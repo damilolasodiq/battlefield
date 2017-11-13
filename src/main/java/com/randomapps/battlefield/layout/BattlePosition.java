@@ -16,6 +16,11 @@ public class BattlePosition {
 
     }
 
+    public boolean hasSoldier() {
+        return this.soldier != null;
+    }
+
+
     public Soldier getSoldier() {
         return soldier;
     }

@@ -13,6 +13,7 @@ public abstract class AbstractSoldier implements Soldier {
     protected static final int DEFAULT_HEALTH = 100;
     protected Weapon currentWeapon;
     protected int health;
+    private int[][] battleCoordinate;
 
     AbstractSoldier() {
         this.health = DEFAULT_HEALTH;
@@ -51,7 +52,7 @@ public abstract class AbstractSoldier implements Soldier {
     @Override
     public void takeHit(Weapon weapon) {
         Optional<Armor> armor = this.getArmor();
-        int weaponWeight = weapon.travelRange();
+        int weaponWeight = 100;
         if (armor.isPresent()) {
             if (armor.get().getHealth() > 0) {
                 int reduce = armor.get().reduce(weaponWeight);
@@ -60,6 +61,8 @@ public abstract class AbstractSoldier implements Soldier {
             } else {
                 this.health = this.health - weaponWeight;
             }
+        } else {
+            this.health -= weaponWeight;
         }
     }
 
@@ -85,4 +88,14 @@ public abstract class AbstractSoldier implements Soldier {
 
     @Override
     public abstract int getRank();
+
+    @Override
+    public int[][] getBattleCoordinate() {
+        return this.battleCoordinate;
+    }
+
+    @Override
+    public void setBattleCoordinate(int[][] battleCoordinate) {
+        this.battleCoordinate = battleCoordinate;
+    }
 }

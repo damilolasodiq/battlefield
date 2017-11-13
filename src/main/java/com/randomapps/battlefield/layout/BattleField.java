@@ -139,6 +139,7 @@ public class BattleField {
             int row = secureRandomX.nextInt(this.level.getRow());
             int col = secureRandomY.nextInt(this.level.getColumn());
             if (area[row][col] == null) {
+                s.setBattleCoordinate(new int[row][col]);
                 area[row][col] = new BattlePosition(s);
                 soldiers.remove();
             }
@@ -209,35 +210,25 @@ public class BattleField {
 
     private void simulateCPUPlay() {
         Player player = this.getCurrentPlayer();
-        BattlePosition[][] area = player.getBattleArea().getArea();
-        BattlePosition foundPosition = null;
-        SecureRandom secureRandomX = new SecureRandom();
-        SecureRandom secureRandomY = new SecureRandom();
-        while (foundPosition == null) {
-            int row = secureRandomX.nextInt(this.level.getRow());
-            int col = secureRandomY.nextInt(this.level.getColumn());
-            BattlePosition battlePosition = area[row][col];
-            if (battlePosition != null && !battlePosition.isBlasted()) {
-                Soldier soldier = battlePosition.getSoldier();
-                if (soldier != null && soldier.isAlive()) {
-                    if (soldier.getCurrentWeapon().isPresent() && !soldier.getCurrentWeapon().get().isOutOfArmor()) {
-                        foundPosition = battlePosition;
-                        //System.out.println("row::" + row + "col::" + col);
-                        // System.out.println("soldiersoldier" + soldier);
-                        this.attack(row, col, row, col);
-                        break;
-                    } else {
-                        try {
-                            this.assignWeapon(row, col);
-                        } catch (WeaponNotAssignableException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
+        List<BattlePosition> battlePositionsWithActiveSoldiers = player.getBattleArea().getBattlePositionsWithActiveSoldiers();
+        SecureRandom rnd = new SecureRandom();
+        int i = rnd.nextInt(battlePositionsWithActiveSoldiers.size());
+        BattlePosition attackPosition = battlePositionsWithActiveSoldiers.get(i);
+        Soldier soldier = attackPosition.getSoldier();
+        int x = soldier.getBattleCoordinate()[0][0];
+        int y = soldier.getBattleCoordinate()[0][1];
+        if (!soldier.getCurrentWeapon().isPresent() || soldier.getCurrentWeapon().get().isOutOfArmor()) {
+            try {
+                this.assignWeapon(x, y);
+            } catch (WeaponNotAssignableException e) {
+                e.printStackTrace();
             }
         }
-
-
+        SecureRandom secureRandomX = new SecureRandom();
+        SecureRandom secureRandomY = new SecureRandom();
+        int row = secureRandomX.nextInt(this.level.getRow());
+        int col = secureRandomY.nextInt(this.level.getColumn());
+        this.attack(x, y, row, col);
     }
 
     private void printNamesInHeaders() {
@@ -332,6 +323,7 @@ public class BattleField {
         if (this.getOpponent().getHealth() <= 0) {
             return true;
         }
+
         long numberOfSoldiersWithWeapon = this.getOpponent().getSoldiers().stream().filter(s -> {
             Optional<Weapon> currentWeapon = s.getCurrentWeapon();
             if (s.isAlive() && currentWeapon.isPresent()) {

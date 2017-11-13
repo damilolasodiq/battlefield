@@ -2,6 +2,7 @@ package com.randomapps.battlefield.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 import java.util.Scanner;
 
 public class GameHelper {
@@ -55,5 +56,11 @@ public class GameHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String getCPUName() {
+        String[] transformerNames = new String[]{"Megatron", "Bumblebee", "Optimus", "Jazz", "Ratchet", "Ironhide", "Arcee", "Sideswipe", "Hatchet"};
+        int rnd = new Random().nextInt(transformerNames.length);
+        return transformerNames[rnd];
     }
 }

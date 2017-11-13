@@ -3,6 +3,7 @@ package com.randomapps.battlefield.game;
 import com.randomapps.battlefield.barrack.Arsenal;
 import com.randomapps.battlefield.barrack.army.Soldier;
 import com.randomapps.battlefield.layout.BattleArea;
+import com.randomapps.battlefield.util.GameHelper;
 
 import java.util.List;
 
@@ -20,8 +21,8 @@ public class Player {
         this.cpu = false;
     }
 
-    public Player(String name, boolean cpu) {
-        this.name = name;
+    public Player(boolean cpu) {
+        this.name = String.format("%s (CPU)",GameHelper.getCPUName());
         this.cpu = cpu;
     }
 

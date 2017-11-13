@@ -49,7 +49,7 @@ public class BattleFieldGameLauncher {
                 validatePlayerName(player2Name);
                 player2 = new Player(player2Name);
             } else if (gameMode.equals("1")) {
-                player2 = new Player("CPU", true);
+                player2 = new Player(true);
             } else {
                 throw new GameInitializationException("Could not determine game mode");
             }

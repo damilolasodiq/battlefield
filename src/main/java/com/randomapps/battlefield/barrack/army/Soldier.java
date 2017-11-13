@@ -31,4 +31,8 @@ public interface Soldier extends Cloneable {
     Soldier clone();
 
     int getRank();
+
+    int[][] getBattleCoordinate();
+
+    void setBattleCoordinate(int[][] battleCoordinate);
 }
