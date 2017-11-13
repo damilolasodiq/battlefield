@@ -1,5 +1,6 @@
 package com.randomapps.battlefield.barrack.armory;
 
+import com.randomapps.battlefield.barrack.WeaponGrade;
 import com.randomapps.battlefield.barrack.WeaponType;
 
 public class ShotGun extends AbstractWeapon {
@@ -22,6 +23,10 @@ public class ShotGun extends AbstractWeapon {
         return this.getWeaponType().getType();
     }
 
+    @Override
+    public WeaponGrade getWeaponGrade() {
+        return WeaponGrade.COMPLEX;
+    }
 
     @Override
     public int scorePoint() {

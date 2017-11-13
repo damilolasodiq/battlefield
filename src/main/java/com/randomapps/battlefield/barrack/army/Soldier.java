@@ -1,7 +1,7 @@
 package com.randomapps.battlefield.barrack.army;
 
 import com.randomapps.battlefield.barrack.WeaponType;
-import com.randomapps.battlefield.barrack.armory.Armor;
+import com.randomapps.battlefield.barrack.armory.ArmorVest;
 import com.randomapps.battlefield.barrack.armory.Weapon;
 import com.randomapps.battlefield.exception.WeaponNotAssignableException;
 
@@ -20,7 +20,7 @@ public interface Soldier extends Cloneable {
 
     Character getSymbol();
 
-    Optional<Armor> getArmor();
+    Optional<ArmorVest> getArmorVest();
 
     boolean canUseWeapon(WeaponType weaponType);
 

@@ -1,7 +1,7 @@
 package com.randomapps.battlefield.barrack.army;
 
 import com.randomapps.battlefield.barrack.WeaponType;
-import com.randomapps.battlefield.barrack.armory.Armor;
+import com.randomapps.battlefield.barrack.armory.ArmorVest;
 import com.randomapps.battlefield.barrack.armory.Weapon;
 import com.randomapps.battlefield.exception.WeaponNotAssignableException;
 
@@ -28,7 +28,7 @@ public abstract class AbstractSoldier implements Soldier {
 
     @Override
     public final int getHealth() {
-        Optional<Armor> armor = this.getArmor();
+        Optional<ArmorVest> armor = this.getArmorVest();
         if (armor.isPresent()) {
             return this.health + armor.get().getHealth();
         }
@@ -51,7 +51,7 @@ public abstract class AbstractSoldier implements Soldier {
 
     @Override
     public void takeHit(Weapon weapon) {
-        Optional<Armor> armor = this.getArmor();
+        Optional<ArmorVest> armor = this.getArmorVest();
         int weaponWeight = 100;
         if (armor.isPresent()) {
             if (armor.get().getHealth() > 0) {
@@ -67,7 +67,7 @@ public abstract class AbstractSoldier implements Soldier {
     }
 
     @Override
-    public abstract Optional<Armor> getArmor();
+    public abstract Optional<ArmorVest> getArmorVest();
 
     @Override
     public abstract Character getSymbol();

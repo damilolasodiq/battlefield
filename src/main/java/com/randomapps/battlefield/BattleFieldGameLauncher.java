@@ -88,8 +88,10 @@ public class BattleFieldGameLauncher {
                             int opponentRow = Integer.parseInt(split[2]);
                             int opponentColumn = Integer.parseInt(split[3]);
                             battleField.attack(playerRow, playerColumn, opponentRow, opponentColumn);
-                        } catch (ArrayIndexOutOfBoundsException e) {
+                        } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
                             System.err.println("The selected index does not exist. Please try again or type \"help\" to read teh game instructions");
+                        }catch (Exception e){
+                            System.err.println("An error occurred. Please try again or type \"help\" to read teh game instructions");
                         }
                         break;
                 }

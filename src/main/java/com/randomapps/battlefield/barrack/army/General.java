@@ -1,7 +1,7 @@
 package com.randomapps.battlefield.barrack.army;
 
 import com.randomapps.battlefield.barrack.WeaponType;
-import com.randomapps.battlefield.barrack.armory.Armor;
+import com.randomapps.battlefield.barrack.armory.ArmorVest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,11 +13,11 @@ public class General extends AbstractSoldier {
     private static final List<WeaponType> ALLOWED_WEAPONS_TYPES = new ArrayList<>();
     private static final Character SYMBOL = 'G';
     private static final int RANK = 3;
-    private Armor armor;
+    private ArmorVest armorVest;
 
     public General() {
         super();
-        armor = new Armor();
+        armorVest = new ArmorVest();
         ALLOWED_WEAPONS_TYPES.addAll(Arrays.asList(WeaponType.PISTOL, WeaponType.BAZOOKA, WeaponType.SHOTGUN));
     }
 
@@ -31,8 +31,8 @@ public class General extends AbstractSoldier {
     }
 
     @Override
-    public Optional<Armor> getArmor() {
-        return Optional.of(armor);
+    public Optional<ArmorVest> getArmorVest() {
+        return Optional.of(armorVest);
     }
 
     @Override

@@ -1,15 +1,15 @@
 package com.randomapps.battlefield.barrack.armory;
 
-public class Armor {
+public class ArmorVest {
 
     private static final int DEFAULT_HEALTH = 100;
     private int health;
 
-    public Armor(int health) {
+    public ArmorVest(int health) {
         this.health = health;
     }
 
-    public Armor() {
+    public ArmorVest() {
         this.health = DEFAULT_HEALTH;
     }
 

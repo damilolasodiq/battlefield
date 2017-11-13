@@ -4,8 +4,13 @@ public enum WeaponGrade {
 
     ADVANCE (1), SIMPLE (3), COMPLEX(2);
 
-    int level;
+    int grade;
 
-    WeaponGrade(int i) {
+    WeaponGrade(int grade) {
+        this.grade = grade;
+    }
+
+    public int getGrade(){
+        return this.grade;
     }
 }

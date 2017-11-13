@@ -1,5 +1,6 @@
 package com.randomapps.battlefield.barrack.armory;
 
+import com.randomapps.battlefield.barrack.WeaponGrade;
 import com.randomapps.battlefield.barrack.WeaponType;
 
 public class Pistol extends AbstractWeapon {
@@ -12,7 +13,10 @@ public class Pistol extends AbstractWeapon {
         this.availableRounds = AVAILABLE_ROUNDS;
     }
 
-
+    @Override
+    public WeaponGrade getWeaponGrade() {
+        return WeaponGrade.SIMPLE;
+    }
     @Override
     public String name() {
         return this.getWeaponType().name();

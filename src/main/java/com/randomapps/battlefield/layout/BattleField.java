@@ -277,37 +277,40 @@ public class BattleField {
                 System.err.println("Sorry, your Soldier at that position has fallen!");
                 return;
             }
-            Optional<Weapon> weapon = soldier.getCurrentWeapon();
-            if (weapon.isPresent()) {
+            Optional<Weapon> weaponOptional = soldier.getCurrentWeapon();
+            if (weaponOptional.isPresent()) {
                 try {
-                    weapon.get().fire();
-                    BattlePosition opponentBattlePosition = opponentArea[opponentRow][opponentColumn];
-                    Soldier opponentSoldier = opponentBattlePosition.getSoldier();
-                    if (opponentSoldier != null) {
-                        if (opponentSoldier.isAlive()) {
-                            opponentSoldier.takeHit(weapon.get());
-                            if (!opponentSoldier.isAlive()) {
-                                this.getCurrentPlayer().getStat().setNumberOfEnemiesKilled(this.getCurrentPlayer().getStat().getNumberOfEnemiesKilled() + 1);
-                                this.getCurrentPlayer().getStat().setPoints(this.getCurrentPlayer().getStat().getPoints() + calculatePoints(soldier, opponentSoldier, weapon.get()));
+                    Weapon weapon = weaponOptional.get();
+                    weapon.fire();
+                    if (this.level.getColumn() / weapon.getWeaponGrade().getGrade() >= opponentColumn) {
+                        BattlePosition opponentBattlePosition = opponentArea[opponentRow][opponentColumn];
+                        Soldier opponentSoldier = opponentBattlePosition.getSoldier();
+                        if (opponentSoldier != null) {
+                            if (opponentSoldier.isAlive()) {
+                                opponentSoldier.takeHit(weaponOptional.get());
+                                if (!opponentSoldier.isAlive()) {
+                                    this.getCurrentPlayer().getStat().setNumberOfEnemiesKilled(this.getCurrentPlayer().getStat().getNumberOfEnemiesKilled() + 1);
+                                    this.getCurrentPlayer().getStat().setPoints(this.getCurrentPlayer().getStat().getPoints() + calculatePoints(soldier, opponentSoldier, weaponOptional.get()));
+                                }
                             }
-                        }
-                    } else {
-                        opponentBattlePosition.setBlasted(true);
-                    }
-                    if (this.shouldGameEnd()) {
-                        System.out.printf("%s has WON!!\n", this.getCurrentPlayer().getName());
-                        if (this.level.getLevel() < Level.MAX_LEVEL) {
-                            System.out.printf("Type \"next level\" to go to %d", this.level.getLevel() + 1);
                         } else {
-                            System.out.printf("You have reached the end of the game!!!");
-                            System.exit(0);
+                            opponentBattlePosition.setBlasted(true);
                         }
-                        this.endGame();
-                    } else {
-                        this.nextPlayerTurn();
+                        if (this.shouldGameEnd()) {
+                            System.out.printf("%s has WON!!\n", this.getCurrentPlayer().getName());
+                            if (this.level.getLevel() < Level.MAX_LEVEL) {
+                                System.out.printf("Type \"next level\" to go to %d", this.level.getLevel() + 1);
+                            } else {
+                                System.out.printf("You have reached the end of the game!!!");
+                                System.exit(0);
+                            }
+                            this.endGame();
+                            return;
+                        }
                     }
+                    this.nextPlayerTurn();
                 } catch (SoldierOutOfArmorException e) {
-                    System.err.println("The Soldier you have selected is out of Armor use a different Soldier or pick a new Weapon in the Arsenal.");
+                    System.err.println("The Soldier you have selected is out of ArmorVest use a different Soldier or pick a new Weapon in the Arsenal.");
                     return;
                 }
             } else {

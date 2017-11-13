@@ -1,7 +1,7 @@
 package com.randomapps.battlefield.barrack.army;
 
 import com.randomapps.battlefield.barrack.WeaponType;
-import com.randomapps.battlefield.barrack.armory.Armor;
+import com.randomapps.battlefield.barrack.armory.ArmorVest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +34,7 @@ public class Corporal extends AbstractSoldier {
     }
 
     @Override
-    public Optional<Armor> getArmor() {
+    public Optional<ArmorVest> getArmorVest() {
         return Optional.empty();
     }
 }
