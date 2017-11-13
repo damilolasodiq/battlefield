@@ -1,0 +1,83 @@
+package com.randomapps.battlefield.game;
+
+import com.randomapps.battlefield.barrack.Arsenal;
+import com.randomapps.battlefield.barrack.army.Soldier;
+import com.randomapps.battlefield.layout.BattleArea;
+
+import java.util.List;
+
+public class Player {
+
+    private final String name;
+    private final boolean cpu;
+    private List<Soldier> soldiers;
+    private Arsenal arsenal;
+    private BattleArea battleArea;
+    private PlayerStat stat;
+
+    public Player(String name) {
+        this.name = name;
+        this.cpu = false;
+    }
+
+    public Player(String name, boolean cpu) {
+        this.name = name;
+        this.cpu = cpu;
+    }
+
+    public boolean isCpu() {
+        return cpu;
+    }
+
+    public int getHealth() {
+        if (soldiers == null)
+            return 0;
+        return soldiers.stream().mapToInt(soldier -> soldier.getHealth()).sum();
+    }
+
+    public long getNumberOfInjuredSoldiers() {
+        return soldiers.stream().filter(soldier -> soldier.getHealth() > 0 && soldier.getHealth() < 100).count();
+    }
+
+    public long getNumberOfDeadSoldiers() {
+        return soldiers.stream().filter(soldier -> !soldier.isAlive()).count();
+    }
+
+
+    public String getName() {
+        return name;
+    }
+
+    public List<Soldier> getSoldiers() {
+        return soldiers;
+    }
+
+    public void setSoldiers(List<Soldier> soldiers) {
+        this.soldiers = soldiers;
+    }
+
+    public Arsenal getArsenal() {
+        return arsenal;
+    }
+
+    public void setArsenal(Arsenal arsenal) {
+        this.arsenal = arsenal;
+    }
+
+    public PlayerStat getStat() {
+        return stat;
+    }
+
+    public void setStat(PlayerStat stat) {
+        this.stat = stat;
+    }
+
+    public BattleArea getBattleArea() {
+        return battleArea;
+    }
+
+    public void setBattleArea(BattleArea battleArea) {
+        this.battleArea = battleArea;
+    }
+
+}
