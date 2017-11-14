@@ -1,0 +1,196 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Level</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.randomapps.battlefield.game</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Level (com.randomapps.battlefield.game)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Level</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/ 10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (43/ 43)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.randomapps.battlefield.game;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.randomapps.battlefield.barrack.WeaponType;
+<i>4</i>&nbsp;import com.randomapps.battlefield.barrack.army.Corporal;
+<i>5</i>&nbsp;import com.randomapps.battlefield.barrack.army.General;
+<i>6</i>&nbsp;import com.randomapps.battlefield.barrack.army.Sergeant;
+<i>7</i>&nbsp;import com.randomapps.battlefield.barrack.army.Soldier;
+<i>8</i>&nbsp;import com.randomapps.battlefield.exception.GameInitializationException;
+<i>9</i>&nbsp;import com.randomapps.battlefield.util.CollectionsHelper;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;import java.io.Serializable;
+<i>12</i>&nbsp;import java.util.ArrayList;
+<i>13</i>&nbsp;import java.util.Collections;
+<i>14</i>&nbsp;import java.util.List;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;public class Level implements Serializable {
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    private static final int DEFAULT_ROW_SIZE = 4;
+<i>19</i>&nbsp;    private static final int DEFAULT_COLUMN_SIZE = 6;
+<i>20</i>&nbsp;    public static final int MAX_LEVEL = 5;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    private int row;
+<i>23</i>&nbsp;    private int column;
+<i>24</i>&nbsp;    private int level;
+<i>25</i>&nbsp;    private int numberOfSoldiersRequired;
+<i>26</i>&nbsp;    private int numberOfGeneralsRequired;
+<i>27</i>&nbsp;    private int numberOfCorporalsRequired;
+<i>28</i>&nbsp;    private int numberOfSergeantsRequired;
+<i>29</i>&nbsp;    private int maxHealthInLevel;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    private List&lt;Soldier&gt; soldiers;
+<i>32</i>&nbsp;    private List&lt;WeaponType&gt; weaponTypes;
+<i>33</i>&nbsp;
+<b class="fc"><i>34</i>&nbsp;    public Level(int level) throws GameInitializationException {</b>
+<b class="fc"><i>35</i>&nbsp;        if (level &gt; MAX_LEVEL || level &lt; 1) {</b>
+<b class="fc"><i>36</i>&nbsp;            throw new GameInitializationException(&quot;Invalid game level selected&quot;);</b>
+<i>37</i>&nbsp;        }
+<b class="fc"><i>38</i>&nbsp;        this.level = level;</b>
+<b class="fc"><i>39</i>&nbsp;        this.row = DEFAULT_ROW_SIZE + level - 1;</b>
+<b class="fc"><i>40</i>&nbsp;        this.column = DEFAULT_COLUMN_SIZE + level - 1;</b>
+<b class="fc"><i>41</i>&nbsp;        this.initSoldiers();</b>
+<b class="fc"><i>42</i>&nbsp;        this.initWeaponTypes();</b>
+<b class="fc"><i>43</i>&nbsp;        this.initHealth();</b>
+<b class="fc"><i>44</i>&nbsp;    }</b>
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    public int getRow() {
+<b class="fc"><i>47</i>&nbsp;        return row;</b>
+<i>48</i>&nbsp;    }
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    public int getColumn() {
+<b class="fc"><i>51</i>&nbsp;        return column;</b>
+<i>52</i>&nbsp;    }
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    public List&lt;Soldier&gt; getSoldiers() {
+<b class="fc"><i>55</i>&nbsp;        return this.soldiers;</b>
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    }
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    private void initSoldiers() {
+<b class="fc"><i>60</i>&nbsp;        this.numberOfSoldiersRequired = ((row * column) / 2) - level;</b>
+<b class="fc"><i>61</i>&nbsp;        this.numberOfGeneralsRequired = (level * 2) - 2;</b>
+<b class="fc"><i>62</i>&nbsp;        if (this.numberOfGeneralsRequired &lt; 2) {</b>
+<b class="fc"><i>63</i>&nbsp;            this.numberOfSergeantsRequired = 2;</b>
+<i>64</i>&nbsp;        } else {
+<b class="fc"><i>65</i>&nbsp;            this.numberOfSergeantsRequired = numberOfGeneralsRequired - 2;</b>
+<i>66</i>&nbsp;        }
+<b class="fc"><i>67</i>&nbsp;        this.numberOfCorporalsRequired = numberOfSoldiersRequired - (numberOfGeneralsRequired + numberOfSergeantsRequired);</b>
+<i>68</i>&nbsp;
+<b class="fc"><i>69</i>&nbsp;        this.soldiers = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>70</i>&nbsp;        if (this.numberOfCorporalsRequired &gt; 0) {</b>
+<b class="fc"><i>71</i>&nbsp;            soldiers.addAll(CollectionsHelper.createListWithNewObjects(Corporal.class, this.numberOfCorporalsRequired));</b>
+<i>72</i>&nbsp;        }
+<b class="fc"><i>73</i>&nbsp;        if (this.numberOfSergeantsRequired &gt; 0) {</b>
+<b class="fc"><i>74</i>&nbsp;            soldiers.addAll(CollectionsHelper.createListWithNewObjects(Sergeant.class, this.numberOfSergeantsRequired));</b>
+<i>75</i>&nbsp;        }
+<b class="fc"><i>76</i>&nbsp;        if (this.numberOfGeneralsRequired &gt; 0) {</b>
+<b class="fc"><i>77</i>&nbsp;            soldiers.addAll(CollectionsHelper.createListWithNewObjects(General.class, this.numberOfGeneralsRequired));</b>
+<i>78</i>&nbsp;        }
+<b class="fc"><i>79</i>&nbsp;    }</b>
+<i>80</i>&nbsp;
+<i>81</i>&nbsp;    private void initWeaponTypes() {
+<b class="fc"><i>82</i>&nbsp;        this.weaponTypes = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>83</i>&nbsp;        if (this.numberOfCorporalsRequired &gt; 0) {</b>
+<b class="fc"><i>84</i>&nbsp;            int numberOfRequiredPistols = this.numberOfCorporalsRequired + (int) Math.floor(this.numberOfCorporalsRequired / 2) - 1;</b>
+<b class="fc"><i>85</i>&nbsp;            weaponTypes.addAll(Collections.nCopies(numberOfRequiredPistols, WeaponType.PISTOL));</b>
+<i>86</i>&nbsp;        }
+<b class="fc"><i>87</i>&nbsp;        if (this.numberOfGeneralsRequired &gt; 0) {</b>
+<b class="fc"><i>88</i>&nbsp;            int numberOfRequiredBazookas = this.numberOfGeneralsRequired + (int) Math.floor(this.numberOfGeneralsRequired / 2) - 1;</b>
+<b class="fc"><i>89</i>&nbsp;            weaponTypes.addAll(Collections.nCopies(numberOfRequiredBazookas, WeaponType.BAZOOKA));</b>
+<i>90</i>&nbsp;        }
+<b class="fc"><i>91</i>&nbsp;        if (this.numberOfSergeantsRequired &gt; 0) {</b>
+<b class="fc"><i>92</i>&nbsp;            int numberOfShotguns = this.numberOfSergeantsRequired + (int) Math.floor(this.numberOfSergeantsRequired / 2) - 1;</b>
+<b class="fc"><i>93</i>&nbsp;            weaponTypes.addAll(Collections.nCopies(numberOfShotguns, WeaponType.SHOTGUN));</b>
+<i>94</i>&nbsp;        }
+<b class="fc"><i>95</i>&nbsp;    }</b>
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    public List&lt;WeaponType&gt; getWeaponTypes() {
+<b class="fc"><i>98</i>&nbsp;        return this.weaponTypes;</b>
+<i>99</i>&nbsp;    }
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;    private void initHealth() {
+<b class="fc"><i>102</i>&nbsp;        this.maxHealthInLevel = this.getSoldiers().stream().mapToInt(soldier -&gt; soldier.getHealth()).sum();</b>
+<b class="fc"><i>103</i>&nbsp;    }</b>
+<i>104</i>&nbsp;
+<i>105</i>&nbsp;    public int getLevel() {
+<b class="fc"><i>106</i>&nbsp;        return this.level;</b>
+<i>107</i>&nbsp;    }
+<i>108</i>&nbsp;
+<i>109</i>&nbsp;    public int getMaxHealthInLevel() {
+<b class="fc"><i>110</i>&nbsp;        return this.maxHealthInLevel;</b>
+<i>111</i>&nbsp;    }
+<i>112</i>&nbsp;
+<i>113</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2017-11-14 16:37</div>
+</div>
+</body>
+</html>

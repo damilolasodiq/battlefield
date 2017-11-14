@@ -1,0 +1,553 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BattleField</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.randomapps.battlefield.layout</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BattleField (com.randomapps.battlefield.layout)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BattleField</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (24/ 32)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66%
+  </span>
+  <span class="absValue">
+    (194/ 294)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.randomapps.battlefield.layout;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.randomapps.battlefield.barrack.Arsenal;
+<i>4</i>&nbsp;import com.randomapps.battlefield.barrack.WeaponType;
+<i>5</i>&nbsp;import com.randomapps.battlefield.barrack.armory.Weapon;
+<i>6</i>&nbsp;import com.randomapps.battlefield.barrack.armory.WeaponFactory;
+<i>7</i>&nbsp;import com.randomapps.battlefield.barrack.army.Soldier;
+<i>8</i>&nbsp;import com.randomapps.battlefield.exception.GameInitializationException;
+<i>9</i>&nbsp;import com.randomapps.battlefield.exception.SoldierOutOfArmorException;
+<i>10</i>&nbsp;import com.randomapps.battlefield.exception.WeaponNotAssignableException;
+<i>11</i>&nbsp;import com.randomapps.battlefield.exception.WeaponNotAvailableException;
+<i>12</i>&nbsp;import com.randomapps.battlefield.game.Level;
+<i>13</i>&nbsp;import com.randomapps.battlefield.game.Player;
+<i>14</i>&nbsp;import com.randomapps.battlefield.game.PlayerStat;
+<i>15</i>&nbsp;import com.randomapps.battlefield.util.GameHelper;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;import java.io.Serializable;
+<i>18</i>&nbsp;import java.security.SecureRandom;
+<i>19</i>&nbsp;import java.util.*;
+<i>20</i>&nbsp;import java.util.stream.Collectors;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;public class BattleField implements Serializable {
+<i>23</i>&nbsp;
+<b class="fc"><i>24</i>&nbsp;    private final static Character DEAD_SOLDIER_POSITION = &#39;!&#39;;</b>
+<b class="fc"><i>25</i>&nbsp;    private final static Character HIDDEN_POSITION = &#39;-&#39;;</b>
+<b class="fc"><i>26</i>&nbsp;    private final static Character BLASTED_POSITION = &#39;X&#39;;</b>
+<i>27</i>&nbsp;
+<b class="fc"><i>28</i>&nbsp;    Player[] players = new Player[2]; //number of players possible at a time</b>
+<i>29</i>&nbsp;    private Level level;
+<b class="fc"><i>30</i>&nbsp;    private int currentPlayerIndex = 0;</b>
+<i>31</i>&nbsp;    private boolean running;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;
+<b class="fc"><i>34</i>&nbsp;    public BattleField(Player player1, Player player2, Level level) throws GameInitializationException {</b>
+<b class="fc"><i>35</i>&nbsp;        GameHelper.clearConsole();</b>
+<b class="fc"><i>36</i>&nbsp;        this.level = level;</b>
+<b class="fc"><i>37</i>&nbsp;        players[0] = player1;</b>
+<b class="fc"><i>38</i>&nbsp;        players[1] = player2;</b>
+<b class="fc"><i>39</i>&nbsp;        this.running = true;</b>
+<b class="fc"><i>40</i>&nbsp;        this.initializePlayers();</b>
+<b class="fc"><i>41</i>&nbsp;        this.drawBattleHeaders();</b>
+<b class="fc"><i>42</i>&nbsp;        this.drawField();</b>
+<b class="fc"><i>43</i>&nbsp;    }</b>
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;    private int calculatePoints(Soldier shootingSoldier, Soldier shotSoldier, Weapon weapon) {
+<b class="fc"><i>46</i>&nbsp;        int point = weapon.scorePoint();</b>
+<b class="fc"><i>47</i>&nbsp;        if (shootingSoldier.getRank() &lt; shotSoldier.getRank()) {</b>
+<b class="nc"><i>48</i>&nbsp;            point += 2 * this.level.getLevel();</b>
+<i>49</i>&nbsp;        }
+<b class="fc"><i>50</i>&nbsp;        return point;</b>
+<i>51</i>&nbsp;    }
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    public boolean isRunning() {
+<b class="nc"><i>54</i>&nbsp;        return running;</b>
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    private Player getFirstPlayer() {
+<b class="fc"><i>58</i>&nbsp;        return this.players[0];</b>
+<i>59</i>&nbsp;    }
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    private Player getSecondPlayer() {
+<b class="fc"><i>62</i>&nbsp;        return this.players[1];</b>
+<i>63</i>&nbsp;    }
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    private void drawBattleField() {
+<b class="fc"><i>66</i>&nbsp;        BattlePosition[][] area = this.getFirstPlayer().getBattleArea().getArea();</b>
+<b class="fc"><i>67</i>&nbsp;        BattlePosition[][] area1 = this.getSecondPlayer().getBattleArea().getArea();</b>
+<b class="fc"><i>68</i>&nbsp;        for (int x = 1; x &lt; area[0].length + 1; x++) {</b>
+<b class="fc"><i>69</i>&nbsp;            System.out.print(&quot;   &quot; + (x - 1) + &quot;&quot;);</b>
+<i>70</i>&nbsp;        }
+<b class="fc"><i>71</i>&nbsp;        System.out.printf(&quot;%6s&quot;, &quot; &quot;);</b>
+<b class="fc"><i>72</i>&nbsp;        for (int x = 1; x &lt; area[0].length + 1; x++) {</b>
+<b class="fc"><i>73</i>&nbsp;            System.out.print(&quot;   &quot; + (x - 1) + &quot;&quot;);</b>
+<i>74</i>&nbsp;        }
+<i>75</i>&nbsp;
+<b class="fc"><i>76</i>&nbsp;        System.out.println();</b>
+<b class="fc"><i>77</i>&nbsp;        for (int j = 0; j &lt; area.length; j++) {</b>
+<b class="fc"><i>78</i>&nbsp;            System.out.print(j);</b>
+<b class="fc"><i>79</i>&nbsp;            boolean hideSoldiers = this.getCurrentPlayer() == this.getFirstPlayer();</b>
+<b class="fc"><i>80</i>&nbsp;            printBattleArea(area[j], !hideSoldiers);</b>
+<i>81</i>&nbsp;
+<b class="fc"><i>82</i>&nbsp;            System.out.printf(&quot;%5s&quot;, &quot; &quot;);</b>
+<i>83</i>&nbsp;
+<b class="fc"><i>84</i>&nbsp;            printBattleArea(area1[j], hideSoldiers);</b>
+<b class="fc"><i>85</i>&nbsp;            System.out.println();</b>
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;        }
+<b class="fc"><i>88</i>&nbsp;    }</b>
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;    private void printBattleArea(BattlePosition[] area, boolean hideSoldiers) {
+<b class="fc"><i>91</i>&nbsp;        int len = area.length - 1;</b>
+<b class="fc"><i>92</i>&nbsp;        for (int i = 0; i &lt; area.length; i++) {</b>
+<i>93</i>&nbsp;            Character rowToken;
+<b class="fc"><i>94</i>&nbsp;            BattlePosition battlePosition = area[i];</b>
+<b class="fc"><i>95</i>&nbsp;            Soldier soldier = battlePosition.getSoldier();</b>
+<b class="fc"><i>96</i>&nbsp;            if (soldier != null) {</b>
+<b class="fc"><i>97</i>&nbsp;                if (soldier.isAlive()) {</b>
+<b class="fc"><i>98</i>&nbsp;                    rowToken = hideSoldiers ? HIDDEN_POSITION : soldier.getType().getSymbol();</b>
+<i>99</i>&nbsp;                } else {
+<b class="fc"><i>100</i>&nbsp;                    rowToken = DEAD_SOLDIER_POSITION;</b>
+<i>101</i>&nbsp;                }
+<i>102</i>&nbsp;            } else {
+<b class="fc"><i>103</i>&nbsp;                rowToken = battlePosition.isBlasted() ? BLASTED_POSITION : HIDDEN_POSITION;</b>
+<i>104</i>&nbsp;            }
+<b class="fc"><i>105</i>&nbsp;            System.out.print((i == 0 ? &quot;[ &quot; : &quot;| &quot;) + rowToken + &quot; &quot;);</b>
+<b class="fc"><i>106</i>&nbsp;            if (len == i)</b>
+<b class="fc"><i>107</i>&nbsp;                System.out.print(&quot;]&quot;);</b>
+<i>108</i>&nbsp;
+<i>109</i>&nbsp;        }
+<i>110</i>&nbsp;
+<b class="fc"><i>111</i>&nbsp;    }</b>
+<i>112</i>&nbsp;
+<i>113</i>&nbsp;    private final void initializePlayers() throws GameInitializationException {
+<b class="fc"><i>114</i>&nbsp;        for (int i = 0; i &lt; players.length; i++) {</b>
+<b class="fc"><i>115</i>&nbsp;            BattleArea battleArea = new BattleArea(this.level);</b>
+<b class="fc"><i>116</i>&nbsp;            Player player = players[i];</b>
+<b class="fc"><i>117</i>&nbsp;            player.setBattleArea(battleArea);</b>
+<b class="fc"><i>118</i>&nbsp;            initializePlayer(player);</b>
+<b class="fc"><i>119</i>&nbsp;            initializeLevel(player);</b>
+<i>120</i>&nbsp;        }
+<i>121</i>&nbsp;
+<b class="fc"><i>122</i>&nbsp;    }</b>
+<i>123</i>&nbsp;
+<i>124</i>&nbsp;    public void initializeLevel(Player player) {
+<b class="fc"><i>125</i>&nbsp;        BattlePosition[][] area = player.getBattleArea().getArea();</b>
+<b class="fc"><i>126</i>&nbsp;        for (int i = 0; i &lt; area.length; i++) {</b>
+<b class="fc"><i>127</i>&nbsp;            for (int j = 0; j &lt; area[i].length; j++) {</b>
+<b class="fc"><i>128</i>&nbsp;                if (area[i][j] == null)</b>
+<b class="fc"><i>129</i>&nbsp;                    area[i][j] = new BattlePosition();</b>
+<i>130</i>&nbsp;            }
+<i>131</i>&nbsp;        }
+<b class="fc"><i>132</i>&nbsp;    }</b>
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;    public void positionSoldiers(Player player) {
+<b class="fc"><i>135</i>&nbsp;        BattlePosition[][] area = player.getBattleArea().getArea();</b>
+<b class="fc"><i>136</i>&nbsp;        SecureRandom secureRandomX = new SecureRandom();</b>
+<b class="fc"><i>137</i>&nbsp;        SecureRandom secureRandomY = new SecureRandom();</b>
+<b class="fc"><i>138</i>&nbsp;        Queue&lt;Soldier&gt; soldiers = new LinkedList(player.getSoldiers());</b>
+<b class="fc"><i>139</i>&nbsp;        while (!soldiers.isEmpty()) {</b>
+<b class="fc"><i>140</i>&nbsp;            Soldier s = soldiers.peek();</b>
+<b class="fc"><i>141</i>&nbsp;            int row = secureRandomX.nextInt(this.level.getRow());</b>
+<b class="fc"><i>142</i>&nbsp;            int col = secureRandomY.nextInt(this.level.getColumn());</b>
+<b class="fc"><i>143</i>&nbsp;            if (area[row][col] == null) {</b>
+<b class="fc"><i>144</i>&nbsp;                int[][] coordinate = new int[1][2];</b>
+<b class="fc"><i>145</i>&nbsp;                coordinate[0][0] = row;</b>
+<b class="fc"><i>146</i>&nbsp;                coordinate[0][1] = col;</b>
+<b class="fc"><i>147</i>&nbsp;                s.setBattleCoordinate(coordinate);</b>
+<b class="fc"><i>148</i>&nbsp;                area[row][col] = new BattlePosition(s);</b>
+<b class="fc"><i>149</i>&nbsp;                soldiers.remove();</b>
+<i>150</i>&nbsp;            }
+<b class="fc"><i>151</i>&nbsp;        }</b>
+<b class="fc"><i>152</i>&nbsp;    }</b>
+<i>153</i>&nbsp;
+<i>154</i>&nbsp;    private void drawField() {
+<b class="fc"><i>155</i>&nbsp;        this.drawBattleField();</b>
+<b class="fc"><i>156</i>&nbsp;    }</b>
+<i>157</i>&nbsp;
+<i>158</i>&nbsp;    private void initializePlayer(Player player) throws GameInitializationException {
+<b class="fc"><i>159</i>&nbsp;        Arsenal arsenal = new Arsenal();</b>
+<i>160</i>&nbsp;
+<b class="fc"><i>161</i>&nbsp;        List&lt;Soldier&gt; soldiers = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>162</i>&nbsp;        this.level.getSoldiers().stream().forEach(s -&gt; soldiers.add(s.clone()));</b>
+<b class="fc"><i>163</i>&nbsp;        List&lt;WeaponType&gt; weapons = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>164</i>&nbsp;        this.level.getWeaponTypes().stream().forEach(w -&gt; weapons.add(w));</b>
+<b class="fc"><i>165</i>&nbsp;        if (weapons != null) {</b>
+<i>166</i>&nbsp;
+<b class="fc"><i>167</i>&nbsp;            Map&lt;WeaponType, List&lt;WeaponType&gt;&gt; collect = weapons.stream().collect(Collectors.groupingBy(weapon -&gt; weapon));</b>
+<i>168</i>&nbsp;
+<b class="fc"><i>169</i>&nbsp;            for (Soldier s : soldiers) {</b>
+<b class="fc"><i>170</i>&nbsp;                for (WeaponType weaponType : collect.keySet()) {</b>
+<b class="fc"><i>171</i>&nbsp;                    List&lt;WeaponType&gt; availableWeapons = collect.get(weaponType);</b>
+<b class="fc"><i>172</i>&nbsp;                    if (!s.allowedWeapons().isEmpty() &amp;&amp; s.allowedWeapons().contains(weaponType) &amp;&amp; !availableWeapons.isEmpty()) {</b>
+<i>173</i>&nbsp;                        try {
+<b class="fc"><i>174</i>&nbsp;                            Weapon weapon = WeaponFactory.newInstance(availableWeapons.remove(0));</b>
+<b class="fc"><i>175</i>&nbsp;                            s.assignWeapon(weapon);</b>
+<b class="fc"><i>176</i>&nbsp;                            break;</b>
+<b class="nc"><i>177</i>&nbsp;                        } catch (WeaponNotAssignableException e) {</b>
+<b class="nc"><i>178</i>&nbsp;                            throw new GameInitializationException(e);</b>
+<i>179</i>&nbsp;                        }
+<i>180</i>&nbsp;                    }
+<b class="fc"><i>181</i>&nbsp;                }</b>
+<b class="fc"><i>182</i>&nbsp;                if (!s.getCurrentWeapon().isPresent()) {</b>
+<b class="nc"><i>183</i>&nbsp;                    throw new GameInitializationException(&quot;You cannot take a Soldier to a Battle without a Weapon now can you?&quot;);</b>
+<i>184</i>&nbsp;                }
+<b class="fc"><i>185</i>&nbsp;            }</b>
+<i>186</i>&nbsp;            //add the rest of the weapons to the armory
+<b class="fc"><i>187</i>&nbsp;            collect.forEach((k, v) -&gt; arsenal.addWeapon(k, v.size()));</b>
+<i>188</i>&nbsp;        }
+<b class="fc"><i>189</i>&nbsp;        player.setStat(new PlayerStat());</b>
+<b class="fc"><i>190</i>&nbsp;        player.setArsenal(arsenal);</b>
+<b class="fc"><i>191</i>&nbsp;        player.setSoldiers(soldiers);</b>
+<b class="fc"><i>192</i>&nbsp;        positionSoldiers(player);</b>
+<b class="fc"><i>193</i>&nbsp;    }</b>
+<i>194</i>&nbsp;
+<i>195</i>&nbsp;    public Player getCurrentPlayer() {
+<b class="fc"><i>196</i>&nbsp;        return this.players[currentPlayerIndex];</b>
+<i>197</i>&nbsp;    }
+<i>198</i>&nbsp;
+<i>199</i>&nbsp;    public Player getOpponent() {
+<b class="fc"><i>200</i>&nbsp;        return this.players[1 ^ currentPlayerIndex];</b>
+<i>201</i>&nbsp;    }
+<i>202</i>&nbsp;
+<i>203</i>&nbsp;    private void nextPlayerTurn() {
+<b class="fc"><i>204</i>&nbsp;        this.currentPlayerIndex = 1 ^ currentPlayerIndex;</b>
+<b class="fc"><i>205</i>&nbsp;        if (this.getCurrentPlayer().isCpu()) {</b>
+<b class="nc"><i>206</i>&nbsp;            this.simulateCPUPlay(0);</b>
+<i>207</i>&nbsp;        } else {
+<b class="fc"><i>208</i>&nbsp;            this.drawBattleHeaders();</b>
+<b class="fc"><i>209</i>&nbsp;            this.drawField();</b>
+<i>210</i>&nbsp;        }
+<i>211</i>&nbsp;
+<b class="fc"><i>212</i>&nbsp;    }</b>
+<i>213</i>&nbsp;
+<i>214</i>&nbsp;
+<i>215</i>&nbsp;    private void simulateCPUPlay(int count) {
+<b class="nc"><i>216</i>&nbsp;        Player player = this.getCurrentPlayer();</b>
+<b class="nc"><i>217</i>&nbsp;        List&lt;BattlePosition&gt; battlePositionsWithActiveSoldiers = player.getBattleArea().getBattlePositionsWithActiveSoldiers();</b>
+<b class="nc"><i>218</i>&nbsp;        if (this.level.getLevel() &gt; 1) {</b>
+<i>219</i>&nbsp;            //cpu gets smarter from level 2 by ensuring it uses the best Soldiers first
+<b class="nc"><i>220</i>&nbsp;            int max = battlePositionsWithActiveSoldiers.stream().mapToInt(x -&gt; x.getSoldier().getRank()).max().getAsInt();</b>
+<b class="nc"><i>221</i>&nbsp;            battlePositionsWithActiveSoldiers = battlePositionsWithActiveSoldiers.stream().filter(x -&gt; x.getSoldier().getRank() == max).collect(Collectors.toList());</b>
+<i>222</i>&nbsp;        }
+<b class="nc"><i>223</i>&nbsp;        SecureRandom rnd = new SecureRandom();</b>
+<b class="nc"><i>224</i>&nbsp;        int i = rnd.nextInt(battlePositionsWithActiveSoldiers.size());</b>
+<b class="nc"><i>225</i>&nbsp;        BattlePosition attackPosition = battlePositionsWithActiveSoldiers.get(i);</b>
+<b class="nc"><i>226</i>&nbsp;        Soldier soldier = attackPosition.getSoldier();</b>
+<b class="nc"><i>227</i>&nbsp;        int x = soldier.getBattleCoordinate()[0][0];</b>
+<b class="nc"><i>228</i>&nbsp;        int y = soldier.getBattleCoordinate()[0][1];</b>
+<b class="nc"><i>229</i>&nbsp;        if (!soldier.getCurrentWeapon().isPresent() || soldier.getCurrentWeapon().get().isOutOfArmor()) {</b>
+<i>230</i>&nbsp;            try {
+<b class="nc"><i>231</i>&nbsp;                this.assignWeapon(x, y);</b>
+<b class="nc"><i>232</i>&nbsp;            } catch (WeaponNotAssignableException | WeaponNotAvailableException e) {</b>
+<b class="nc"><i>233</i>&nbsp;                if (count &lt; this.level.getLevel() + 2) { //after the x iteration, let the CPU play with whatever player it has selected</b>
+<b class="nc"><i>234</i>&nbsp;                    simulateCPUPlay(count + 1);</b>
+<i>235</i>&nbsp;                }
+<b class="nc"><i>236</i>&nbsp;            }</b>
+<i>237</i>&nbsp;        }
+<b class="nc"><i>238</i>&nbsp;        SecureRandom secureRandomX = new SecureRandom();</b>
+<b class="nc"><i>239</i>&nbsp;        SecureRandom secureRandomY = new SecureRandom();</b>
+<b class="nc"><i>240</i>&nbsp;        int row = secureRandomX.nextInt(this.level.getRow());</b>
+<b class="nc"><i>241</i>&nbsp;        int col = secureRandomY.nextInt(this.level.getColumn());</b>
+<b class="nc"><i>242</i>&nbsp;        this.attack(x, y, row, col);</b>
+<b class="nc"><i>243</i>&nbsp;    }</b>
+<i>244</i>&nbsp;
+<i>245</i>&nbsp;    private void printNamesInHeaders() {
+<b class="fc"><i>246</i>&nbsp;        for (int i = 0; i &lt; this.players.length; i++) {</b>
+<b class="fc"><i>247</i>&nbsp;            Player player = this.players[i];</b>
+<b class="fc"><i>248</i>&nbsp;            int fullHealthBar = (this.level.getColumn() * 4) + 2;</b>
+<b class="fc"><i>249</i>&nbsp;            int startPlayerName = fullHealthBar - 4;</b>
+<b class="fc"><i>250</i>&nbsp;            System.out.printf(&quot;%-&quot; + startPlayerName + &quot;s %d%%&quot;, player.getName().toUpperCase(), this.calculateHealthInPercentage(player));</b>
+<b class="fc"><i>251</i>&nbsp;            System.out.printf(&quot;%5s&quot;, &quot; &quot;);</b>
+<i>252</i>&nbsp;        }
+<b class="fc"><i>253</i>&nbsp;        System.out.println();</b>
+<b class="fc"><i>254</i>&nbsp;    }</b>
+<i>255</i>&nbsp;
+<i>256</i>&nbsp;    private void drawBattleHeaders() {
+<b class="fc"><i>257</i>&nbsp;        System.out.printf(String.format(&quot;BattleField Level %d \n&quot;, this.level.getLevel()));</b>
+<b class="fc"><i>258</i>&nbsp;        System.out.printf(&quot;%-15s %s \n&quot;, &quot;Current Player&quot;, this.getCurrentPlayer().getName().toUpperCase());</b>
+<b class="fc"><i>259</i>&nbsp;        this.printNamesInHeaders();</b>
+<i>260</i>&nbsp;
+<b class="fc"><i>261</i>&nbsp;        int fullHealthBar = (this.level.getColumn() * 4) + 2;</b>
+<i>262</i>&nbsp;
+<b class="fc"><i>263</i>&nbsp;        for (int i = 0; i &lt; this.players.length; i++) {</b>
+<b class="fc"><i>264</i>&nbsp;            int playerHealth = this.players[i].getHealth();</b>
+<b class="fc"><i>265</i>&nbsp;            int currentPlayerHealthBar = (int) Math.floor((playerHealth / (double) this.level.getMaxHealthInLevel()) * fullHealthBar);</b>
+<b class="fc"><i>266</i>&nbsp;            for (int j = 0; j &lt; fullHealthBar; j++) {</b>
+<b class="fc"><i>267</i>&nbsp;                if (j &gt; currentPlayerHealthBar) {</b>
+<b class="fc"><i>268</i>&nbsp;                    System.out.print(&quot; &quot;);</b>
+<i>269</i>&nbsp;                } else {
+<b class="fc"><i>270</i>&nbsp;                    System.out.print(&quot;=&quot;);</b>
+<i>271</i>&nbsp;                }
+<i>272</i>&nbsp;            }
+<b class="fc"><i>273</i>&nbsp;            System.out.printf(&quot;%5s&quot;, &quot; &quot;);</b>
+<i>274</i>&nbsp;        }
+<b class="fc"><i>275</i>&nbsp;        System.out.println();</b>
+<b class="fc"><i>276</i>&nbsp;    }</b>
+<i>277</i>&nbsp;
+<i>278</i>&nbsp;
+<i>279</i>&nbsp;    public void attack(int playerRow, int playerColumn, int opponentRow, int opponentColumn) {
+<b class="fc"><i>280</i>&nbsp;        BattlePosition[][] area = this.getCurrentPlayer().getBattleArea().getArea();</b>
+<b class="fc"><i>281</i>&nbsp;        BattlePosition[][] opponentArea = this.getOpponent().getBattleArea().getArea();</b>
+<b class="fc"><i>282</i>&nbsp;        BattlePosition battlePosition = area[playerRow][playerColumn];</b>
+<b class="fc"><i>283</i>&nbsp;        if (battlePosition != null &amp;&amp; battlePosition.getSoldier() != null) {</b>
+<b class="fc"><i>284</i>&nbsp;            Soldier soldier = battlePosition.getSoldier();</b>
+<b class="fc"><i>285</i>&nbsp;            if (!soldier.isAlive()) {</b>
+<b class="nc"><i>286</i>&nbsp;                System.err.println(&quot;Sorry, your Soldier at that position has fallen!&quot;);</b>
+<b class="nc"><i>287</i>&nbsp;                return;</b>
+<i>288</i>&nbsp;            }
+<b class="fc"><i>289</i>&nbsp;            Optional&lt;Weapon&gt; weaponOptional = soldier.getCurrentWeapon();</b>
+<b class="fc"><i>290</i>&nbsp;            if (weaponOptional.isPresent()) {</b>
+<i>291</i>&nbsp;                try {
+<b class="fc"><i>292</i>&nbsp;                    Weapon weapon = weaponOptional.get();</b>
+<b class="fc"><i>293</i>&nbsp;                    weapon.fire();</b>
+<b class="fc"><i>294</i>&nbsp;                    if (this.level.getColumn() / weapon.getWeaponGrade().getGrade() &gt;= opponentColumn) {</b>
+<b class="fc"><i>295</i>&nbsp;                        BattlePosition opponentBattlePosition = opponentArea[opponentRow][opponentColumn];</b>
+<b class="fc"><i>296</i>&nbsp;                        Soldier opponentSoldier = opponentBattlePosition.getSoldier();</b>
+<b class="fc"><i>297</i>&nbsp;                        if (opponentSoldier != null) {</b>
+<b class="fc"><i>298</i>&nbsp;                            if (opponentSoldier.isAlive()) {</b>
+<b class="fc"><i>299</i>&nbsp;                                System.out.printf(&quot;%s %s has hit the enemy&#39;s %s\n&quot;, this.getCurrentPlayer().getName(), soldier.getType().name(), opponentSoldier.getType().name());</b>
+<b class="fc"><i>300</i>&nbsp;                                opponentSoldier.takeHit(weaponOptional.get());</b>
+<b class="fc"><i>301</i>&nbsp;                                if (!opponentSoldier.isAlive()) {</b>
+<b class="fc"><i>302</i>&nbsp;                                    this.getCurrentPlayer().getStat().setNumberOfEnemiesKilled(this.getCurrentPlayer().getStat().getNumberOfEnemiesKilled() + 1);</b>
+<b class="fc"><i>303</i>&nbsp;                                    this.getOpponent().getStat().setNumberOfSoldiersKilled(this.getCurrentPlayer().getStat().getNumberOfEnemiesKilled());</b>
+<b class="fc"><i>304</i>&nbsp;                                    this.getCurrentPlayer().getStat().setPoints(this.getCurrentPlayer().getStat().getPoints() + calculatePoints(soldier, opponentSoldier, weaponOptional.get()));</b>
+<i>305</i>&nbsp;                                }
+<i>306</i>&nbsp;                            }
+<i>307</i>&nbsp;                        } else {
+<b class="nc"><i>308</i>&nbsp;                            System.out.printf(&quot;%s %s has hit an empty position on the enemy&#39;s area.\n&quot;, this.getCurrentPlayer().getName(), soldier.getType().name());</b>
+<b class="nc"><i>309</i>&nbsp;                            opponentBattlePosition.setBlasted(true);</b>
+<i>310</i>&nbsp;                        }
+<b class="fc"><i>311</i>&nbsp;                        if (this.shouldGameEnd()) {</b>
+<b class="nc"><i>312</i>&nbsp;                            System.out.printf(&quot;%s has WON!!\n&quot;, this.getCurrentPlayer().getName());</b>
+<b class="nc"><i>313</i>&nbsp;                            if (this.level.getLevel() &lt; Level.MAX_LEVEL) {</b>
+<b class="nc"><i>314</i>&nbsp;                                System.out.printf(&quot;Type \&quot;NEXT LEVEL\&quot; to go to %d \n&quot;, this.level.getLevel() + 1);</b>
+<i>315</i>&nbsp;                            } else {
+<b class="nc"><i>316</i>&nbsp;                                System.out.printf(&quot;You have reached the end of the game!. The game would now exit :)\n&quot;);</b>
+<b class="nc"><i>317</i>&nbsp;                                this.endGame();</b>
+<b class="nc"><i>318</i>&nbsp;                                System.exit(0);</b>
+<i>319</i>&nbsp;                            }
+<b class="nc"><i>320</i>&nbsp;                            this.endGame();</b>
+<b class="nc"><i>321</i>&nbsp;                            return;</b>
+<i>322</i>&nbsp;                        }
+<b class="fc"><i>323</i>&nbsp;                    } else {</b>
+<b class="nc"><i>324</i>&nbsp;                        System.out.printf(&quot;%s %s shot out of range. What a waste! \n&quot;, this.getCurrentPlayer().getName(), soldier.getType().name());</b>
+<i>325</i>&nbsp;                    }
+<b class="fc"><i>326</i>&nbsp;                    this.nextPlayerTurn();</b>
+<b class="nc"><i>327</i>&nbsp;                } catch (SoldierOutOfArmorException e) {</b>
+<b class="nc"><i>328</i>&nbsp;                    System.err.println(&quot;The Soldier you have selected is out of ArmorVest use a different Soldier or pick a new Weapon in the Arsenal.&quot;);</b>
+<b class="nc"><i>329</i>&nbsp;                    return;</b>
+<b class="fc"><i>330</i>&nbsp;                }</b>
+<i>331</i>&nbsp;            } else {
+<b class="nc"><i>332</i>&nbsp;                System.err.println(&quot;The Soldier you have selected does not have a Weapon. Check the Arsenal for weapons.&quot;);</b>
+<i>333</i>&nbsp;            }
+<b class="fc"><i>334</i>&nbsp;        } else {</b>
+<b class="fc"><i>335</i>&nbsp;            System.err.println(&quot;You do not have a Soldier at that battlePosition!&quot;);</b>
+<i>336</i>&nbsp;        }
+<b class="fc"><i>337</i>&nbsp;    }</b>
+<i>338</i>&nbsp;
+<i>339</i>&nbsp;    private boolean shouldGameEnd() {
+<b class="fc"><i>340</i>&nbsp;        Arsenal arsenal = this.getOpponent().getArsenal();</b>
+<b class="fc"><i>341</i>&nbsp;        if (this.getOpponent().getHealth() &lt;= 0) {</b>
+<b class="nc"><i>342</i>&nbsp;            return true;</b>
+<i>343</i>&nbsp;        }
+<i>344</i>&nbsp;
+<b class="fc"><i>345</i>&nbsp;        long numberOfSoldiersWithWeapon = this.getOpponent().getSoldiers().stream().filter(s -&gt; {</b>
+<b class="fc"><i>346</i>&nbsp;            Optional&lt;Weapon&gt; currentWeapon = s.getCurrentWeapon();</b>
+<b class="fc"><i>347</i>&nbsp;            if (s.isAlive() &amp;&amp; currentWeapon.isPresent()) {</b>
+<b class="fc"><i>348</i>&nbsp;                if (!currentWeapon.get().isOutOfArmor()) {</b>
+<b class="fc"><i>349</i>&nbsp;                    return true;</b>
+<i>350</i>&nbsp;                }
+<i>351</i>&nbsp;            }
+<b class="fc"><i>352</i>&nbsp;            return false;</b>
+<b class="fc"><i>353</i>&nbsp;        }).count();</b>
+<i>354</i>&nbsp;
+<b class="fc"><i>355</i>&nbsp;        if (numberOfSoldiersWithWeapon &lt; 1 &amp;&amp; arsenal != null &amp;&amp; !arsenal.isEmpty()) {</b>
+<b class="nc"><i>356</i>&nbsp;            Map&lt;WeaponType, Integer&gt; inventory = arsenal.getInventory();</b>
+<i>357</i>&nbsp;
+<b class="nc"><i>358</i>&nbsp;            List&lt;Soldier&gt; soldierWithoutWeapon = this.getOpponent().getSoldiers().stream().filter(s -&gt; {</b>
+<b class="nc"><i>359</i>&nbsp;                Optional&lt;Weapon&gt; currentWeapon = s.getCurrentWeapon();</b>
+<b class="nc"><i>360</i>&nbsp;                if (s.isAlive() &amp;&amp; currentWeapon.isPresent()) {</b>
+<b class="nc"><i>361</i>&nbsp;                    if (currentWeapon.get().isOutOfArmor()) {</b>
+<b class="nc"><i>362</i>&nbsp;                        return true;</b>
+<i>363</i>&nbsp;                    }
+<i>364</i>&nbsp;                }
+<b class="nc"><i>365</i>&nbsp;                return false;</b>
+<b class="nc"><i>366</i>&nbsp;            }).collect(Collectors.toList());</b>
+<i>367</i>&nbsp;
+<b class="nc"><i>368</i>&nbsp;            if (soldierWithoutWeapon.isEmpty()) {</b>
+<b class="nc"><i>369</i>&nbsp;                return false;</b>
+<i>370</i>&nbsp;            }
+<b class="nc"><i>371</i>&nbsp;            for (Soldier s : soldierWithoutWeapon) {</b>
+<b class="nc"><i>372</i>&nbsp;                boolean foundMatchingWeapon = false;</b>
+<b class="nc"><i>373</i>&nbsp;                for (WeaponType weaponType : inventory.keySet()) {</b>
+<b class="nc"><i>374</i>&nbsp;                    int count = inventory.get(weaponType);</b>
+<b class="nc"><i>375</i>&nbsp;                    if (count &gt; 0) {</b>
+<b class="nc"><i>376</i>&nbsp;                        if (s.canUseWeapon(weaponType)) {</b>
+<b class="nc"><i>377</i>&nbsp;                            inventory.put(weaponType, count - 1);</b>
+<b class="nc"><i>378</i>&nbsp;                            foundMatchingWeapon = true;</b>
+<b class="nc"><i>379</i>&nbsp;                            break;</b>
+<i>380</i>&nbsp;                        }
+<i>381</i>&nbsp;                    }
+<b class="nc"><i>382</i>&nbsp;                }</b>
+<b class="nc"><i>383</i>&nbsp;                if (!foundMatchingWeapon)</b>
+<b class="nc"><i>384</i>&nbsp;                    return true;</b>
+<b class="nc"><i>385</i>&nbsp;            }</b>
+<b class="nc"><i>386</i>&nbsp;            return true;</b>
+<i>387</i>&nbsp;        }
+<b class="fc"><i>388</i>&nbsp;        return false;</b>
+<i>389</i>&nbsp;    }
+<i>390</i>&nbsp;
+<i>391</i>&nbsp;    public void assignWeapon(int playerRow, int playerCol) throws WeaponNotAssignableException, WeaponNotAvailableException {
+<b class="fc"><i>392</i>&nbsp;        BattlePosition battlePosition = this.getCurrentPlayer().getBattleArea().getArea()[playerRow][playerCol];</b>
+<b class="fc"><i>393</i>&nbsp;        Soldier soldier = battlePosition.getSoldier();</b>
+<b class="fc"><i>394</i>&nbsp;        if (soldier != null) {</b>
+<b class="nc"><i>395</i>&nbsp;            if (soldier.isAlive()) {</b>
+<b class="nc"><i>396</i>&nbsp;                Arsenal arsenal = this.getCurrentPlayer().getArsenal();</b>
+<b class="nc"><i>397</i>&nbsp;                boolean assigned = false;</b>
+<b class="nc"><i>398</i>&nbsp;                for (WeaponType weaponType : soldier.allowedWeapons()) {</b>
+<b class="nc"><i>399</i>&nbsp;                    if (arsenal.hasWeapon(weaponType)) {</b>
+<b class="nc"><i>400</i>&nbsp;                        Weapon weapon = arsenal.pickWeapon(weaponType);</b>
+<b class="nc"><i>401</i>&nbsp;                        soldier.assignWeapon(weapon);</b>
+<b class="nc"><i>402</i>&nbsp;                        assigned = true;</b>
+<b class="nc"><i>403</i>&nbsp;                        break;</b>
+<i>404</i>&nbsp;                    }
+<b class="nc"><i>405</i>&nbsp;                }</b>
+<b class="nc"><i>406</i>&nbsp;                if (!assigned)</b>
+<b class="nc"><i>407</i>&nbsp;                    throw new WeaponNotAssignableException(&quot;Could not find an appropriate Weapon for the Soldier in the arsenal&quot;);</b>
+<b class="nc"><i>408</i>&nbsp;            } else {</b>
+<b class="nc"><i>409</i>&nbsp;                throw new WeaponNotAssignableException(&quot;Cannot assign a weapon to a dead Soldier&quot;);</b>
+<i>410</i>&nbsp;            }
+<i>411</i>&nbsp;        } else {
+<b class="fc"><i>412</i>&nbsp;            throw new WeaponNotAssignableException(&quot;Cannot find a Soldier in the specified battle position&quot;);</b>
+<i>413</i>&nbsp;        }
+<b class="nc"><i>414</i>&nbsp;    }</b>
+<i>415</i>&nbsp;
+<i>416</i>&nbsp;    private void printCurrentPlayerStat() {
+<b class="nc"><i>417</i>&nbsp;        this.printStat(this.getCurrentPlayer());</b>
+<b class="nc"><i>418</i>&nbsp;    }</b>
+<i>419</i>&nbsp;
+<i>420</i>&nbsp;    public void printStat(Player... players) {
+<b class="fc"><i>421</i>&nbsp;        if (players == null || players.length &lt; 1) {</b>
+<b class="nc"><i>422</i>&nbsp;            this.printCurrentPlayerStat();</b>
+<b class="nc"><i>423</i>&nbsp;            return;</b>
+<i>424</i>&nbsp;        }
+<b class="fc"><i>425</i>&nbsp;        for (Player player : players) {</b>
+<b class="fc"><i>426</i>&nbsp;            System.out.printf(&quot;_________________________________\n&quot;);</b>
+<b class="fc"><i>427</i>&nbsp;            System.out.printf(&quot;%-25s %s\n&quot;, &quot;Player&quot;, player.getName().toUpperCase());</b>
+<b class="fc"><i>428</i>&nbsp;            System.out.printf(&quot;%-25s %d \n&quot;, &quot;Enemies Killed&quot;, player.getStat().getNumberOfEnemiesKilled());</b>
+<b class="fc"><i>429</i>&nbsp;            System.out.printf(&quot;%-25s %d \n&quot;, &quot;Soldiers Killed&quot;, player.getNumberOfDeadSoldiers());</b>
+<b class="fc"><i>430</i>&nbsp;            System.out.printf(&quot;%-25s %d \n&quot;, &quot;Soldiers Injured&quot;, player.getNumberOfInjuredSoldiers());</b>
+<b class="fc"><i>431</i>&nbsp;            System.out.printf(&quot;%-25s %d%%\n&quot;, &quot;Health Status&quot;, this.calculateHealthInPercentage(player));</b>
+<b class="fc"><i>432</i>&nbsp;            System.out.printf(&quot;%-25s %d \n&quot;, &quot;Points&quot;, player.getStat().getPoints());</b>
+<b class="fc"><i>433</i>&nbsp;            System.out.printf(&quot;-------Weapons in Arsenal--------\n&quot;);</b>
+<b class="fc"><i>434</i>&nbsp;            player.getArsenal().getInventory().forEach((k, v) -&gt; System.out.printf(&quot;%-25s %d \n&quot;, k, v));</b>
+<b class="fc"><i>435</i>&nbsp;            System.out.printf(&quot;_________________________________\n&quot;);</b>
+<i>436</i>&nbsp;        }
+<b class="fc"><i>437</i>&nbsp;    }</b>
+<i>438</i>&nbsp;
+<i>439</i>&nbsp;    private int calculateHealthInPercentage(Player player) {
+<b class="fc"><i>440</i>&nbsp;        double playerHealth = player.getHealth();</b>
+<b class="fc"><i>441</i>&nbsp;        double maxHealth = this.level.getMaxHealthInLevel();</b>
+<b class="fc"><i>442</i>&nbsp;        return (int) Math.floor((playerHealth / maxHealth) * 100);</b>
+<i>443</i>&nbsp;    }
+<i>444</i>&nbsp;
+<i>445</i>&nbsp;    public void endGame() {
+<b class="nc"><i>446</i>&nbsp;        this.printStat(this.getFirstPlayer(), this.getSecondPlayer());</b>
+<b class="nc"><i>447</i>&nbsp;        this.running = false;</b>
+<b class="nc"><i>448</i>&nbsp;    }</b>
+<i>449</i>&nbsp;
+<i>450</i>&nbsp;    public void startGame() {
+<b class="fc"><i>451</i>&nbsp;        this.running = true;</b>
+<b class="fc"><i>452</i>&nbsp;    }</b>
+<i>453</i>&nbsp;
+<i>454</i>&nbsp;    public BattleField goToNextLevel() throws GameInitializationException {
+<b class="nc"><i>455</i>&nbsp;        if (!this.running) {</b>
+<b class="nc"><i>456</i>&nbsp;            return new BattleField(this.getFirstPlayer(), this.getSecondPlayer(), new Level(this.level.getLevel() + 1));</b>
+<i>457</i>&nbsp;        } else {
+<b class="nc"><i>458</i>&nbsp;            throw new GameInitializationException(&quot;You cannot switch game level while another game is going on&quot;);</b>
+<i>459</i>&nbsp;        }
+<i>460</i>&nbsp;    }
+<i>461</i>&nbsp;
+<i>462</i>&nbsp;    public void redrawField() {
+<b class="nc"><i>463</i>&nbsp;        this.drawBattleHeaders();</b>
+<b class="nc"><i>464</i>&nbsp;        this.drawField();</b>
+<b class="nc"><i>465</i>&nbsp;    }</b>
+<i>466</i>&nbsp;
+<i>467</i>&nbsp;    public int getLevel() {
+<b class="nc"><i>468</i>&nbsp;        return this.level.getLevel();</b>
+<i>469</i>&nbsp;    }
+<i>470</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2017-11-14 16:36</div>
+</div>
+</body>
+</html>

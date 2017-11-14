@@ -1,0 +1,128 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AbstractWeapon</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.randomapps.battlefield.barrack.armory</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AbstractWeapon (com.randomapps.battlefield.barrack.armory)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AbstractWeapon</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/ 7)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.randomapps.battlefield.barrack.armory;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.randomapps.battlefield.barrack.WeaponGrade;
+<i>4</i>&nbsp;import com.randomapps.battlefield.barrack.WeaponType;
+<i>5</i>&nbsp;import com.randomapps.battlefield.exception.SoldierOutOfArmorException;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;
+<b class="fc"><i>8</i>&nbsp;public abstract class AbstractWeapon implements Weapon {</b>
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;    protected int availableRounds;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;    @Override
+<i>14</i>&nbsp;    public final boolean isOutOfArmor() {
+<b class="fc"><i>15</i>&nbsp;        return this.availableRounds &lt;= 0;</b>
+<i>16</i>&nbsp;    }
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    @Override
+<i>19</i>&nbsp;    public abstract WeaponGrade getWeaponGrade();
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    @Override
+<i>22</i>&nbsp;    public abstract WeaponType getWeaponType();
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    @Override
+<i>25</i>&nbsp;    public abstract int scorePoint();
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    @Override
+<i>28</i>&nbsp;    public abstract String name();
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    @Override
+<i>31</i>&nbsp;    public int availableRounds() {
+<b class="fc"><i>32</i>&nbsp;        return this.availableRounds;</b>
+<i>33</i>&nbsp;    }
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    @Override
+<i>36</i>&nbsp;    public final void fire() throws SoldierOutOfArmorException {
+<b class="fc"><i>37</i>&nbsp;        if (this.isOutOfArmor())</b>
+<b class="fc"><i>38</i>&nbsp;            throw new SoldierOutOfArmorException(&quot;This weapon is out of ArmorVest&quot;);</b>
+<b class="fc"><i>39</i>&nbsp;        this.availableRounds--;</b>
+<b class="fc"><i>40</i>&nbsp;    }</b>
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    @Override
+<i>43</i>&nbsp;    public abstract int travelRange();
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2017-11-14 16:37</div>
+</div>
+</body>
+</html>
