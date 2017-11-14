@@ -9,44 +9,41 @@ import com.randomapps.battlefield.layout.BattleField;
 import com.randomapps.battlefield.util.GameHelper;
 
 import java.util.Scanner;
+import java.util.function.Predicate;
 
 public class BattleFieldGameLauncher {
 
-    private static void validatePlayerName(String playerName) {
+    private static boolean validatePlayerName(String playerName) {
         if (playerName == null || playerName.length() < 2 || playerName.length() > 5) {
             System.out.println("Player name must be between 2 and 5 characters");
-            return;
+            return false;
         }
+        return true;
     }
 
-    private static void validateGameMode(String mode) {
+    private static boolean validateGameMode(String mode) {
         if (mode == null || mode.length() == 0 || (!mode.equals("1") && !mode.equals("2"))) {
             System.out.println("Press 1 to play with the CPU or 2 for multiple players");
-            return;
+            return false;
         }
+        return true;
     }
 
     public static void main(String[] args) throws GameInitializationException {
         BattleFieldGame battleFieldGame = new BattleFieldGame();
         battleFieldGame.showInstructions();
-        GameHelper.promptEnterKey();
-        try {
-            System.out.println("Press 1 to play with the CPU or 2 for multiple players");
-            Scanner gameModeInput = new Scanner(System.in);
-            String gameMode = gameModeInput.nextLine();
-            validateGameMode(gameMode);
 
-            Scanner player1NameInput = new Scanner(System.in);
-            System.out.println("Player 1, Please a name for your Character\n");
-            String player1Name = player1NameInput.nextLine();
-            validatePlayerName(player1Name);
+        GameHelper.pressAnyKeyToContinue();
+        GameHelper.clearConsole();
+        try {
+            String gameMode = getInputAsString("Press 1 to play with the CPU or 2 for multiple players", BattleFieldGameLauncher::validateGameMode);
+
+            String player1Name = getInputAsString("Player 1, Please a name for your Character", BattleFieldGameLauncher::validatePlayerName);
+
             Player player1 = new Player(player1Name);
             Player player2;
             if (gameMode.equals("2")) {
-                Scanner player2NameInput = new Scanner(System.in);
-                System.out.println("Player 2, Please a name for your Character\n");
-                String player2Name = player2NameInput.nextLine();
-                validatePlayerName(player2Name);
+                String player2Name = getInputAsString("Player 2, Please a name for your Character", BattleFieldGameLauncher::validatePlayerName);
                 player2 = new Player(player2Name);
             } else if (gameMode.equals("1")) {
                 player2 = new Player(true);
@@ -81,17 +78,21 @@ public class BattleFieldGameLauncher {
                         }
                         break;
                     default:
-                        try {
-                            String[] split = next.split("\\s");
-                            int playerRow = Integer.parseInt(split[0]);
-                            int playerColumn = Integer.parseInt(split[1]);
-                            int opponentRow = Integer.parseInt(split[2]);
-                            int opponentColumn = Integer.parseInt(split[3]);
-                            battleField.attack(playerRow, playerColumn, opponentRow, opponentColumn);
-                        } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-                            System.err.println("The selected index does not exist. Please try again or type \"help\" to read teh game instructions");
-                        }catch (Exception e){
-                            System.err.println("An error occurred. Please try again or type \"help\" to read teh game instructions");
+                        if (next != null && next.length() == 4) {
+                            try {
+                                char[] split = next.toCharArray();
+                                int playerRow = Character.getNumericValue(split[0]);
+                                int playerColumn = Character.getNumericValue(split[1]);
+                                int opponentRow = Character.getNumericValue(split[2]);
+                                int opponentColumn = Character.getNumericValue(split[3]);
+                                battleField.attack(playerRow, playerColumn, opponentRow, opponentColumn);
+                            } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
+                                System.err.println("The selected index does not exist. Please try again or type \"help\" to read teh game instructions");
+                            } catch (Exception e) {
+                                System.err.println("An error occurred. Please try again or type \"help\" to read teh game instructions");
+                            }
+                        } else {
+                            System.err.println("Unknown command. Please try again or type \"help\" to read teh game instructions");
                         }
                         break;
                 }
@@ -101,5 +102,17 @@ public class BattleFieldGameLauncher {
         } catch (InvalidGameStateException e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    private static String getInputAsString(String prompt, Predicate<String> stringPredicate) {
+        System.out.println(prompt);
+        boolean b = false;
+        String output = null;
+        while (!b) {
+            Scanner s = new Scanner(System.in);
+            output = s.nextLine();
+            b = stringPredicate.test(output);
+        }
+        return output;
     }
 }

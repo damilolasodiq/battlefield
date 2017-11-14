@@ -41,4 +41,5 @@ public abstract class AbstractWeapon implements Weapon {
 
     @Override
     public abstract int travelRange();
+
 }
