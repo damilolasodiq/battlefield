@@ -3,7 +3,9 @@ package com.randomapps.battlefield.game;
 import com.randomapps.battlefield.exception.GameInitializationException;
 import com.randomapps.battlefield.exception.InvalidGameStateException;
 
-public interface Game {
+import java.io.Serializable;
+
+public interface Game<T extends Serializable> {
 
     void start() throws InvalidGameStateException, GameInitializationException;
 
@@ -18,4 +20,6 @@ public interface Game {
     boolean isPaused();
 
     void showInstructions();
+
+    SavedGame<T> lastSavedGame();
 }

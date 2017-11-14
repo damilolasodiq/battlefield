@@ -4,7 +4,9 @@ import com.randomapps.battlefield.barrack.WeaponGrade;
 import com.randomapps.battlefield.barrack.WeaponType;
 import com.randomapps.battlefield.exception.SoldierOutOfArmorException;
 
-public interface Weapon {
+import java.io.Serializable;
+
+public interface Weapon extends Serializable {
 
     String name();
 

@@ -2,14 +2,21 @@ package com.randomapps.battlefield.barrack;
 
 public enum SoldierType {
 
-    CORPORAL("corporal"), SERGEANT("sergeant"), GENERAL("general");
-    String type;
+    CORPORAL("Corporal", 'C'), SERGEANT("Sergeant", 'S'), GENERAL("General", 'G');
+    char symbol;
+    String name;
 
-    SoldierType(String type) {
-        this.type = type;
+    SoldierType(String name, char symbol) {
+        this.symbol = symbol;
+        this.name = name;
+
     }
 
-    public String getType(){
-        return this.type;
+    public char getSymbol() {
+        return this.symbol;
+    }
+
+    public String getName() {
+        return name;
     }
 }

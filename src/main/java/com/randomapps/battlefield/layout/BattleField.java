@@ -13,11 +13,12 @@ import com.randomapps.battlefield.game.Level;
 import com.randomapps.battlefield.game.Player;
 import com.randomapps.battlefield.game.PlayerStat;
 
+import java.io.Serializable;
 import java.security.SecureRandom;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class BattleField {
+public class BattleField implements Serializable {
 
     private final static Character DEAD_SOLDIER_POSITION = '!';
     private final static Character HIDDEN_POSITION = '-';
@@ -37,6 +38,10 @@ public class BattleField {
         this.initializePlayers();
         this.drawBattleHeaders();
         this.drawField();
+    }
+
+    public BattleField(Player player1, Player player2, int level) throws GameInitializationException {
+        new BattleField(player1, player2, new Level(level));
     }
 
     private int calculatePoints(Soldier shootingSoldier, Soldier shotSoldier, Weapon weapon) {
@@ -93,7 +98,7 @@ public class BattleField {
             Soldier soldier = battlePosition.getSoldier();
             if (soldier != null) {
                 if (soldier.isAlive()) {
-                    rowToken = hideSoldiers ? HIDDEN_POSITION : soldier.getSymbol();
+                    rowToken = hideSoldiers ? HIDDEN_POSITION : soldier.getType().getSymbol();
                 } else {
                     rowToken = DEAD_SOLDIER_POSITION;
                 }
@@ -139,7 +144,10 @@ public class BattleField {
             int row = secureRandomX.nextInt(this.level.getRow());
             int col = secureRandomY.nextInt(this.level.getColumn());
             if (area[row][col] == null) {
-                s.setBattleCoordinate(new int[row][col]);
+                int[][] coordinate = new int[1][2];
+                coordinate[0][0] = row;
+                coordinate[0][1] = col;
+                s.setBattleCoordinate(coordinate);
                 area[row][col] = new BattlePosition(s);
                 soldiers.remove();
             }
@@ -200,7 +208,6 @@ public class BattleField {
         if (this.getCurrentPlayer().isCpu()) {
             this.simulateCPUPlay();
         } else {
-
             this.drawBattleHeaders();
             this.drawField();
         }
@@ -287,6 +294,7 @@ public class BattleField {
                         Soldier opponentSoldier = opponentBattlePosition.getSoldier();
                         if (opponentSoldier != null) {
                             if (opponentSoldier.isAlive()) {
+                                System.out.printf("%s %s has hit the enemy's %s\n", this.getCurrentPlayer().getName(), soldier.getType().name(), opponentSoldier.getType().name());
                                 opponentSoldier.takeHit(weaponOptional.get());
                                 if (!opponentSoldier.isAlive()) {
                                     this.getCurrentPlayer().getStat().setNumberOfEnemiesKilled(this.getCurrentPlayer().getStat().getNumberOfEnemiesKilled() + 1);
@@ -294,12 +302,13 @@ public class BattleField {
                                 }
                             }
                         } else {
+                            System.out.printf("%s %s has hit an empty position on the enemy's area.\n", this.getCurrentPlayer().getName(), soldier.getType().name());
                             opponentBattlePosition.setBlasted(true);
                         }
                         if (this.shouldGameEnd()) {
                             System.out.printf("%s has WON!!\n", this.getCurrentPlayer().getName());
                             if (this.level.getLevel() < Level.MAX_LEVEL) {
-                                System.out.printf("Type \"next level\" to go to %d \n", this.level.getLevel() + 1);
+                                System.out.printf("Type \"NEXT LEVEL\" to go to %d \n", this.level.getLevel() + 1);
                             } else {
                                 System.out.printf("You have reached the end of the game!. The game would now exit :)\n");
                                 this.endGame();
@@ -308,6 +317,8 @@ public class BattleField {
                             this.endGame();
                             return;
                         }
+                    } else {
+                        System.out.printf("%s %s shot out of range. What a waste! \n", this.getCurrentPlayer().getName(), soldier.getType().name());
                     }
                     this.nextPlayerTurn();
                 } catch (SoldierOutOfArmorException e) {
@@ -439,10 +450,14 @@ public class BattleField {
 
     public BattleField goToNextLevel() throws GameInitializationException {
         if (!this.running) {
-            Level level = new Level(this.level.getLevel() + 1);
-            return new BattleField(this.getFirstPlayer(), this.getSecondPlayer(), level);
+            return new BattleField(this.getFirstPlayer(), this.getSecondPlayer(), this.level.getLevel() + 1);
         } else {
             throw new GameInitializationException("You cannot switch game level while another game is going on");
         }
+    }
+
+    public void redrawField() {
+        this.drawBattleHeaders();
+        this.drawField();
     }
 }

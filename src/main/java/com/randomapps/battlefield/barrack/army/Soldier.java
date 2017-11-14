@@ -1,14 +1,16 @@
 package com.randomapps.battlefield.barrack.army;
 
+import com.randomapps.battlefield.barrack.SoldierType;
 import com.randomapps.battlefield.barrack.WeaponType;
 import com.randomapps.battlefield.barrack.armory.ArmorVest;
 import com.randomapps.battlefield.barrack.armory.Weapon;
 import com.randomapps.battlefield.exception.WeaponNotAssignableException;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-public interface Soldier extends Cloneable {
+public interface Soldier extends Cloneable, Serializable {
 
     List<WeaponType> allowedWeapons();
 
@@ -17,8 +19,6 @@ public interface Soldier extends Cloneable {
     Optional<Weapon> getCurrentWeapon();
 
     boolean isAlive();
-
-    Character getSymbol();
 
     Optional<ArmorVest> getArmorVest();
 
@@ -33,6 +33,8 @@ public interface Soldier extends Cloneable {
     int getRank();
 
     int[][] getBattleCoordinate();
+
+    SoldierType getType();
 
     void setBattleCoordinate(int[][] battleCoordinate);
 }

@@ -4,10 +4,11 @@ import com.randomapps.battlefield.barrack.armory.Weapon;
 import com.randomapps.battlefield.barrack.armory.WeaponFactory;
 import com.randomapps.battlefield.exception.WeaponNotAvailableException;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Arsenal {
+public class Arsenal implements Serializable {
 
     private Map<WeaponType, Integer> inventory = new HashMap();
 

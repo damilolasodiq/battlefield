@@ -5,9 +5,10 @@ import com.randomapps.battlefield.barrack.army.Soldier;
 import com.randomapps.battlefield.layout.BattleArea;
 import com.randomapps.battlefield.util.GameHelper;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Player {
+public class Player implements Serializable{
 
     private final String name;
     private final boolean cpu;

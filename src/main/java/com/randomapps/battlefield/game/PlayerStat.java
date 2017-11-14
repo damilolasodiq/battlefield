@@ -1,6 +1,8 @@
 package com.randomapps.battlefield.game;
 
-public class PlayerStat {
+import java.io.Serializable;
+
+public class PlayerStat implements Serializable{
 
 
     private int numberOfSoldiersKilled;

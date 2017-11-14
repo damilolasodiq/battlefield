@@ -8,11 +8,12 @@ import com.randomapps.battlefield.barrack.army.Soldier;
 import com.randomapps.battlefield.exception.GameInitializationException;
 import com.randomapps.battlefield.util.CollectionsHelper;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Level {
+public class Level implements Serializable {
 
     private static final int DEFAULT_ROW_SIZE = 4;
     private static final int DEFAULT_COLUMN_SIZE = 6;

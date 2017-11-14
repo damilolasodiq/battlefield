@@ -5,9 +5,11 @@ import com.randomapps.battlefield.exception.InvalidGameStateException;
 import com.randomapps.battlefield.game.BattleFieldGame;
 import com.randomapps.battlefield.game.Level;
 import com.randomapps.battlefield.game.Player;
+import com.randomapps.battlefield.game.SavedGame;
 import com.randomapps.battlefield.layout.BattleField;
 import com.randomapps.battlefield.util.GameHelper;
 
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
@@ -29,13 +31,29 @@ public class BattleFieldGameLauncher {
         return true;
     }
 
+
     public static void main(String[] args) throws GameInitializationException {
         BattleFieldGame battleFieldGame = new BattleFieldGame();
-        battleFieldGame.showInstructions();
+        BattleField battleField;
+        SavedGame<BattleField> battleFieldSavedGame = battleFieldGame.lastSavedGame();
+        String resumeGame = null;
+        if (battleFieldSavedGame != null) {
+            String prompt = "Type \"1\" to resume or \"2\" to start a new game";
+            String date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(battleFieldSavedGame.getDateSaved());
+            resumeGame = getInputAsString(String.format("You have a saved game on %s, %s", date, prompt), s -> {
+                if (s == null || s.length() == 0 || (!s.equals("1") && !s.equals("2"))) {
+                    System.out.println(prompt);
+                    return false;
+                }
+                return true;
+            });
+        }
+        if (resumeGame == null || resumeGame.equals("2")) {
+            battleFieldGame.showInstructions();
 
-        GameHelper.pressAnyKeyToContinue();
-        GameHelper.clearConsole();
-        try {
+            GameHelper.pressAnyKeyToContinue();
+            GameHelper.clearConsole();
+
             String gameMode = getInputAsString("Press 1 to play with the CPU or 2 for multiple players", BattleFieldGameLauncher::validateGameMode);
 
             String player1Name = getInputAsString("Player 1, Please a name for your Character", BattleFieldGameLauncher::validatePlayerName);
@@ -51,7 +69,12 @@ public class BattleFieldGameLauncher {
                 throw new GameInitializationException("Could not determine game mode");
             }
             Level level = new Level(1);
-            BattleField battleField = new BattleField(player1, player2, level);
+            battleField = new BattleField(player1, player2, level);
+        } else {
+            battleField = battleFieldSavedGame.getGame();
+        }
+
+        try {
             battleFieldGame.setBattleField(battleField);
             battleFieldGame.start();
             Scanner scanner = new Scanner(System.in);
@@ -78,7 +101,7 @@ public class BattleFieldGameLauncher {
                         }
                         break;
                     default:
-                        if (next != null && next.length() == 4) {
+                        if (next != null && next.matches("^\\d{4}")) {
                             try {
                                 char[] split = next.toCharArray();
                                 int playerRow = Character.getNumericValue(split[0]);
@@ -104,7 +127,7 @@ public class BattleFieldGameLauncher {
         }
     }
 
-    private static String getInputAsString(String prompt, Predicate<String> stringPredicate) {
+    private static String getInputAsString(final String prompt, Predicate<String> stringPredicate) {
         System.out.println(prompt);
         boolean b = false;
         String output = null;

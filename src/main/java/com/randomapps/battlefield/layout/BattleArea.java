@@ -2,12 +2,13 @@ package com.randomapps.battlefield.layout;
 
 import com.randomapps.battlefield.game.Level;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class BattleArea {
+public class BattleArea implements Serializable{
 
     private int row;
     private int col;

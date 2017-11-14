@@ -2,8 +2,9 @@ package com.randomapps.battlefield.layout;
 
 import com.randomapps.battlefield.barrack.army.Soldier;
 
-public class BattlePosition {
+import java.io.Serializable;
 
+public class BattlePosition implements Serializable {
     Soldier soldier;
 
     boolean blasted;

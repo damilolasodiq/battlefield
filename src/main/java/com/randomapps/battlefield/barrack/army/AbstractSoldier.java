@@ -1,5 +1,6 @@
 package com.randomapps.battlefield.barrack.army;
 
+import com.randomapps.battlefield.barrack.SoldierType;
 import com.randomapps.battlefield.barrack.WeaponType;
 import com.randomapps.battlefield.barrack.armory.ArmorVest;
 import com.randomapps.battlefield.barrack.armory.Weapon;
@@ -69,9 +70,6 @@ public abstract class AbstractSoldier implements Soldier {
     @Override
     public abstract Optional<ArmorVest> getArmorVest();
 
-    @Override
-    public abstract Character getSymbol();
-
     public final boolean isAlive() {
         return this.getHealth() > 0;
 
@@ -93,6 +91,9 @@ public abstract class AbstractSoldier implements Soldier {
     public int[][] getBattleCoordinate() {
         return this.battleCoordinate;
     }
+
+    @Override
+    public abstract SoldierType getType();
 
     @Override
     public void setBattleCoordinate(int[][] battleCoordinate) {
