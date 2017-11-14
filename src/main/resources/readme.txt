@@ -17,20 +17,19 @@ For every level, each player is assigned the same number of soldiers, weapons an
 How to play
 -----------
     1) After reading this instructions, you would follow subsequent instructions on the screen to set a game mode (CPU or multi-player)
-    1) You will be required to enter a name for your character e.g John, Xavi, Elixir e.t.c
-    2) You can type "PAUSE" at any time during a game play to pause the game.
-
-    3) The level information, current player name and health status of both players are shown on the top of the screen at everytime
-    4) You can type "STAT" at any moment in the game to check your full stat such as number of Soldier killed, number of soldiers injured,
+    2) You will be required to enter a name for your character e.g John, Xavi, Elixir e.t.c
+    3) You can type "PAUSE" at any time during a game play to pause the game.
+    4) The level information, current player name and health status of both players are shown on the top of the screen at everytime
+    5) You can type "STAT" at any moment in the game to check your full stat such as number of Soldier killed, number of soldiers injured,
     number of points, inventory of your arsenal and so on.
-    5) To launch an attack, you need to specify the position of your Soldier to carry out the attack to also a position in the battle area
+    6) To launch an attack, you need to specify the position of your Soldier to carry out the attack to also a position in the battle area
     of your opponent where the attack your be carried out. For example, you type 0 1 3 4 to select your Soldier at row 1 col 0 to carry out
     an attack on row 3 col 4 in the opponent's battle area.
-    6) For every attack, you can see the effect on the enemies field.
+    7) For every attack, you can see the effect on the enemies field.
         'X' means your attack hit a position without a Soldier in which case, you don't get a point but your Soldier weapon loses a bullet.
         '!' means your attack hit a Soldier on the enemies field and the Soldier died.
         '-' means a position on the battle field that is yet to be explored.
-    7) Every Soldier type has a range they can shoot for example, a Corporal cannot shoot as far as a Sergeant and a Sergeant cannot shoot as wide as general
+    8) Every Soldier type has a range they can shoot for example, a Corporal cannot shoot as far as a Sergeant and a Sergeant cannot shoot as wide as general
     9) If a Soldier tries to shoot to a point on the enemy's area where his cannot reach, his weapon reduces by a round but there's no effect on the enemies field
     and hence, no point awarded.
     10) You can view this instruction anytime during a game play by typing "HELP"
