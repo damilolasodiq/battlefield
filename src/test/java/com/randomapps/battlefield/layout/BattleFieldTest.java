@@ -162,4 +162,15 @@ public class BattleFieldTest {
         Assert.assertEquals("The Points for player 2 must be the same before and after pausing a game", battleFieldBeforePause.getOpponent().getStat().getPoints(), battleFieldBeforePause.getOpponent().getStat().getPoints());
     }
 
+    @Test
+    public void cpuPlayersTurnAndPlayerRemiansTheSame() throws GameInitializationException {
+        Player player1 = new Player(player1Name);
+        Player player2 = new Player(true);
+        Level level = new Level(1);
+        BattleField battleField = new BattleField(player1, player2, level);
+        battleField.attack(0,0,0,0);
+        Assert.assertEquals(battleField.getCurrentPlayer(), player1);
+        Assert.assertTrue(player2.isCpu());
+    }
+
 }
