@@ -3,7 +3,8 @@ About the Game
 The Battlefield game is an interesting console game designed to emulate 2 nations at war.
 As a player, you have can choose between a multi-player mode or a CPU simulated mode (single player).
 
-When the game starts, each player is given a battle area(N x M matrix) with a representation of Soldiers
+When the game starts, each player is given a battle area (N x M matrix) with a representation of Soldiers. There are 3 type of Soldier and the number and type of Soldiers a Player get is based on the current game level
+
     C - Corporal
     S - Sergeant
     G - General

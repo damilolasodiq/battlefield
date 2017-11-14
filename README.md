@@ -3,13 +3,18 @@ About the Game
 The Battlefield game is an interesting console game designed to emulate 2 nations at war.
 As a player, you have can choose between a multi-player mode or a CPU simulated mode (single player).
 
-When the game starts, each player is given a battle area **(N x M matrix)** with a representation of Soldiers
+When the game starts, each player is given a battle area **(N x M matrix)** with a representation of Soldiers. There are 3 type of Soldier and the number and type of Soldiers a Player get is based on the current game level
 
-    **C** - Corporal
-    **S** - Sergeant
-    **G** - General
+    C - Corporal
+    S - Sergeant
+    G - General
 
-There are 3 categories of weapons in the game, a Pistol, a Shotgun and a Bazooka. A Soldier can only use weapons according to their ranks.
+There are 3 categories of weapons in the game;
+ 
+    Pistol
+    Shotgun
+    Bazooka
+A Soldier can only use weapons according to their ranks.
 For example, a Corporal can only use a Pistol, a Sergent can use a Pistol and a Shotgun while a General can use any of the 3 weapons.
 
 For a CPU simulated mode, the computer randomly selects a name from some list of TRANSFORMER names.
@@ -21,16 +26,16 @@ Perquisite: Ensure you have java >=1.8 runtime installed in your environment. Yo
 )** to run the commands for setup.
 1)  Clone this repository
 
-        `git clone https://github.com/damilolasodiq/battlefield`
+        git clone https://github.com/damilolasodiq/battlefield
 2)  Goto the directory where the repository is created and run the command;
    
-        `mvn clean install`
+        mvn clean install
         
 How to play
 -----------
 1) Open a command line terminal on your Mac or PC and run the command below from the location you cloned the repository;
 
-        ` java -jar Battlefield-1.0-SNAPSHOT.jar BattleFieldGameLauncher`
+        java -jar Battlefield-1.0-SNAPSHOT.jar BattleFieldGameLauncher
         
 2) After reading this instructions, you would follow subsequent instructions on the screen to set a game mode (CPU or multi-player)
 3) You will be required to enter a name for your character e.g John, Xavi, Elixir e.t.c
