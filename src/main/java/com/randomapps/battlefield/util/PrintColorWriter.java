@@ -32,7 +32,7 @@ public class PrintColorWriter extends PrintWriter {
             println(ANSI_RESET);
             flush();
         } else {
-            super.printf(string);
+            println(string);
         }
     }
 
@@ -43,7 +43,7 @@ public class PrintColorWriter extends PrintWriter {
             print(ANSI_RESET);
             flush();
         } else {
-            super.printf(string);
+            print(string);
         }
     }
 
