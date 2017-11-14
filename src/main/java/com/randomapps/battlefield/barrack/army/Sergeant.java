@@ -12,11 +12,9 @@ import java.util.Optional;
 public class Sergeant extends AbstractSoldier {
 
     private static final List<WeaponType> ALLOWED_WEAPONS_TYPES = new ArrayList<>();
-    private static final int RANK = 2 ;
 
     public Sergeant() {
         super();
-        //this.health = 120;
         ALLOWED_WEAPONS_TYPES.addAll(Arrays.asList(WeaponType.PISTOL, WeaponType.SHOTGUN));
     }
 
@@ -29,10 +27,6 @@ public class Sergeant extends AbstractSoldier {
         return Optional.empty();
     }
 
-    @Override
-    public int getRank() {
-        return RANK;
-    }
 
     @Override
     public SoldierType getType() {

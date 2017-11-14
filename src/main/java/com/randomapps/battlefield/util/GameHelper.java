@@ -41,6 +41,10 @@ public class GameHelper {
             }
     }
 
+    public static boolean isWindowsOS() {
+        final String os = System.getProperty("os.name");
+        return os.contains("Windows");
+    }
     public static void promptEnterKey() {
         // Scanner s = new Scanner(System.in);
         System.out.println("Press \"ENTER\" to continue...");

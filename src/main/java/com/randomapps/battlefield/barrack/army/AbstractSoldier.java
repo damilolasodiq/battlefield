@@ -13,7 +13,7 @@ public abstract class AbstractSoldier implements Soldier {
 
     protected static final int DEFAULT_HEALTH = 100;
     protected Weapon currentWeapon;
-    protected int health;
+    private int health;
     private int[][] battleCoordinate;
 
     AbstractSoldier() {
@@ -85,7 +85,9 @@ public abstract class AbstractSoldier implements Soldier {
     }
 
     @Override
-    public abstract int getRank();
+    public final int getRank(){
+        return this.getType().getRank();
+    }
 
     @Override
     public int[][] getBattleCoordinate() {

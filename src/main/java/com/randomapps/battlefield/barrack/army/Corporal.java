@@ -17,21 +17,14 @@ public class Corporal extends AbstractSoldier {
     }
 
     private static final List<WeaponType> ALLOWED_WEAPONS_TYPES = new ArrayList<>();
-    private static final int RANK = 1;
 
     public Corporal() {
         super();
-        this.health = 100;
         ALLOWED_WEAPONS_TYPES.addAll(Arrays.asList(WeaponType.PISTOL));
     }
 
     public List<WeaponType> allowedWeapons() {
         return ALLOWED_WEAPONS_TYPES;
-    }
-
-    @Override
-    public int getRank() {
-        return RANK;
     }
 
     @Override

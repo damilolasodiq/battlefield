@@ -12,7 +12,6 @@ import java.util.Optional;
 public class General extends AbstractSoldier {
 
     private static final List<WeaponType> ALLOWED_WEAPONS_TYPES = new ArrayList<>();
-    private static final int RANK = 3;
     private ArmorVest armorVest;
 
     public General() {
@@ -28,11 +27,6 @@ public class General extends AbstractSoldier {
     @Override
     public Optional<ArmorVest> getArmorVest() {
         return Optional.of(armorVest);
-    }
-
-    @Override
-    public int getRank() {
-        return RANK;
     }
 
 

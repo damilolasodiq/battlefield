@@ -12,6 +12,8 @@ import com.randomapps.battlefield.exception.WeaponNotAvailableException;
 import com.randomapps.battlefield.game.Level;
 import com.randomapps.battlefield.game.Player;
 import com.randomapps.battlefield.game.PlayerStat;
+import com.randomapps.battlefield.util.PrintColor;
+import com.randomapps.battlefield.util.PrintColorWriter;
 
 import java.io.Serializable;
 import java.security.SecureRandom;
@@ -90,7 +92,6 @@ public class BattleField implements Serializable {
     }
 
     private void printBattleArea(BattlePosition[] area, boolean hideSoldiers) {
-        // hideSoldiers = false; //todo remove
         int len = area.length - 1;
         for (int i = 0; i < area.length; i++) {
             Character rowToken;
@@ -251,7 +252,7 @@ public class BattleField implements Serializable {
     }
 
     private void drawBattleHeaders() {
-        System.out.printf(String.format("BattleField Level %d \n", this.level.getLevel()));
+        PrintColorWriter.getInstance().printf(String.format("BattleField Level %d \n", this.level.getLevel()));
         System.out.printf("%-15s %s \n", "Current Player", this.getCurrentPlayer().getName().toUpperCase());
         this.printNamesInHeaders();
 
@@ -264,7 +265,7 @@ public class BattleField implements Serializable {
                 if (j > currentPlayerHealthBar) {
                     System.out.print(" ");
                 } else {
-                    System.out.print("=");
+                    PrintColorWriter.getInstance().printf(PrintColor.GREEN, "=");
                 }
 
             }
@@ -298,6 +299,7 @@ public class BattleField implements Serializable {
                                 opponentSoldier.takeHit(weaponOptional.get());
                                 if (!opponentSoldier.isAlive()) {
                                     this.getCurrentPlayer().getStat().setNumberOfEnemiesKilled(this.getCurrentPlayer().getStat().getNumberOfEnemiesKilled() + 1);
+                                    this.getOpponent().getStat().setNumberOfSoldiersKilled(this.getCurrentPlayer().getStat().getNumberOfEnemiesKilled());
                                     this.getCurrentPlayer().getStat().setPoints(this.getCurrentPlayer().getStat().getPoints() + calculatePoints(soldier, opponentSoldier, weaponOptional.get()));
                                 }
                             }
