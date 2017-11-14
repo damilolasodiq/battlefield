@@ -87,7 +87,6 @@ public class BattleFieldGame implements Game<BattleField> {
                     oos.writeObject(this.battleField);
                     this.paused = true;
                     System.out.println("Your game has been paused. You would get a prompt to resume next time you play.");
-                    System.exit(0);
                 }
             } catch (IOException e) {
                 e.printStackTrace();

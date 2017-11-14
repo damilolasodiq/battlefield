@@ -47,6 +47,7 @@ public abstract class AbstractSoldier implements Soldier {
         if (this.canUseWeapon(weapon.getWeaponType())) {
             this.currentWeapon = weapon;
         }
+        else throw new WeaponNotAssignableException("Weapon type is cannot be assigned to the specified Soldier");
     }
 
 

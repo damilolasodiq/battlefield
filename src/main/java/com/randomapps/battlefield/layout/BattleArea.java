@@ -18,12 +18,6 @@ public class BattleArea implements Serializable{
         this.row = level.getRow();
         this.col = level.getColumn();
         this.area = new BattlePosition[row][col];
-        // this.draw();
-    }
-
-    private static void printMatrix(Character[][] matrix, Consumer<Character[]> rowPrinter) {
-        Arrays.stream(matrix)
-                .forEach((row) -> rowPrinter.accept(row));
     }
 
     public BattlePosition[][] getArea() {

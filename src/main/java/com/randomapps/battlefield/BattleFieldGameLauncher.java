@@ -40,7 +40,7 @@ public class BattleFieldGameLauncher {
         if (battleFieldSavedGame != null) {
             String prompt = "Type \"1\" to resume or \"2\" to start a new game";
             String date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(battleFieldSavedGame.getDateSaved());
-            resumeGame = getInputAsString(String.format("You have a saved game on %s, %s", date, prompt), true,s -> {
+            resumeGame = getInputAsString(String.format("You have a game saved at LEVEL %d on %s, %s", battleFieldSavedGame.getGame().getLevel(), date, prompt), true, s -> {
                 if (s == null || s.length() == 0 || (!s.equals("1") && !s.equals("2"))) {
                     System.out.println(prompt);
                     return false;
@@ -50,10 +50,8 @@ public class BattleFieldGameLauncher {
         }
         if (resumeGame == null || resumeGame.equals("2")) {
             battleFieldGame.showInstructions();
-
             GameHelper.pressAnyKeyToContinue();
             GameHelper.clearConsole();
-
             String gameMode = getInputAsString("Press 1 to play with the CPU or 2 for multiple players",true, BattleFieldGameLauncher::validateGameMode);
 
             String player1Name = getInputAsString("Player 1, Please a name for your Character",true, BattleFieldGameLauncher::validatePlayerName);
@@ -93,6 +91,7 @@ public class BattleFieldGameLauncher {
                         break;
                     case "pause":
                         battleFieldGame.pause();
+                        System.exit(0);
                         break;
                     case "next level":
                         battleField = battleField.goToNextLevel();

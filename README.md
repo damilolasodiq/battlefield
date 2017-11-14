@@ -44,7 +44,7 @@ How to play
 6) You can type "STAT" at any moment in the game to check your full stat such as number of Soldier killed, number of soldiers injured,
 number of points, inventory of your arsenal and so on.
 7) To launch an attack, you need to specify the position of your Soldier to carry out the attack to also a position in the battle area
-of your opponent where the attack your be carried out. For example, you type 0 1 3 4 to select your Soldier at row 1 col 0 to carry out
+of your opponent where the attack your be carried out. For example, you type 0134 to select your Soldier at row 1 col 0 to carry out
 an attack on row 3 col 4 in the opponent's battle area.
 8) For every attack, you can see the effect on the enemies field.
     'X' means your attack hit a position without a Soldier in which case, you don't get a point but your Soldier weapon loses a bullet.
