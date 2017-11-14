@@ -12,6 +12,7 @@ import com.randomapps.battlefield.exception.WeaponNotAvailableException;
 import com.randomapps.battlefield.game.Level;
 import com.randomapps.battlefield.game.Player;
 import com.randomapps.battlefield.game.PlayerStat;
+import com.randomapps.battlefield.util.GameHelper;
 
 import java.io.Serializable;
 import java.security.SecureRandom;
@@ -31,6 +32,7 @@ public class BattleField implements Serializable {
 
 
     public BattleField(Player player1, Player player2, Level level) throws GameInitializationException {
+        GameHelper.clearConsole();
         this.level = level;
         players[0] = player1;
         players[1] = player2;
