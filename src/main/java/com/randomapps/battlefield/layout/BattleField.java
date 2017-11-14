@@ -299,9 +299,10 @@ public class BattleField {
                         if (this.shouldGameEnd()) {
                             System.out.printf("%s has WON!!\n", this.getCurrentPlayer().getName());
                             if (this.level.getLevel() < Level.MAX_LEVEL) {
-                                System.out.printf("Type \"next level\" to go to %d", this.level.getLevel() + 1);
+                                System.out.printf("Type \"next level\" to go to %d \n", this.level.getLevel() + 1);
                             } else {
-                                System.out.printf("You have reached the end of the game!!!");
+                                System.out.printf("You have reached the end of the game!. The game would now exit :)\n");
+                                this.endGame();
                                 System.exit(0);
                             }
                             this.endGame();
