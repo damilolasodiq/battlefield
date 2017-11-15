@@ -22,6 +22,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
 public class BattleFieldTest {
 
     String player1Name;
@@ -173,4 +176,13 @@ public class BattleFieldTest {
         Assert.assertTrue(player2.isCpu());
     }
 
+    public void startGameWithGameConsole() {
+        InputOutput inputOutput = new InputOutput();
+
+        String input = "add 5";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        //assertEquals("add 5", inputOutput.getInput());
+    }
 }

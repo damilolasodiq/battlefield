@@ -215,14 +215,16 @@ public class BattleField implements Serializable {
     private void simulateCPUPlay(int count) {
         Player player = this.getCurrentPlayer();
         List<BattlePosition> battlePositionsWithActiveSoldiers = player.getBattleArea().getBattlePositionsWithActiveSoldiers();
+        BattlePosition attackPosition;
         if (this.level.getLevel() > 1) {
             //cpu gets smarter from level 2 by ensuring it uses the best Soldiers first
-            int max = battlePositionsWithActiveSoldiers.stream().mapToInt(x -> x.getSoldier().getRank()).max().getAsInt();
-            battlePositionsWithActiveSoldiers = battlePositionsWithActiveSoldiers.stream().filter(x -> x.getSoldier().getRank() == max).collect(Collectors.toList());
+            attackPosition = battlePositionsWithActiveSoldiers.stream().max(Comparator.comparingInt(s -> s.getSoldier().getRank())).get();
+        } else {
+            SecureRandom rnd = new SecureRandom();
+            int i = rnd.nextInt(battlePositionsWithActiveSoldiers.size());
+            attackPosition = battlePositionsWithActiveSoldiers.get(i);
         }
-        SecureRandom rnd = new SecureRandom();
-        int i = rnd.nextInt(battlePositionsWithActiveSoldiers.size());
-        BattlePosition attackPosition = battlePositionsWithActiveSoldiers.get(i);
+
         Soldier soldier = attackPosition.getSoldier();
         int x = soldier.getBattleCoordinate()[0][0];
         int y = soldier.getBattleCoordinate()[0][1];
