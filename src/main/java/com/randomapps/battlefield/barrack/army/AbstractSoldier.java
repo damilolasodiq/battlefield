@@ -76,15 +76,6 @@ public abstract class AbstractSoldier implements Soldier {
 
     }
 
-    public Soldier clone() {
-        try {
-            return (Soldier) super.clone();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     @Override
     public final int getRank(){
         return this.getType().getRank();

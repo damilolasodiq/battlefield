@@ -18,6 +18,7 @@ import com.randomapps.battlefield.game.BattleFieldGame;
 import com.randomapps.battlefield.game.Level;
 import com.randomapps.battlefield.game.Player;
 import com.randomapps.battlefield.game.SavedGame;
+import com.randomapps.battlefield.layout.BattleField;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -85,6 +86,7 @@ public class BattleFieldTest {
     public void corporalPicksValidWeaponAndWeaponIsAssigned() throws WeaponNotAssignableException {
         Corporal corporal = new Corporal();
         corporal.assignWeapon(WeaponFactory.newInstance(WeaponType.PISTOL));
+        Assert.assertFalse(corporal.getArmorVest().isPresent());
         Assert.assertEquals(corporal.getCurrentWeapon().get().getWeaponType().getType(), WeaponFactory.newInstance(WeaponType.PISTOL).getWeaponType().getType());
     }
 
@@ -92,6 +94,7 @@ public class BattleFieldTest {
     public void sergeantPicksValidWeaponAndWeaponIsAssigned() throws WeaponNotAssignableException {
         Sergeant sergeant = new Sergeant();
         sergeant.assignWeapon(WeaponFactory.newInstance(WeaponType.SHOTGUN));
+        Assert.assertFalse(sergeant.getArmorVest().isPresent());
         Assert.assertEquals(sergeant.getCurrentWeapon().get().getWeaponType().getType(), WeaponFactory.newInstance(WeaponType.SHOTGUN).getWeaponType().getType());
     }
 
@@ -99,8 +102,10 @@ public class BattleFieldTest {
     public void generalPicksValidWeaponAndWeaponIsAssigned() throws WeaponNotAssignableException {
         General general = new General();
         general.assignWeapon(WeaponFactory.newInstance(WeaponType.BAZOOKA));
+        Assert.assertTrue(general.getArmorVest().isPresent());
         Assert.assertEquals(general.getCurrentWeapon().get().getWeaponType().getType(), WeaponFactory.newInstance(WeaponType.BAZOOKA).getWeaponType().getType());
     }
+
 
     @Test(expected = SoldierOutOfArmorException.class)
     public void soldierOutOfAmour() throws SoldierOutOfArmorException {
@@ -111,7 +116,7 @@ public class BattleFieldTest {
     }
 
     @Test
-    public void opponentSoldierDiesWhenHit() throws GameInitializationException, WeaponNotAssignableException {
+    public void solderKillsOpponentSoldier() throws GameInitializationException, WeaponNotAssignableException {
         Player player1 = new Player("Player 1");
         Player player2 = new Player("Player 2");
 
@@ -130,7 +135,25 @@ public class BattleFieldTest {
         Assert.assertEquals(1, player1.getStat().getNumberOfEnemiesKilled());
         Assert.assertEquals(1, player2.getStat().getNumberOfSoldiersKilled());
         Assert.assertTrue(points < player1.getStat().getPoints());
-        battleField.assignWeapon(soldier1.getBattleCoordinate()[0][0], soldier1.getBattleCoordinate()[0][1]);
+    }
+
+    @Test
+    public void solderHitGeneralsArmorVest() throws GameInitializationException, WeaponNotAssignableException {
+        Player player1 = new Player("Player 1");
+        Player player2 = new Player("Player 2");
+
+        Level level = new Level(2);
+        BattleField battleField = new BattleField(player1, player2, level);
+
+
+        Soldier soldier = level.getSoldiers().stream().filter(s -> s.getType().equals(SoldierType.GENERAL)).findFirst().get();
+
+        Soldier soldier1 = player1.getBattleArea().getBattlePositionsWithActiveSoldiers().stream().filter(s -> s.getSoldier().getType().equals(soldier.getType())).findFirst().get().getSoldier();
+        Soldier soldier2 = player2.getBattleArea().getBattlePositionsWithActiveSoldiers().stream().filter(s -> s.getSoldier().getType().equals(SoldierType.GENERAL)).findFirst().get().getSoldier();
+
+        Assert.assertEquals(100, soldier2.getArmorVest().get().getHealth());
+        battleField.attack(soldier1.getBattleCoordinate()[0][0], soldier1.getBattleCoordinate()[0][1], soldier2.getBattleCoordinate()[0][0], soldier2.getBattleCoordinate()[0][1]);
+        Assert.assertTrue(soldier2.getArmorVest().get().getHealth() < 100);
     }
 
     @Test

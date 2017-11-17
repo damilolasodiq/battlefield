@@ -2,7 +2,7 @@ package com.randomapps.battlefield.game;
 
 import com.randomapps.battlefield.barrack.Arsenal;
 import com.randomapps.battlefield.barrack.army.Soldier;
-import com.randomapps.battlefield.BattleArea;
+import com.randomapps.battlefield.layout.BattleArea;
 import com.randomapps.battlefield.util.GameHelper;
 
 import java.io.Serializable;

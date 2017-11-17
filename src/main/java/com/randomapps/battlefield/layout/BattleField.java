@@ -1,10 +1,11 @@
-package com.randomapps.battlefield;
+package com.randomapps.battlefield.layout;
 
 import com.randomapps.battlefield.barrack.Arsenal;
 import com.randomapps.battlefield.barrack.WeaponType;
 import com.randomapps.battlefield.barrack.armory.Weapon;
 import com.randomapps.battlefield.barrack.armory.WeaponFactory;
 import com.randomapps.battlefield.barrack.army.Soldier;
+import com.randomapps.battlefield.barrack.army.SoldierFactory;
 import com.randomapps.battlefield.exception.GameInitializationException;
 import com.randomapps.battlefield.exception.SoldierOutOfArmorException;
 import com.randomapps.battlefield.exception.WeaponNotAssignableException;
@@ -159,7 +160,7 @@ public class BattleField implements Serializable {
         Arsenal arsenal = new Arsenal();
 
         List<Soldier> soldiers = new ArrayList<>();
-        this.level.getSoldiers().stream().forEach(s -> soldiers.add(s.clone()));
+        this.level.getSoldiers().stream().forEach(s -> soldiers.add(SoldierFactory.newInstance(s.getType())));
         List<WeaponType> weapons = new ArrayList<>();
         this.level.getWeaponTypes().stream().forEach(w -> weapons.add(w));
         if (weapons != null) {

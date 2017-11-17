@@ -2,7 +2,7 @@ package com.randomapps.battlefield.game;
 
 import com.randomapps.battlefield.exception.GameInitializationException;
 import com.randomapps.battlefield.exception.InvalidGameStateException;
-import com.randomapps.battlefield.BattleField;
+import com.randomapps.battlefield.layout.BattleField;
 import com.randomapps.battlefield.util.GameHelper;
 
 import java.io.*;

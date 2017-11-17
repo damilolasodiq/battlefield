@@ -1,4 +1,4 @@
-package com.randomapps.battlefield;
+package com.randomapps.battlefield.layout;
 
 import com.randomapps.battlefield.barrack.army.Soldier;
 

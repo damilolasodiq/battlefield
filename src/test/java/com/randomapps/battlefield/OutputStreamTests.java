@@ -3,6 +3,7 @@ package com.randomapps.battlefield;
 import com.randomapps.battlefield.exception.GameInitializationException;
 import com.randomapps.battlefield.game.Level;
 import com.randomapps.battlefield.game.Player;
+import com.randomapps.battlefield.layout.BattleField;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

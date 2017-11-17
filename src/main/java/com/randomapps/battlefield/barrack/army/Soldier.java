@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-public interface Soldier extends Cloneable, Serializable {
+public interface Soldier extends Serializable {
 
     List<WeaponType> allowedWeapons();
 
@@ -27,8 +27,6 @@ public interface Soldier extends Cloneable, Serializable {
     void assignWeapon(Weapon weapon) throws WeaponNotAssignableException;
 
     void takeHit(Weapon weapon);
-
-    Soldier clone();
 
     int getRank();
 
