@@ -1,5 +1,3 @@
-[![Coverage Status](https://coveralls.io/repos/github/damilolasodiq/battlefield/badge.svg?branch=master)](https://coveralls.io/github/damilolasodiq/battlefield?branch=master)
-
 About the Game
 --------------
 The Battlefield game is an interesting console game designed to emulate 2 nations at war.
