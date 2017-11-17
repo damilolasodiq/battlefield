@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.security.SecureRandom;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class BattleField implements Serializable {
 
@@ -166,6 +167,7 @@ public class BattleField implements Serializable {
         if (weapons != null) {
             Map<WeaponType, List<WeaponType>> collect = weapons.stream().collect(Collectors.groupingBy(weapon -> weapon));
             for (Soldier s : soldiers) {
+                collect.keySet().stream().sorted(Comparator.comparingInt(c -> c.getGrade()));
                 for (WeaponType weaponType : collect.keySet()) {
                     List<WeaponType> availableWeapons = collect.get(weaponType);
                     if (!s.allowedWeapons().isEmpty() && s.allowedWeapons().contains(weaponType) && !availableWeapons.isEmpty()) {
@@ -292,7 +294,7 @@ public class BattleField implements Serializable {
                 try {
                     Weapon weapon = weaponOptional.get();
                     weapon.fire();
-                    if (this.level.getColumn() / weapon.getWeaponType().getGrade() >= opponentColumn) {
+                    if ((this.level.getColumn() / weapon.getWeaponType().getGrade()) >= opponentColumn) {
                         BattlePosition opponentBattlePosition = opponentArea[opponentRow][opponentColumn];
                         Soldier opponentSoldier = opponentBattlePosition.getSoldier();
                         if (opponentSoldier != null) {

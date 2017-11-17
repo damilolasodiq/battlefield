@@ -1,7 +1,5 @@
 package com.randomapps.battlefield.util;
 
-import com.randomapps.battlefield.barrack.armory.Pistol;
-
 import java.util.ArrayList;
 import java.util.List;
 
