@@ -1,6 +1,5 @@
 package com.randomapps.battlefield.barrack.armory;
 
-import com.randomapps.battlefield.barrack.WeaponGrade;
 import com.randomapps.battlefield.barrack.WeaponType;
 
 public class Bazooka extends AbstractWeapon {
@@ -12,16 +11,6 @@ public class Bazooka extends AbstractWeapon {
         this.availableRounds = AVAILABLE_ROUNDS;
     }
 
-
-    @Override
-    public int travelRange() {
-        return TRAVEL_RANGE;
-    }
-
-    @Override
-    public WeaponGrade getWeaponGrade() {
-        return WeaponGrade.ADVANCE;
-    }
 
     @Override
     public WeaponType getWeaponType() {

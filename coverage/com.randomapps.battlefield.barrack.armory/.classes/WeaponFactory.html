@@ -58,10 +58,10 @@
 </td>
 <td class="coverageStat">
   <span class="percent">
-    75%
+    87.5%
   </span>
   <span class="absValue">
-    (6/ 8)
+    (7/ 8)
   </span>
 </td>
 </tr>
@@ -79,14 +79,14 @@
 <i>5</i>&nbsp;
 <b class="nc"><i>6</i>&nbsp;public class WeaponFactory {</b>
 <i>7</i>&nbsp;    public static Weapon newInstance(WeaponType type) {
-<b class="fc"><i>8</i>&nbsp;        if (type.equals(WeaponType.PISTOL)) {</b>
+<b class="fc"><i>8</i>&nbsp;        if (WeaponType.PISTOL.equals(type)) {</b>
 <b class="fc"><i>9</i>&nbsp;            return new Pistol();</b>
-<b class="fc"><i>10</i>&nbsp;        } else if (type.equals(WeaponType.BAZOOKA)) {</b>
+<b class="fc"><i>10</i>&nbsp;        } else if (WeaponType.BAZOOKA.equals(type)) {</b>
 <b class="fc"><i>11</i>&nbsp;            return new Bazooka();</b>
-<b class="fc"><i>12</i>&nbsp;        } else if (type.equals(WeaponType.SHOTGUN)) {</b>
+<b class="fc"><i>12</i>&nbsp;        } else if (WeaponType.SHOTGUN.equals(type)) {</b>
 <b class="fc"><i>13</i>&nbsp;            return new ShotGun();</b>
 <i>14</i>&nbsp;        }
-<b class="nc"><i>15</i>&nbsp;        throw new WeaponNotAvailableException(&quot;An unknown weapon type was selected&quot;);</b>
+<b class="fc"><i>15</i>&nbsp;        throw new WeaponNotAvailableException(&quot;An unknown weapon type was selected&quot;);</b>
 <i>16</i>&nbsp;    }
 <i>17</i>&nbsp;
 <i>18</i>&nbsp;}
@@ -95,7 +95,7 @@
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2017-11-14 16:45</div>
+    <div style="float:right;">generated on 2017-11-17 12:28</div>
 </div>
 </body>
 </html>

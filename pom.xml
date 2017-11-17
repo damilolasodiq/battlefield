@@ -12,6 +12,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -40,7 +41,7 @@
                     <repoToken>DXrRVxzTGyxn0KrdUKsw9HKVB0NlSKpUx</repoToken>
                 </configuration>
             </plugin>
-            <plugin>
+            <!--<plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
                 <version>2.7</version>
@@ -48,9 +49,22 @@
                     <check></check>
                     <format>xml</format>
                     <maxmem>256m</maxmem>
-                    <!-- aggregated reports for multi-module projects -->
+                    &lt;!&ndash; aggregated reports for multi-module projects &ndash;&gt;
                     <aggregate>true</aggregate>
                 </configuration>
+            </plugin>-->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.7.9</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

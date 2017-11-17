@@ -1,6 +1,5 @@
 package com.randomapps.battlefield.barrack.armory;
 
-import com.randomapps.battlefield.barrack.WeaponGrade;
 import com.randomapps.battlefield.barrack.WeaponType;
 import com.randomapps.battlefield.exception.SoldierOutOfArmorException;
 
@@ -14,9 +13,6 @@ public abstract class AbstractWeapon implements Weapon {
     public final boolean isOutOfArmor() {
         return this.availableRounds <= 0;
     }
-
-    @Override
-    public abstract WeaponGrade getWeaponGrade();
 
     @Override
     public abstract WeaponType getWeaponType();
@@ -38,8 +34,5 @@ public abstract class AbstractWeapon implements Weapon {
             throw new SoldierOutOfArmorException("This weapon is out of ArmorVest");
         this.availableRounds--;
     }
-
-    @Override
-    public abstract int travelRange();
 
 }

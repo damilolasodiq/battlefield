@@ -1,6 +1,7 @@
 package com.randomapps.battlefield;
 
 
+import com.randomapps.battlefield.barrack.Arsenal;
 import com.randomapps.battlefield.barrack.SoldierType;
 import com.randomapps.battlefield.barrack.WeaponType;
 import com.randomapps.battlefield.barrack.armory.Pistol;
@@ -146,10 +147,8 @@ public class BattleFieldTest {
         BattleField battleField = new BattleField(player1, player2, level);
 
 
-        Soldier soldier = level.getSoldiers().stream().filter(s -> s.getType().equals(SoldierType.GENERAL)).findFirst().get();
-
-        Soldier soldier1 = player1.getBattleArea().getBattlePositionsWithActiveSoldiers().stream().filter(s -> s.getSoldier().getType().equals(soldier.getType())).findFirst().get().getSoldier();
-        Soldier soldier2 = player2.getBattleArea().getBattlePositionsWithActiveSoldiers().stream().filter(s -> s.getSoldier().getType().equals(SoldierType.GENERAL)).findFirst().get().getSoldier();
+        Soldier soldier1 = player1.getBattleArea().getBattlePositionsWithActiveSoldiers().stream().filter(s -> s.getSoldier().getType().equals(SoldierType.GENERAL)).findAny().get().getSoldier();
+        Soldier soldier2 = player2.getBattleArea().getBattlePositionsWithActiveSoldiers().stream().filter(s -> s.getSoldier().getType().equals(SoldierType.GENERAL)).findAny().get().getSoldier();
 
         Assert.assertEquals(100, soldier2.getArmorVest().get().getHealth());
         battleField.attack(soldier1.getBattleCoordinate()[0][0], soldier1.getBattleCoordinate()[0][1], soldier2.getBattleCoordinate()[0][0], soldier2.getBattleCoordinate()[0][1]);
@@ -170,6 +169,7 @@ public class BattleFieldTest {
         BattleField battleFieldBeforePause = new BattleField(player1, player2, new Level(1));
         BattleFieldGame battleFieldGameBeforePause = new BattleFieldGame();
         battleFieldGameBeforePause.setBattleField(battleFieldBeforePause);
+
         battleFieldGameBeforePause.start();
         battleFieldBeforePause.attack(0, 0, 0, 0);
         battleFieldGameBeforePause.pause();
@@ -195,5 +195,43 @@ public class BattleFieldTest {
         Assert.assertEquals(battleField.getCurrentPlayer(), player1);
         Assert.assertTrue(player2.isCpu());
     }
+
+
+    @Test
+    public void shouldAssignNewPistolToACorporal() throws GameInitializationException, WeaponNotAssignableException {
+        Player player1 = new Player(player1Name);
+        Player player2 = new Player(player2Name);
+
+        BattleField battleField = new BattleField(player1, player2, new Level(1));
+        Soldier soldier = player1.getBattleArea().getBattlePositionsWithActiveSoldiers().stream().filter(s -> s.getSoldier().getType().equals(SoldierType.CORPORAL)).findAny().get().getSoldier();
+        Weapon OldWeapon = soldier.getCurrentWeapon().get();
+        Arsenal arsenal = player1.getArsenal();
+
+        Assert.assertNotNull(arsenal);
+        Assert.assertNotNull(arsenal.getInventory());
+        Assert.assertTrue(arsenal.hasWeapon(WeaponType.PISTOL));
+
+        int beforeAssign = arsenal.getInventory().get(WeaponType.PISTOL).intValue();
+        battleField.assignWeapon(soldier.getBattleCoordinate()[0][0], soldier.getBattleCoordinate()[0][1]);
+
+        int afterAssign = arsenal.getInventory().getOrDefault(WeaponType.PISTOL, 0);
+        Assert.assertEquals(beforeAssign - 1, afterAssign);
+        Assert.assertNotNull(soldier.getCurrentWeapon());
+        Assert.assertNotEquals(OldWeapon, soldier.getCurrentWeapon().get());
+
+    }
+
+    @Test(expected = InvalidGameStateException.class)
+    public void shouldNotResumeAGameThatWasNotPaused() throws InvalidGameStateException, GameInitializationException {
+        Player player1 = new Player(player1Name);
+        Player player2 = new Player(player2Name);
+
+        BattleField battleFieldBeforePause = new BattleField(player1, player2, new Level(1));
+        BattleFieldGame battleFieldGameBeforePause = new BattleFieldGame();
+        battleFieldGameBeforePause.setBattleField(battleFieldBeforePause);
+        battleFieldGameBeforePause.pause();
+
+    }
+
 
 }

@@ -80,17 +80,17 @@ public class Level implements Serializable {
 
     private void initWeaponTypes() {
         this.weaponTypes = new ArrayList<>();
-        if (this.numberOfCorporalsRequired > 0) {
-            int numberOfRequiredPistols = this.numberOfCorporalsRequired + (int) Math.floor(this.numberOfCorporalsRequired / 2) - 1;
-            weaponTypes.addAll(Collections.nCopies(numberOfRequiredPistols, WeaponType.PISTOL));
+        if (this.numberOfSergeantsRequired > 0) {
+            int numberOfShotguns = this.numberOfSergeantsRequired + (int) Math.floor(this.numberOfSergeantsRequired / 2) - 1;
+            weaponTypes.addAll(Collections.nCopies(numberOfShotguns, WeaponType.SHOTGUN));
         }
         if (this.numberOfGeneralsRequired > 0) {
             int numberOfRequiredBazookas = this.numberOfGeneralsRequired + (int) Math.floor(this.numberOfGeneralsRequired / 2) - 1;
             weaponTypes.addAll(Collections.nCopies(numberOfRequiredBazookas, WeaponType.BAZOOKA));
         }
-        if (this.numberOfSergeantsRequired > 0) {
-            int numberOfShotguns = this.numberOfSergeantsRequired + (int) Math.floor(this.numberOfSergeantsRequired / 2) - 1;
-            weaponTypes.addAll(Collections.nCopies(numberOfShotguns, WeaponType.SHOTGUN));
+        if (this.numberOfCorporalsRequired > 0) {
+            int numberOfRequiredPistols = this.numberOfCorporalsRequired + (int) Math.floor(this.numberOfCorporalsRequired / 2) - 1;
+            weaponTypes.addAll(Collections.nCopies(numberOfRequiredPistols, WeaponType.PISTOL));
         }
     }
 

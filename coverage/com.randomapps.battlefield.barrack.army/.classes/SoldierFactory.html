@@ -42,26 +42,26 @@
   <td class="name">SoldierFactory</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/ 1)
+    (1/ 1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    50%
   </span>
   <span class="absValue">
-    (0/ 2)
+    (1/ 2)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    87.5%
   </span>
   <span class="absValue">
-    (0/ 4)
+    (7/ 8)
   </span>
 </td>
 </tr>
@@ -75,24 +75,29 @@
 <div class="sourceCode"><i>1</i>&nbsp;package com.randomapps.battlefield.barrack.army;
 <i>2</i>&nbsp;
 <i>3</i>&nbsp;import com.randomapps.battlefield.barrack.SoldierType;
-<i>4</i>&nbsp;
-<b class="nc"><i>5</i>&nbsp;public class SoldierFactory {</b>
-<i>6</i>&nbsp;
-<i>7</i>&nbsp;    public static Soldier newInstance(SoldierType type) {
-<b class="nc"><i>8</i>&nbsp;        if (type.equals(SoldierType.SERGEANT)) {</b>
-<b class="nc"><i>9</i>&nbsp;            return new Sergeant();</b>
-<i>10</i>&nbsp;        }
-<b class="nc"><i>11</i>&nbsp;        return null;</b>
-<i>12</i>&nbsp;    }
-<i>13</i>&nbsp;
-<i>14</i>&nbsp;}
-<i>15</i>&nbsp;
+<i>4</i>&nbsp;import com.randomapps.battlefield.exception.UnknownSoldierTypeException;
+<i>5</i>&nbsp;
+<b class="nc"><i>6</i>&nbsp;public class SoldierFactory {</b>
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;    public static Soldier newInstance(SoldierType type) throws UnknownSoldierTypeException{
+<b class="fc"><i>9</i>&nbsp;        if (SoldierType.SERGEANT.equals(type)) {</b>
+<b class="fc"><i>10</i>&nbsp;            return new Sergeant();</b>
+<b class="fc"><i>11</i>&nbsp;        }if (SoldierType.CORPORAL.equals(type)) {</b>
+<b class="fc"><i>12</i>&nbsp;            return new Corporal();</b>
+<b class="fc"><i>13</i>&nbsp;        }if (SoldierType.GENERAL.equals(type)) {</b>
+<b class="fc"><i>14</i>&nbsp;            return new General();</b>
+<i>15</i>&nbsp;        }
+<b class="fc"><i>16</i>&nbsp;        throw new UnknownSoldierTypeException(&quot;The Type of Solder is not known&quot;);</b>
+<i>17</i>&nbsp;    }
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;}
+<i>20</i>&nbsp;
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2017-11-14 16:45</div>
+    <div style="float:right;">generated on 2017-11-17 12:28</div>
 </div>
 </body>
 </html>

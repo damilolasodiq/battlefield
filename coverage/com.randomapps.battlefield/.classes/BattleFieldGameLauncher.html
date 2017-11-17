@@ -80,145 +80,146 @@
 <i>6</i>&nbsp;import com.randomapps.battlefield.game.Level;
 <i>7</i>&nbsp;import com.randomapps.battlefield.game.Player;
 <i>8</i>&nbsp;import com.randomapps.battlefield.game.SavedGame;
-<i>9</i>&nbsp;import com.randomapps.battlefield.util.GameHelper;
-<i>10</i>&nbsp;
-<i>11</i>&nbsp;import java.text.SimpleDateFormat;
-<i>12</i>&nbsp;import java.util.Scanner;
-<i>13</i>&nbsp;import java.util.function.Predicate;
-<i>14</i>&nbsp;
-<b class="nc"><i>15</i>&nbsp;public class BattleFieldGameLauncher {</b>
-<i>16</i>&nbsp;
-<i>17</i>&nbsp;    private static boolean validatePlayerName(String playerName) {
-<b class="nc"><i>18</i>&nbsp;        if (playerName == null || playerName.length() &lt; 2 || playerName.length() &gt; 5) {</b>
-<b class="nc"><i>19</i>&nbsp;            System.out.println(&quot;Player name must be between 2 and 5 characters&quot;);</b>
-<b class="nc"><i>20</i>&nbsp;            return false;</b>
-<i>21</i>&nbsp;        }
-<b class="nc"><i>22</i>&nbsp;        return true;</b>
-<i>23</i>&nbsp;    }
-<i>24</i>&nbsp;
-<i>25</i>&nbsp;    private static boolean validateGameMode(String mode) {
-<b class="nc"><i>26</i>&nbsp;        if (mode == null || mode.length() == 0 || (!mode.equals(&quot;1&quot;) &amp;&amp; !mode.equals(&quot;2&quot;))) {</b>
-<b class="nc"><i>27</i>&nbsp;            System.out.println(&quot;Press 1 to play with the CPU or 2 for multiple players&quot;);</b>
-<b class="nc"><i>28</i>&nbsp;            return false;</b>
-<i>29</i>&nbsp;        }
-<b class="nc"><i>30</i>&nbsp;        return true;</b>
-<i>31</i>&nbsp;    }
-<i>32</i>&nbsp;
+<i>9</i>&nbsp;import com.randomapps.battlefield.layout.BattleField;
+<i>10</i>&nbsp;import com.randomapps.battlefield.util.GameHelper;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;import java.text.SimpleDateFormat;
+<i>13</i>&nbsp;import java.util.Scanner;
+<i>14</i>&nbsp;import java.util.function.Predicate;
+<i>15</i>&nbsp;
+<b class="nc"><i>16</i>&nbsp;public class BattleFieldGameLauncher {</b>
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    private static boolean validatePlayerName(String playerName) {
+<b class="nc"><i>19</i>&nbsp;        if (playerName == null || playerName.length() &lt; 2 || playerName.length() &gt; 5) {</b>
+<b class="nc"><i>20</i>&nbsp;            System.out.println(&quot;Player name must be between 2 and 5 characters&quot;);</b>
+<b class="nc"><i>21</i>&nbsp;            return false;</b>
+<i>22</i>&nbsp;        }
+<b class="nc"><i>23</i>&nbsp;        return true;</b>
+<i>24</i>&nbsp;    }
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    private static boolean validateGameMode(String mode) {
+<b class="nc"><i>27</i>&nbsp;        if (mode == null || mode.length() == 0 || (!mode.equals(&quot;1&quot;) &amp;&amp; !mode.equals(&quot;2&quot;))) {</b>
+<b class="nc"><i>28</i>&nbsp;            System.out.println(&quot;Press 1 to play with the CPU or 2 for multiple players&quot;);</b>
+<b class="nc"><i>29</i>&nbsp;            return false;</b>
+<i>30</i>&nbsp;        }
+<b class="nc"><i>31</i>&nbsp;        return true;</b>
+<i>32</i>&nbsp;    }
 <i>33</i>&nbsp;
-<i>34</i>&nbsp;    public static void main(String[] args) throws GameInitializationException {
-<b class="nc"><i>35</i>&nbsp;        BattleFieldGame battleFieldGame = new BattleFieldGame();</b>
-<i>36</i>&nbsp;        BattleField battleField;
-<b class="nc"><i>37</i>&nbsp;        SavedGame&lt;BattleField&gt; battleFieldSavedGame = battleFieldGame.lastSavedGame();</b>
-<b class="nc"><i>38</i>&nbsp;        String resumeGame = null;</b>
-<b class="nc"><i>39</i>&nbsp;        if (battleFieldSavedGame != null) {</b>
-<b class="nc"><i>40</i>&nbsp;            String prompt = &quot;Type \&quot;1\&quot; to resume or \&quot;2\&quot; to start a new game&quot;;</b>
-<b class="nc"><i>41</i>&nbsp;            String date = new SimpleDateFormat(&quot;yyyy-MM-dd hh:mm:ss&quot;).format(battleFieldSavedGame.getDateSaved());</b>
-<b class="nc"><i>42</i>&nbsp;            resumeGame = getInputAsString(String.format(&quot;You have a game saved at LEVEL %d on %s, %s&quot;, battleFieldSavedGame.getGame().getLevel(), date, prompt), true, s -&gt; {</b>
-<b class="nc"><i>43</i>&nbsp;                if (s == null || s.length() == 0 || (!s.equals(&quot;1&quot;) &amp;&amp; !s.equals(&quot;2&quot;))) {</b>
-<b class="nc"><i>44</i>&nbsp;                    System.out.println(prompt);</b>
-<b class="nc"><i>45</i>&nbsp;                    return false;</b>
-<i>46</i>&nbsp;                }
-<b class="nc"><i>47</i>&nbsp;                return true;</b>
-<i>48</i>&nbsp;            });
-<i>49</i>&nbsp;        }
-<b class="nc"><i>50</i>&nbsp;        if (resumeGame == null || resumeGame.equals(&quot;2&quot;)) {</b>
-<b class="nc"><i>51</i>&nbsp;            battleFieldGame.showInstructions();</b>
-<b class="nc"><i>52</i>&nbsp;            GameHelper.pressAnyKeyToContinue();</b>
-<b class="nc"><i>53</i>&nbsp;            GameHelper.clearConsole();</b>
-<b class="nc"><i>54</i>&nbsp;            String gameMode = getInputAsString(&quot;Press 1 to play with the CPU or 2 for multiple players&quot;,true, BattleFieldGameLauncher::validateGameMode);</b>
-<i>55</i>&nbsp;
-<b class="nc"><i>56</i>&nbsp;            String player1Name = getInputAsString(&quot;Player 1, Please a name for your Character&quot;,true, BattleFieldGameLauncher::validatePlayerName);</b>
-<i>57</i>&nbsp;
-<b class="nc"><i>58</i>&nbsp;            Player player1 = new Player(player1Name);</b>
-<i>59</i>&nbsp;            Player player2;
-<b class="nc"><i>60</i>&nbsp;            if (gameMode.equals(&quot;2&quot;)) {</b>
-<b class="nc"><i>61</i>&nbsp;                String player2Name = getInputAsString(&quot;Player 2, Please a name for your Character&quot;,true, BattleFieldGameLauncher::validatePlayerName);</b>
-<b class="nc"><i>62</i>&nbsp;                player2 = new Player(player2Name);</b>
-<b class="nc"><i>63</i>&nbsp;            } else if (gameMode.equals(&quot;1&quot;)) {</b>
-<b class="nc"><i>64</i>&nbsp;                player2 = new Player(true);</b>
-<i>65</i>&nbsp;            } else {
-<b class="nc"><i>66</i>&nbsp;                throw new GameInitializationException(&quot;Could not determine game mode&quot;);</b>
-<i>67</i>&nbsp;            }
-<b class="nc"><i>68</i>&nbsp;            Level level = new Level(1);</b>
-<b class="nc"><i>69</i>&nbsp;            battleField = new BattleField(player1, player2, level);</b>
-<b class="nc"><i>70</i>&nbsp;        } else {</b>
-<b class="nc"><i>71</i>&nbsp;            battleField = battleFieldSavedGame.getGame();</b>
-<i>72</i>&nbsp;        }
-<i>73</i>&nbsp;
-<i>74</i>&nbsp;        try {
-<b class="nc"><i>75</i>&nbsp;            battleFieldGame.setBattleField(battleField);</b>
-<b class="nc"><i>76</i>&nbsp;            battleFieldGame.start();</b>
-<b class="nc"><i>77</i>&nbsp;            Scanner scanner = new Scanner(System.in);</b>
-<b class="nc"><i>78</i>&nbsp;            while (battleFieldGame.isActive()) {</b>
-<b class="nc"><i>79</i>&nbsp;                String next = scanner.nextLine();</b>
-<b class="nc"><i>80</i>&nbsp;                switch (next.toLowerCase()) {</b>
-<i>81</i>&nbsp;                    case &quot;help&quot;:
-<b class="nc"><i>82</i>&nbsp;                        battleFieldGame.showInstructions();</b>
-<b class="nc"><i>83</i>&nbsp;                        break;</b>
-<i>84</i>&nbsp;                    case &quot;stat&quot;:
-<b class="nc"><i>85</i>&nbsp;                        battleField.printStat();</b>
-<b class="nc"><i>86</i>&nbsp;                        break;</b>
-<i>87</i>&nbsp;                    case &quot;quit&quot;:
-<i>88</i>&nbsp;                    case &quot;exit&quot;:
-<b class="nc"><i>89</i>&nbsp;                        battleFieldGame.stop();</b>
-<b class="nc"><i>90</i>&nbsp;                        break;</b>
-<i>91</i>&nbsp;                    case &quot;pause&quot;:
-<b class="nc"><i>92</i>&nbsp;                        battleFieldGame.pause();</b>
-<b class="nc"><i>93</i>&nbsp;                        System.exit(0);</b>
-<b class="nc"><i>94</i>&nbsp;                        break;</b>
-<i>95</i>&nbsp;                    case &quot;next level&quot;:
-<b class="nc"><i>96</i>&nbsp;                        battleField = battleField.goToNextLevel();</b>
-<b class="nc"><i>97</i>&nbsp;                        if (!battleField.isRunning()) {</b>
-<b class="nc"><i>98</i>&nbsp;                            battleField.startGame();</b>
-<i>99</i>&nbsp;                        }
-<i>100</i>&nbsp;                        break;
-<i>101</i>&nbsp;                    default:
-<b class="nc"><i>102</i>&nbsp;                        if (next != null &amp;&amp; next.matches(&quot;^\\d{4}&quot;)) {</b>
-<i>103</i>&nbsp;                            try {
-<b class="nc"><i>104</i>&nbsp;                                char[] split = next.toCharArray();</b>
-<b class="nc"><i>105</i>&nbsp;                                int playerRow = Character.getNumericValue(split[0]);</b>
-<b class="nc"><i>106</i>&nbsp;                                int playerColumn = Character.getNumericValue(split[1]);</b>
-<b class="nc"><i>107</i>&nbsp;                                int opponentRow = Character.getNumericValue(split[2]);</b>
-<b class="nc"><i>108</i>&nbsp;                                int opponentColumn = Character.getNumericValue(split[3]);</b>
-<b class="nc"><i>109</i>&nbsp;                                battleField.attack(playerRow, playerColumn, opponentRow, opponentColumn);</b>
-<b class="nc"><i>110</i>&nbsp;                            } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {</b>
-<b class="nc"><i>111</i>&nbsp;                                System.err.println(&quot;The selected index does not exist. Please try again or type \&quot;help\&quot; to read teh game instructions&quot;);</b>
-<b class="nc"><i>112</i>&nbsp;                            } catch (Exception e) {</b>
-<b class="nc"><i>113</i>&nbsp;                                System.err.println(&quot;An error occurred. Please try again or type \&quot;help\&quot; to read teh game instructions&quot;);</b>
-<b class="nc"><i>114</i>&nbsp;                            }</b>
-<i>115</i>&nbsp;                        } else {
-<b class="nc"><i>116</i>&nbsp;                            System.err.println(&quot;Unknown command. Please try again or type \&quot;help\&quot; to read teh game instructions&quot;);</b>
-<i>117</i>&nbsp;                        }
-<i>118</i>&nbsp;                        break;
-<i>119</i>&nbsp;                }
-<b class="nc"><i>120</i>&nbsp;            }</b>
-<b class="nc"><i>121</i>&nbsp;        } catch (GameInitializationException e) {</b>
-<b class="nc"><i>122</i>&nbsp;            System.err.println(e.getMessage());</b>
-<b class="nc"><i>123</i>&nbsp;        } catch (InvalidGameStateException e) {</b>
-<b class="nc"><i>124</i>&nbsp;            System.err.println(e.getMessage());</b>
-<b class="nc"><i>125</i>&nbsp;        }</b>
-<i>126</i>&nbsp;    }
-<i>127</i>&nbsp;
-<i>128</i>&nbsp;    private static String getInputAsString(final String prompt,boolean clearConsole, Predicate&lt;String&gt; stringPredicate) {
-<b class="nc"><i>129</i>&nbsp;        System.out.println(prompt);</b>
-<b class="nc"><i>130</i>&nbsp;        boolean b = false;</b>
-<b class="nc"><i>131</i>&nbsp;        String output = null;</b>
-<b class="nc"><i>132</i>&nbsp;        while (!b) {</b>
-<b class="nc"><i>133</i>&nbsp;            Scanner s = new Scanner(System.in);</b>
-<b class="nc"><i>134</i>&nbsp;            output = s.nextLine();</b>
-<b class="nc"><i>135</i>&nbsp;            b = stringPredicate.test(output);</b>
-<b class="nc"><i>136</i>&nbsp;        }</b>
-<b class="nc"><i>137</i>&nbsp;        if(clearConsole)</b>
-<b class="nc"><i>138</i>&nbsp;            GameHelper.clearConsole();</b>
-<b class="nc"><i>139</i>&nbsp;        return output;</b>
-<i>140</i>&nbsp;    }
-<i>141</i>&nbsp;}
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    public static void main(String[] args) throws GameInitializationException {
+<b class="nc"><i>36</i>&nbsp;        BattleFieldGame battleFieldGame = new BattleFieldGame();</b>
+<i>37</i>&nbsp;        BattleField battleField;
+<b class="nc"><i>38</i>&nbsp;        SavedGame&lt;BattleField&gt; battleFieldSavedGame = battleFieldGame.lastSavedGame();</b>
+<b class="nc"><i>39</i>&nbsp;        String resumeGame = null;</b>
+<b class="nc"><i>40</i>&nbsp;        if (battleFieldSavedGame != null) {</b>
+<b class="nc"><i>41</i>&nbsp;            String prompt = &quot;Type \&quot;1\&quot; to resume or \&quot;2\&quot; to start a new game&quot;;</b>
+<b class="nc"><i>42</i>&nbsp;            String date = new SimpleDateFormat(&quot;yyyy-MM-dd hh:mm:ss&quot;).format(battleFieldSavedGame.getDateSaved());</b>
+<b class="nc"><i>43</i>&nbsp;            resumeGame = getInputAsString(String.format(&quot;You have a game saved at LEVEL %d on %s, %s&quot;, battleFieldSavedGame.getGame().getLevel(), date, prompt), true, s -&gt; {</b>
+<b class="nc"><i>44</i>&nbsp;                if (s == null || s.length() == 0 || (!s.equals(&quot;1&quot;) &amp;&amp; !s.equals(&quot;2&quot;))) {</b>
+<b class="nc"><i>45</i>&nbsp;                    System.out.println(prompt);</b>
+<b class="nc"><i>46</i>&nbsp;                    return false;</b>
+<i>47</i>&nbsp;                }
+<b class="nc"><i>48</i>&nbsp;                return true;</b>
+<i>49</i>&nbsp;            });
+<i>50</i>&nbsp;        }
+<b class="nc"><i>51</i>&nbsp;        if (resumeGame == null || resumeGame.equals(&quot;2&quot;)) {</b>
+<b class="nc"><i>52</i>&nbsp;            battleFieldGame.showInstructions();</b>
+<b class="nc"><i>53</i>&nbsp;            GameHelper.pressAnyKeyToContinue();</b>
+<b class="nc"><i>54</i>&nbsp;            GameHelper.clearConsole();</b>
+<b class="nc"><i>55</i>&nbsp;            String gameMode = getInputAsString(&quot;Press 1 to play with the CPU or 2 for multiple players&quot;,true, BattleFieldGameLauncher::validateGameMode);</b>
+<i>56</i>&nbsp;
+<b class="nc"><i>57</i>&nbsp;            String player1Name = getInputAsString(&quot;Player 1, Please a name for your Character&quot;,true, BattleFieldGameLauncher::validatePlayerName);</b>
+<i>58</i>&nbsp;
+<b class="nc"><i>59</i>&nbsp;            Player player1 = new Player(player1Name);</b>
+<i>60</i>&nbsp;            Player player2;
+<b class="nc"><i>61</i>&nbsp;            if (gameMode.equals(&quot;2&quot;)) {</b>
+<b class="nc"><i>62</i>&nbsp;                String player2Name = getInputAsString(&quot;Player 2, Please a name for your Character&quot;,true, BattleFieldGameLauncher::validatePlayerName);</b>
+<b class="nc"><i>63</i>&nbsp;                player2 = new Player(player2Name);</b>
+<b class="nc"><i>64</i>&nbsp;            } else if (gameMode.equals(&quot;1&quot;)) {</b>
+<b class="nc"><i>65</i>&nbsp;                player2 = new Player(true);</b>
+<i>66</i>&nbsp;            } else {
+<b class="nc"><i>67</i>&nbsp;                throw new GameInitializationException(&quot;Could not determine game mode&quot;);</b>
+<i>68</i>&nbsp;            }
+<b class="nc"><i>69</i>&nbsp;            Level level = new Level(1);</b>
+<b class="nc"><i>70</i>&nbsp;            battleField = new BattleField(player1, player2, level);</b>
+<b class="nc"><i>71</i>&nbsp;        } else {</b>
+<b class="nc"><i>72</i>&nbsp;            battleField = battleFieldSavedGame.getGame();</b>
+<i>73</i>&nbsp;        }
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;        try {
+<b class="nc"><i>76</i>&nbsp;            battleFieldGame.setBattleField(battleField);</b>
+<b class="nc"><i>77</i>&nbsp;            battleFieldGame.start();</b>
+<b class="nc"><i>78</i>&nbsp;            Scanner scanner = new Scanner(System.in);</b>
+<b class="nc"><i>79</i>&nbsp;            while (battleFieldGame.isActive()) {</b>
+<b class="nc"><i>80</i>&nbsp;                String next = scanner.nextLine();</b>
+<b class="nc"><i>81</i>&nbsp;                switch (next.toLowerCase()) {</b>
+<i>82</i>&nbsp;                    case &quot;help&quot;:
+<b class="nc"><i>83</i>&nbsp;                        battleFieldGame.showInstructions();</b>
+<b class="nc"><i>84</i>&nbsp;                        break;</b>
+<i>85</i>&nbsp;                    case &quot;stat&quot;:
+<b class="nc"><i>86</i>&nbsp;                        battleField.printStat();</b>
+<b class="nc"><i>87</i>&nbsp;                        break;</b>
+<i>88</i>&nbsp;                    case &quot;quit&quot;:
+<i>89</i>&nbsp;                    case &quot;exit&quot;:
+<b class="nc"><i>90</i>&nbsp;                        battleFieldGame.stop();</b>
+<b class="nc"><i>91</i>&nbsp;                        break;</b>
+<i>92</i>&nbsp;                    case &quot;pause&quot;:
+<b class="nc"><i>93</i>&nbsp;                        battleFieldGame.pause();</b>
+<b class="nc"><i>94</i>&nbsp;                        System.exit(0);</b>
+<b class="nc"><i>95</i>&nbsp;                        break;</b>
+<i>96</i>&nbsp;                    case &quot;next level&quot;:
+<b class="nc"><i>97</i>&nbsp;                        battleField = battleField.goToNextLevel();</b>
+<b class="nc"><i>98</i>&nbsp;                        if (!battleField.isRunning()) {</b>
+<b class="nc"><i>99</i>&nbsp;                            battleField.startGame();</b>
+<i>100</i>&nbsp;                        }
+<i>101</i>&nbsp;                        break;
+<i>102</i>&nbsp;                    default:
+<b class="nc"><i>103</i>&nbsp;                        if (next != null &amp;&amp; next.matches(&quot;^\\d{4}&quot;)) {</b>
+<i>104</i>&nbsp;                            try {
+<b class="nc"><i>105</i>&nbsp;                                char[] split = next.toCharArray();</b>
+<b class="nc"><i>106</i>&nbsp;                                int playerRow = Character.getNumericValue(split[0]);</b>
+<b class="nc"><i>107</i>&nbsp;                                int playerColumn = Character.getNumericValue(split[1]);</b>
+<b class="nc"><i>108</i>&nbsp;                                int opponentRow = Character.getNumericValue(split[2]);</b>
+<b class="nc"><i>109</i>&nbsp;                                int opponentColumn = Character.getNumericValue(split[3]);</b>
+<b class="nc"><i>110</i>&nbsp;                                battleField.attack(playerRow, playerColumn, opponentRow, opponentColumn);</b>
+<b class="nc"><i>111</i>&nbsp;                            } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {</b>
+<b class="nc"><i>112</i>&nbsp;                                System.err.println(&quot;The selected index does not exist. Please try again or type \&quot;help\&quot; to read teh game instructions&quot;);</b>
+<b class="nc"><i>113</i>&nbsp;                            } catch (Exception e) {</b>
+<b class="nc"><i>114</i>&nbsp;                                System.err.println(&quot;An error occurred. Please try again or type \&quot;help\&quot; to read teh game instructions&quot;);</b>
+<b class="nc"><i>115</i>&nbsp;                            }</b>
+<i>116</i>&nbsp;                        } else {
+<b class="nc"><i>117</i>&nbsp;                            System.err.println(&quot;Unknown command. Please try again or type \&quot;help\&quot; to read teh game instructions&quot;);</b>
+<i>118</i>&nbsp;                        }
+<i>119</i>&nbsp;                        break;
+<i>120</i>&nbsp;                }
+<b class="nc"><i>121</i>&nbsp;            }</b>
+<b class="nc"><i>122</i>&nbsp;        } catch (GameInitializationException e) {</b>
+<b class="nc"><i>123</i>&nbsp;            System.err.println(e.getMessage());</b>
+<b class="nc"><i>124</i>&nbsp;        } catch (InvalidGameStateException e) {</b>
+<b class="nc"><i>125</i>&nbsp;            System.err.println(e.getMessage());</b>
+<b class="nc"><i>126</i>&nbsp;        }</b>
+<i>127</i>&nbsp;    }
+<i>128</i>&nbsp;
+<i>129</i>&nbsp;    private static String getInputAsString(final String prompt,boolean clearConsole, Predicate&lt;String&gt; stringPredicate) {
+<b class="nc"><i>130</i>&nbsp;        System.out.println(prompt);</b>
+<b class="nc"><i>131</i>&nbsp;        boolean b = false;</b>
+<b class="nc"><i>132</i>&nbsp;        String output = null;</b>
+<b class="nc"><i>133</i>&nbsp;        while (!b) {</b>
+<b class="nc"><i>134</i>&nbsp;            Scanner s = new Scanner(System.in);</b>
+<b class="nc"><i>135</i>&nbsp;            output = s.nextLine();</b>
+<b class="nc"><i>136</i>&nbsp;            b = stringPredicate.test(output);</b>
+<b class="nc"><i>137</i>&nbsp;        }</b>
+<b class="nc"><i>138</i>&nbsp;        if(clearConsole)</b>
+<b class="nc"><i>139</i>&nbsp;            GameHelper.clearConsole();</b>
+<b class="nc"><i>140</i>&nbsp;        return output;</b>
+<i>141</i>&nbsp;    }
+<i>142</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2017-11-14 16:45</div>
+    <div style="float:right;">generated on 2017-11-17 12:28</div>
 </div>
 </body>
 </html>

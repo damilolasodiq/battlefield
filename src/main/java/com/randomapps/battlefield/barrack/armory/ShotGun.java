@@ -1,6 +1,5 @@
 package com.randomapps.battlefield.barrack.armory;
 
-import com.randomapps.battlefield.barrack.WeaponGrade;
 import com.randomapps.battlefield.barrack.WeaponType;
 
 public class ShotGun extends AbstractWeapon {
@@ -13,19 +12,9 @@ public class ShotGun extends AbstractWeapon {
         this.availableRounds = AVAILABLE_ROUNDS;
     }
 
-
-    @Override
-    public int travelRange() {
-        return TRAVEL_RANGE;
-    }
     @Override
     public final String name() {
         return this.getWeaponType().getType();
-    }
-
-    @Override
-    public WeaponGrade getWeaponGrade() {
-        return WeaponGrade.COMPLEX;
     }
 
     @Override

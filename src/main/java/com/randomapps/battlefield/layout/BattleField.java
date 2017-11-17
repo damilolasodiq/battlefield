@@ -164,9 +164,7 @@ public class BattleField implements Serializable {
         List<WeaponType> weapons = new ArrayList<>();
         this.level.getWeaponTypes().stream().forEach(w -> weapons.add(w));
         if (weapons != null) {
-
             Map<WeaponType, List<WeaponType>> collect = weapons.stream().collect(Collectors.groupingBy(weapon -> weapon));
-
             for (Soldier s : soldiers) {
                 for (WeaponType weaponType : collect.keySet()) {
                     List<WeaponType> availableWeapons = collect.get(weaponType);
@@ -294,7 +292,7 @@ public class BattleField implements Serializable {
                 try {
                     Weapon weapon = weaponOptional.get();
                     weapon.fire();
-                    if (this.level.getColumn() / weapon.getWeaponGrade().getGrade() >= opponentColumn) {
+                    if (this.level.getColumn() / weapon.getWeaponType().getGrade() >= opponentColumn) {
                         BattlePosition opponentBattlePosition = opponentArea[opponentRow][opponentColumn];
                         Soldier opponentSoldier = opponentBattlePosition.getSoldier();
                         if (opponentSoldier != null) {

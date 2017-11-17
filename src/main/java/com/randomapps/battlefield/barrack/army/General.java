@@ -17,7 +17,7 @@ public class General extends AbstractSoldier {
     public General() {
         super();
         armorVest = new ArmorVest();
-        ALLOWED_WEAPONS_TYPES.addAll(Arrays.asList(WeaponType.PISTOL, WeaponType.BAZOOKA, WeaponType.SHOTGUN));
+        ALLOWED_WEAPONS_TYPES.addAll(Arrays.asList(WeaponType.BAZOOKA,WeaponType.SHOTGUN,WeaponType.PISTOL));
     }
 
     public List<WeaponType> allowedWeapons() {
