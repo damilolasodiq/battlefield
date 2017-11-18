@@ -8,6 +8,9 @@ public abstract class AbstractWeapon implements Weapon {
 
     protected int availableRounds;
 
+    protected AbstractWeapon() {
+        this.availableRounds = this.getWeaponType().getAvailableRounds();
+    }
 
     @Override
     public final boolean isOutOfArmor() {
@@ -21,7 +24,9 @@ public abstract class AbstractWeapon implements Weapon {
     public abstract int scorePoint();
 
     @Override
-    public abstract String name();
+    public final String name() {
+        return this.getWeaponType().getType();
+    }
 
     @Override
     public int availableRounds() {

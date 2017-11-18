@@ -12,10 +12,7 @@ import com.randomapps.battlefield.barrack.army.Corporal;
 import com.randomapps.battlefield.barrack.army.General;
 import com.randomapps.battlefield.barrack.army.Sergeant;
 import com.randomapps.battlefield.barrack.army.Soldier;
-import com.randomapps.battlefield.exception.GameInitializationException;
-import com.randomapps.battlefield.exception.InvalidGameStateException;
-import com.randomapps.battlefield.exception.SoldierOutOfArmorException;
-import com.randomapps.battlefield.exception.WeaponNotAssignableException;
+import com.randomapps.battlefield.exception.*;
 import com.randomapps.battlefield.game.BattleFieldGame;
 import com.randomapps.battlefield.game.Level;
 import com.randomapps.battlefield.game.Player;
@@ -152,14 +149,8 @@ public class BattleFieldTest {
 
         Assert.assertEquals(100, soldier2.getArmorVest().get().getHealth());
         battleField.attack(soldier1.getBattleCoordinate()[0][0], soldier1.getBattleCoordinate()[0][1], soldier2.getBattleCoordinate()[0][0], soldier2.getBattleCoordinate()[0][1]);
-        System.out.println(soldier2.getArmorVest().get().getHealth()+"soldier2.getArmorVest().get().getHealth()");
-//        Assert.assertTrue(soldier2.getArmorVest().get().getHealth() < 100);
-    }
-
-    @Test
-    public void playerGainsPointWhenAttackIsSuccessful() {
-        Player player1 = new Player("Player 1");
-        Player player2 = new Player("Player 2");
+        Assert.assertTrue(soldier2.getArmorVest().get().getHealth() < 100);
+        Assert.assertEquals(1, player2.getStat().getNumberOfSoldierInjured());
     }
 
     @Test
@@ -187,7 +178,7 @@ public class BattleFieldTest {
     }
 
     @Test
-    public void cpuPlayersTurnAndPlayerRemiansTheSame() throws GameInitializationException {
+    public void cpuPlayersTurnAndPlayerRemainsTheSame() throws GameInitializationException {
         Player player1 = new Player(player1Name);
         Player player2 = new Player(true);
         Level level = new Level(1);
@@ -291,6 +282,26 @@ public class BattleFieldTest {
         Level level = new Level(1);
         BattleField battleField = new BattleField(player1, player2, level);
         battleField.goToNextLevel();
+    }
+
+    @Test
+    public void shouldAddANewWeaponTypeToTheArsenal() throws GameInitializationException {
+        Player player1 = new Player(player1Name);
+        Player player2 = new Player(player2Name);
+        Level level = new Level(1);
+        new BattleField(player1, player2, level);
+        Assert.assertFalse(player1.getArsenal().hasWeapon(WeaponType.BAZOOKA));
+        player1.getArsenal().addWeapon(WeaponType.BAZOOKA);
+        Assert.assertTrue(player1.getArsenal().hasWeapon(WeaponType.BAZOOKA));
+    }
+
+    @Test(expected = WeaponNotAvailableException.class)
+    public void cannotPickAWeaponThatDoesNotExistFromArsenal() throws GameInitializationException {
+        Player player1 = new Player(player1Name);
+        Player player2 = new Player(player2Name);
+        Level level = new Level(1);
+        new BattleField(player1, player2, level);
+        player1.getArsenal().pickWeapon(WeaponType.BAZOOKA);
     }
 
 

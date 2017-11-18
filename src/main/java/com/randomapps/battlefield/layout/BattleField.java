@@ -310,6 +310,8 @@ public class BattleField implements Serializable {
                                     this.getCurrentPlayer().getStat().setNumberOfEnemiesKilled(this.getCurrentPlayer().getStat().getNumberOfEnemiesKilled() + 1);
                                     this.getOpponent().getStat().setNumberOfSoldiersKilled(this.getCurrentPlayer().getStat().getNumberOfEnemiesKilled());
                                     this.getCurrentPlayer().getStat().setPoints(this.getCurrentPlayer().getStat().getPoints() + calculatePoints(soldier, opponentSoldier, weaponOptional.get()));
+                                }else{
+                                    this.getOpponent().getStat().setNumberOfSoldierInjured(this.getOpponent().getStat().getNumberOfSoldierInjured()+1);
                                 }
                             }
                         } else {

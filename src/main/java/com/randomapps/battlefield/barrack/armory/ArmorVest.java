@@ -10,7 +10,7 @@ public class ArmorVest {
     }
 
     public ArmorVest() {
-        this.health = DEFAULT_HEALTH;
+        this(DEFAULT_HEALTH);
     }
 
 
