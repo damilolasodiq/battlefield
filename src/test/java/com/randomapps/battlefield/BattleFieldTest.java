@@ -4,6 +4,7 @@ package com.randomapps.battlefield;
 import com.randomapps.battlefield.barrack.Arsenal;
 import com.randomapps.battlefield.barrack.SoldierType;
 import com.randomapps.battlefield.barrack.WeaponType;
+import com.randomapps.battlefield.barrack.armory.Bazooka;
 import com.randomapps.battlefield.barrack.armory.Pistol;
 import com.randomapps.battlefield.barrack.armory.Weapon;
 import com.randomapps.battlefield.barrack.armory.WeaponFactory;
@@ -23,6 +24,8 @@ import com.randomapps.battlefield.layout.BattleField;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 public class BattleFieldTest {
 
@@ -225,10 +228,69 @@ public class BattleFieldTest {
         Player player2 = new Player(player2Name);
 
         BattleField battleFieldBeforePause = new BattleField(player1, player2, new Level(1));
+
         BattleFieldGame battleFieldGameBeforePause = new BattleFieldGame();
         battleFieldGameBeforePause.setBattleField(battleFieldBeforePause);
         battleFieldGameBeforePause.pause();
 
+    }
+
+    @Test
+    public void shouldEndGameDueToDeadSoldiers() throws GameInitializationException {
+        Player player1 = new Player(player1Name);
+        Player player2 = new Player(player2Name);
+        Level level = new Level(1);
+        BattleField battleField = new BattleField(player1, player2, level);
+        Soldier soldier = player1.getBattleArea().getBattlePositionsWithActiveSoldiers().stream().findAny().get().getSoldier();
+        player2.getSoldiers().stream().forEach(s -> {
+            while (s.isAlive()) {
+                s.takeHit(new Bazooka());
+            }
+        });
+        battleField.attack(soldier.getBattleCoordinate()[0][0], soldier.getBattleCoordinate()[0][1], 0, 0);
+        Assert.assertEquals(battleField.getWinner(), player1);
+    }
+
+    @Test
+    public void shouldEndGameDueToNoWeapons() throws GameInitializationException {
+        Player player1 = new Player(player1Name);
+        Player player2 = new Player(player2Name);
+        Level level = new Level(1);
+        BattleField battleField = new BattleField(player1, player2, level);
+        Soldier soldier = player1.getBattleArea().getBattlePositionsWithActiveSoldiers().stream().findAny().get().getSoldier();
+        player2.getSoldiers().stream().forEach(s -> {
+            while (s.getCurrentWeapon().get().availableRounds() > 0) {
+                try {
+                    s.getCurrentWeapon().get().fire();
+                } catch (SoldierOutOfArmorException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        battleField.attack(soldier.getBattleCoordinate()[0][0], soldier.getBattleCoordinate()[0][1], 0, 0);
+        Assert.assertEquals(battleField.getWinner(), player1);
+    }
+
+    @Test
+    public void shouldGoToNextLevelAfterCompletingALevel() throws GameInitializationException {
+        Player player1 = new Player(player1Name);
+        Player player2 = new Player(player2Name);
+        Level level = new Level(1);
+        BattleField battleField = new BattleField(player1, player2, level);
+        Soldier soldier = player1.getBattleArea().getBattlePositionsWithActiveSoldiers().stream().findAny().get().getSoldier();
+        player2.setSoldiers(new ArrayList<>());
+        battleField.attack(soldier.getBattleCoordinate()[0][0], soldier.getBattleCoordinate()[0][1], 0, 0);
+        BattleField newBattleField = battleField.goToNextLevel();
+        Assert.assertEquals(battleField.getLevel() + 1, newBattleField.getLevel());
+    }
+
+    @Test(expected = GameInitializationException.class)
+    public void shouldNotGoToANewLevelWhileCurrentLevelIsInPlay() throws GameInitializationException {
+        Player player1 = new Player(player1Name);
+        Player player2 = new Player(player2Name);
+        Level level = new Level(1);
+        BattleField battleField = new BattleField(player1, player2, level);
+        battleField.goToNextLevel();
     }
 
 

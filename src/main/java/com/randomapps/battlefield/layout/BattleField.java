@@ -19,13 +19,13 @@ import java.io.Serializable;
 import java.security.SecureRandom;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class BattleField implements Serializable {
 
     private final static Character DEAD_SOLDIER_POSITION = '!';
     private final static Character HIDDEN_POSITION = '-';
     private final static Character BLASTED_POSITION = 'X';
+    private Player winner;
 
     Player[] players = new Player[2]; //number of players possible at a time
     private Level level;
@@ -89,6 +89,10 @@ public class BattleField implements Serializable {
         }
     }
 
+    public Player getWinner() {
+        return winner;
+    }
+
     private void printBattleArea(BattlePosition[] area, boolean hideSoldiers) {
         int len = area.length - 1;
         for (int i = 0; i < area.length; i++) {
@@ -107,6 +111,7 @@ public class BattleField implements Serializable {
             System.out.print((i == 0 ? "[ " : "| ") + rowToken + " ");
             if (len == i)
                 System.out.print("]");
+
 
         }
 
@@ -313,6 +318,7 @@ public class BattleField implements Serializable {
                         }
                         if (this.shouldGameEnd()) {
                             System.out.printf("%s has WON!!\n", this.getCurrentPlayer().getName());
+                            this.winner = this.getCurrentPlayer();
                             if (this.level.getLevel() < Level.MAX_LEVEL) {
                                 System.out.printf("Type \"NEXT LEVEL\" to go to %d \n", this.level.getLevel() + 1);
                             } else {
