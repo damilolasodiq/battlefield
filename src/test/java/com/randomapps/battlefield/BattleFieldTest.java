@@ -22,7 +22,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class BattleFieldTest {
 
@@ -168,11 +171,10 @@ public class BattleFieldTest {
 
         BattleFieldGame battleFieldGameAfterPause = new BattleFieldGame();
         SavedGame<BattleField> battleFieldSavedGame = battleFieldGameAfterPause.lastSavedGame();
-
         Assert.assertNotNull("Could not get the last saved game", battleFieldBeforePause);
         Assert.assertNotNull("The retrieved game is null", battleFieldSavedGame.getGame());
-        System.out.println(battleFieldBeforePause);
-        System.out.println(battleFieldSavedGame.getGame());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm");
+        Assert.assertEquals(dateFormat.format(new Date()), dateFormat.format(battleFieldSavedGame.getDateSaved()));
         Assert.assertEquals("The Points for player 1 must be the same before and after pausing a game", battleFieldBeforePause.getCurrentPlayer().getStat().getPoints(), battleFieldBeforePause.getCurrentPlayer().getStat().getPoints());
         Assert.assertEquals("The Points for player 2 must be the same before and after pausing a game", battleFieldBeforePause.getOpponent().getStat().getPoints(), battleFieldBeforePause.getOpponent().getStat().getPoints());
     }

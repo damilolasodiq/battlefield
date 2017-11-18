@@ -84,7 +84,11 @@ public class BattleFieldGame implements Game<BattleField> {
                 File tempFile = File.createTempFile(GAME_SAVE_PREFIX, ".ser", dir);
                 fout = new FileOutputStream(tempFile);
                 try (ObjectOutputStream oos = new ObjectOutputStream(fout)) {
-                    oos.writeObject(this.battleField);
+                    SavedGame<BattleField> battleFieldSavedGame = new SavedGame<>();
+                    battleFieldSavedGame.setDateSaved(new Date());
+                    battleFieldSavedGame.setGame(this.battleField);
+                    battleFieldSavedGame.setDescription(String.format("Game play between %s and %s", this.battleField.getCurrentPlayer().getName(), this.battleField.getOpponent().getName()));
+                    oos.writeObject(battleFieldSavedGame);
                     this.paused = true;
                     System.out.println("Your game has been paused. You would get a prompt to resume next time you play.");
                 }
@@ -115,10 +119,7 @@ public class BattleFieldGame implements Game<BattleField> {
                     File gameFile = files[0];
                     FileInputStream fileInputStream = new FileInputStream(gameFile);
                     try (ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
-                        BattleField battleField = (BattleField) objectInputStream.readObject();
-                        SavedGame<BattleField> savedGame = new SavedGame();
-                        savedGame.setGame(battleField);
-                        savedGame.setDateSaved(new Date(gameFile.lastModified()));
+                        SavedGame savedGame = (SavedGame) objectInputStream.readObject();
                         this.paused = true;
                         return savedGame;
                     } catch (Exception e) {
