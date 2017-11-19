@@ -28,18 +28,22 @@ Setting up the game
 Perquisite: Ensure you have java >=1.8 runtime installed in your environment. You also need to install **[git](https://git-scm.com/downloads)** and **[maven](https://maven.apache.org/download.cgi
 )** to run the commands for setup.
 1)  Clone this repository
-
-        git clone https://github.com/damilolasodiq/battlefield
+```
+git clone https://github.com/damilolasodiq/battlefield
+```
 2)  Goto the directory where the repository is created and run the command;
-   
-        mvn clean install
-        
+```
+mvn clean install
+```        
 How to play
 -----------
 1) Open a command line terminal on your Mac or PC and run the command below from the location you cloned the repository;
 
-        java -jar Battlefield-1.0-SNAPSHOT.jar BattleFieldGameLauncher
-        
+```java
+
+java -jar Battlefield-1.0-SNAPSHOT.jar BattleFieldGameLauncher
+```        
+
 2) After reading this instructions, you would follow subsequent instructions on the screen to set a game mode (CPU or multi-player)
 3) You will be required to enter a name for your character e.g John, Xavi, Elixir e.t.c
 4) You can type "PAUSE" at any time during a game play to pause the game.
