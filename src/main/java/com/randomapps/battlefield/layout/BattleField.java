@@ -125,7 +125,6 @@ public class BattleField implements Serializable {
             initializePlayer(player);
             initializeLevel(player);
         }
-
     }
 
     public void initializeLevel(Player player) {
@@ -164,7 +163,6 @@ public class BattleField implements Serializable {
 
     private void initializePlayer(Player player) throws GameInitializationException {
         Arsenal arsenal = new Arsenal();
-
         List<Soldier> soldiers = new ArrayList<>();
         this.level.getSoldiers().stream().forEach(s -> soldiers.add(SoldierFactory.newInstance(s.getType())));
         List<WeaponType> weapons = new ArrayList<>();
