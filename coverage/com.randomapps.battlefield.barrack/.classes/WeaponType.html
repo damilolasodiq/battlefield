@@ -53,7 +53,7 @@
     100%
   </span>
   <span class="absValue">
-    (4/ 4)
+    (6/ 6)
   </span>
 </td>
 <td class="coverageStat">
@@ -61,7 +61,7 @@
     100%
   </span>
   <span class="absValue">
-    (6/ 6)
+    (10/ 10)
   </span>
 </td>
 </tr>
@@ -76,24 +76,36 @@
 <i>2</i>&nbsp;
 <b class="fc"><i>3</i>&nbsp;public enum WeaponType {</b>
 <i>4</i>&nbsp;
-<b class="fc"><i>5</i>&nbsp;    PISTOL(&quot;Pistol&quot;), BAZOOKA(&quot;Bazooka&quot;), SHOTGUN(&quot;Shotgun&quot;);</b>
+<b class="fc"><i>5</i>&nbsp;    PISTOL(&quot;Pistol&quot;, 3, 3), BAZOOKA(&quot;Bazooka&quot;, 1, 2), SHOTGUN(&quot;Shotgun&quot;, 2, 2);</b>
 <i>6</i>&nbsp;
 <i>7</i>&nbsp;    String type;
-<i>8</i>&nbsp;
-<b class="fc"><i>9</i>&nbsp;    WeaponType(String type) {</b>
-<b class="fc"><i>10</i>&nbsp;        this.type = type;</b>
-<b class="fc"><i>11</i>&nbsp;    }</b>
-<i>12</i>&nbsp;
-<i>13</i>&nbsp;    public String getType(){
-<b class="fc"><i>14</i>&nbsp;        return this.type;</b>
-<i>15</i>&nbsp;    }
-<i>16</i>&nbsp;}
+<i>8</i>&nbsp;    int grade;
+<i>9</i>&nbsp;    int availableRounds;
+<i>10</i>&nbsp;
+<b class="fc"><i>11</i>&nbsp;    WeaponType(String type, int grade, int availableRounds) {</b>
+<b class="fc"><i>12</i>&nbsp;        this.type = type;</b>
+<b class="fc"><i>13</i>&nbsp;        this.grade = grade;</b>
+<b class="fc"><i>14</i>&nbsp;        this.availableRounds = availableRounds;</b>
+<b class="fc"><i>15</i>&nbsp;    }</b>
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    public String getType(){
+<b class="fc"><i>18</i>&nbsp;        return this.type;</b>
+<i>19</i>&nbsp;    }
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    public int getGrade() {
+<b class="fc"><i>22</i>&nbsp;        return this.grade;</b>
+<i>23</i>&nbsp;    }
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    public int getAvailableRounds() {
+<b class="fc"><i>26</i>&nbsp;        return availableRounds;</b>
+<i>27</i>&nbsp;    }
+<i>28</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2017-11-17 12:28</div>
+    <div style="float:right;">generated on 2017-11-19 23:58</div>
 </div>
 </body>
 </html>

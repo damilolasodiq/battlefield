@@ -136,9 +136,9 @@ public class BattleFieldTest {
     }
 
     @Test
-    public void solderKillsOpponentSoldier() throws GameInitializationException, WeaponNotAssignableException {
-        Player player1 = new Player("Player 1");
-        Player player2 = new Player("Player 2");
+    public void soldierKillsOpponentSoldier() throws GameInitializationException, WeaponNotAssignableException {
+        Player player1 = new Player(player1Name);
+        Player player2 = new Player(player2Name);
 
         Level level = new Level(2);
         BattleField battleField = new BattleField(player1, player2, level);

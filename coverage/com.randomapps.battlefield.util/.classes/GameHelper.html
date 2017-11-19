@@ -50,18 +50,18 @@
 </td>
 <td class="coverageStat">
   <span class="percent">
-    40%
+    80%
   </span>
   <span class="absValue">
-    (2/ 5)
+    (4/ 5)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    26.7%
+    63.3%
   </span>
   <span class="absValue">
-    (8/ 30)
+    (19/ 30)
   </span>
 </td>
 </tr>
@@ -84,16 +84,16 @@
 <i>10</i>&nbsp;
 <i>11</i>&nbsp;    public static String readFileFromClassPathResource(String fileName) {
 <i>12</i>&nbsp;
-<b class="nc"><i>13</i>&nbsp;        StringBuilder result = new StringBuilder(&quot;&quot;);</b>
+<b class="fc"><i>13</i>&nbsp;        StringBuilder result = new StringBuilder(&quot;&quot;);</b>
 <i>14</i>&nbsp;
-<b class="nc"><i>15</i>&nbsp;        try(InputStream in = GameHelper.class.getClassLoader().getResourceAsStream(&quot;readme.txt&quot;)){</b>
-<b class="nc"><i>16</i>&nbsp;            BufferedReader reader = new BufferedReader(new InputStreamReader(in));</b>
-<b class="nc"><i>17</i>&nbsp;            reader.lines().forEach(line -&gt; result.append(line).append(&quot;\n&quot;));</b>
-<b class="nc"><i>18</i>&nbsp;        } catch (IOException e) {</b>
+<b class="fc"><i>15</i>&nbsp;        try(InputStream in = GameHelper.class.getClassLoader().getResourceAsStream(fileName)){</b>
+<b class="fc"><i>16</i>&nbsp;            BufferedReader reader = new BufferedReader(new InputStreamReader(in));</b>
+<b class="fc"><i>17</i>&nbsp;            reader.lines().forEach(line -&gt; result.append(line).append(&quot;\n&quot;));</b>
+<b class="fc"><i>18</i>&nbsp;        } catch (IOException e) {</b>
 <b class="nc"><i>19</i>&nbsp;            e.printStackTrace();</b>
-<b class="nc"><i>20</i>&nbsp;        }</b>
+<b class="fc"><i>20</i>&nbsp;        }</b>
 <i>21</i>&nbsp;
-<b class="nc"><i>22</i>&nbsp;        return result.toString();</b>
+<b class="fc"><i>22</i>&nbsp;        return result.toString();</b>
 <i>23</i>&nbsp;
 <i>24</i>&nbsp;    }
 <i>25</i>&nbsp;
@@ -116,12 +116,12 @@
 <b class="fc"><i>42</i>&nbsp;    }</b>
 <i>43</i>&nbsp;
 <i>44</i>&nbsp;    public static void pressAnyKeyToContinue() {
-<b class="nc"><i>45</i>&nbsp;        System.out.println(&quot;Press \&quot;ENTER\&quot; key to continue...&quot;);</b>
+<b class="fc"><i>45</i>&nbsp;        System.out.println(&quot;Press \&quot;ENTER\&quot; key to continue...&quot;);</b>
 <i>46</i>&nbsp;        try {
-<b class="nc"><i>47</i>&nbsp;            System.in.read();</b>
+<b class="fc"><i>47</i>&nbsp;            System.in.read();</b>
 <b class="nc"><i>48</i>&nbsp;        } catch (Exception e) {</b>
-<b class="nc"><i>49</i>&nbsp;        }</b>
-<b class="nc"><i>50</i>&nbsp;    }</b>
+<b class="fc"><i>49</i>&nbsp;        }</b>
+<b class="fc"><i>50</i>&nbsp;    }</b>
 <i>51</i>&nbsp;    public static String getCPUName() {
 <b class="fc"><i>52</i>&nbsp;        String[] transformerNames = new String[]{&quot;Megatron&quot;, &quot;Bumblebee&quot;, &quot;Optimus&quot;, &quot;Jazz&quot;, &quot;Ratchet&quot;, &quot;Ironhide&quot;, &quot;Arcee&quot;, &quot;Sideswipe&quot;, &quot;Hatchet&quot;};</b>
 <b class="fc"><i>53</i>&nbsp;        int rnd = new Random().nextInt(transformerNames.length);</b>
@@ -133,7 +133,7 @@
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2017-11-17 12:28</div>
+    <div style="float:right;">generated on 2017-11-19 23:58</div>
 </div>
 </body>
 </html>

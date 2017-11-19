@@ -38,36 +38,31 @@
 
 <div class="sourceCode"><i>1</i>&nbsp;package com.randomapps.battlefield.barrack.armory;
 <i>2</i>&nbsp;
-<i>3</i>&nbsp;import com.randomapps.battlefield.barrack.WeaponGrade;
-<i>4</i>&nbsp;import com.randomapps.battlefield.barrack.WeaponType;
-<i>5</i>&nbsp;import com.randomapps.battlefield.exception.SoldierOutOfArmorException;
-<i>6</i>&nbsp;
-<i>7</i>&nbsp;import java.io.Serializable;
-<i>8</i>&nbsp;
-<i>9</i>&nbsp;public interface Weapon extends Serializable {
-<i>10</i>&nbsp;
-<i>11</i>&nbsp;    String name();
-<i>12</i>&nbsp;
-<i>13</i>&nbsp;    int availableRounds();
-<i>14</i>&nbsp;
-<i>15</i>&nbsp;    void fire() throws SoldierOutOfArmorException;
-<i>16</i>&nbsp;
-<i>17</i>&nbsp;    int travelRange();
-<i>18</i>&nbsp;
-<i>19</i>&nbsp;    boolean isOutOfArmor();
-<i>20</i>&nbsp;
-<i>21</i>&nbsp;    WeaponType getWeaponType();
-<i>22</i>&nbsp;
-<i>23</i>&nbsp;    WeaponGrade getWeaponGrade();
-<i>24</i>&nbsp;
-<i>25</i>&nbsp;    int scorePoint();
-<i>26</i>&nbsp;}
+<i>3</i>&nbsp;import com.randomapps.battlefield.barrack.WeaponType;
+<i>4</i>&nbsp;import com.randomapps.battlefield.exception.SoldierOutOfArmorException;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import java.io.Serializable;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;public interface Weapon extends Serializable {
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;    String name();
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    int availableRounds();
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    void fire() throws SoldierOutOfArmorException;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    boolean isOutOfArmor();
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    WeaponType getWeaponType();
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    int scorePoint();
+<i>21</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2017-11-17 12:28</div>
+    <div style="float:right;">generated on 2017-11-19 23:58</div>
 </div>
 </body>
 </html>

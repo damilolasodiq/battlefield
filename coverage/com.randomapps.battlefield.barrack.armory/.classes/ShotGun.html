@@ -50,18 +50,18 @@
 </td>
 <td class="coverageStat">
   <span class="percent">
-    33.3%
+    66.7%
   </span>
   <span class="absValue">
-    (2/ 6)
+    (2/ 3)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    50%
+    66.7%
   </span>
   <span class="absValue">
-    (4/ 8)
+    (2/ 3)
   </span>
 </td>
 </tr>
@@ -74,52 +74,29 @@
 
 <div class="sourceCode"><i>1</i>&nbsp;package com.randomapps.battlefield.barrack.armory;
 <i>2</i>&nbsp;
-<i>3</i>&nbsp;import com.randomapps.battlefield.barrack.WeaponGrade;
-<i>4</i>&nbsp;import com.randomapps.battlefield.barrack.WeaponType;
-<i>5</i>&nbsp;
-<i>6</i>&nbsp;public class ShotGun extends AbstractWeapon {
-<i>7</i>&nbsp;
-<i>8</i>&nbsp;    private static final int AVAILABLE_ROUNDS = 2;
-<i>9</i>&nbsp;    private static final int TRAVEL_RANGE = 2;
-<i>10</i>&nbsp;    private static final int SCORE_POINT = 12;
-<i>11</i>&nbsp;
-<b class="fc"><i>12</i>&nbsp;    public ShotGun() {</b>
-<b class="fc"><i>13</i>&nbsp;        this.availableRounds = AVAILABLE_ROUNDS;</b>
-<b class="fc"><i>14</i>&nbsp;    }</b>
-<i>15</i>&nbsp;
-<i>16</i>&nbsp;
-<i>17</i>&nbsp;    @Override
-<i>18</i>&nbsp;    public int travelRange() {
-<b class="nc"><i>19</i>&nbsp;        return TRAVEL_RANGE;</b>
-<i>20</i>&nbsp;    }
-<i>21</i>&nbsp;    @Override
-<i>22</i>&nbsp;    public final String name() {
-<b class="nc"><i>23</i>&nbsp;        return this.getWeaponType().getType();</b>
-<i>24</i>&nbsp;    }
-<i>25</i>&nbsp;
-<i>26</i>&nbsp;    @Override
-<i>27</i>&nbsp;    public WeaponGrade getWeaponGrade() {
-<b class="nc"><i>28</i>&nbsp;        return WeaponGrade.COMPLEX;</b>
-<i>29</i>&nbsp;    }
-<i>30</i>&nbsp;
-<i>31</i>&nbsp;    @Override
-<i>32</i>&nbsp;    public int scorePoint() {
-<b class="nc"><i>33</i>&nbsp;        return SCORE_POINT;</b>
-<i>34</i>&nbsp;    }
-<i>35</i>&nbsp;
-<i>36</i>&nbsp;    @Override
-<i>37</i>&nbsp;    public final WeaponType getWeaponType() {
-<b class="fc"><i>38</i>&nbsp;        return WeaponType.SHOTGUN;</b>
-<i>39</i>&nbsp;    }
-<i>40</i>&nbsp;
-<i>41</i>&nbsp;
-<i>42</i>&nbsp;}
+<i>3</i>&nbsp;import com.randomapps.battlefield.barrack.WeaponType;
+<i>4</i>&nbsp;
+<b class="fc"><i>5</i>&nbsp;public class ShotGun extends AbstractWeapon {</b>
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;    private static final int SCORE_POINT = 12;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;    @Override
+<i>10</i>&nbsp;    public int scorePoint() {
+<b class="nc"><i>11</i>&nbsp;        return SCORE_POINT;</b>
+<i>12</i>&nbsp;    }
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    @Override
+<i>15</i>&nbsp;    public final WeaponType getWeaponType() {
+<b class="fc"><i>16</i>&nbsp;        return WeaponType.SHOTGUN;</b>
+<i>17</i>&nbsp;    }
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2017-11-17 12:28</div>
+    <div style="float:right;">generated on 2017-11-19 23:58</div>
 </div>
 </body>
 </html>

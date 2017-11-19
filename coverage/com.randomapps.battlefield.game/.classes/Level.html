@@ -154,17 +154,17 @@
 <i>80</i>&nbsp;
 <i>81</i>&nbsp;    private void initWeaponTypes() {
 <b class="fc"><i>82</i>&nbsp;        this.weaponTypes = new ArrayList&lt;&gt;();</b>
-<b class="fc"><i>83</i>&nbsp;        if (this.numberOfCorporalsRequired &gt; 0) {</b>
-<b class="fc"><i>84</i>&nbsp;            int numberOfRequiredPistols = this.numberOfCorporalsRequired + (int) Math.floor(this.numberOfCorporalsRequired / 2) - 1;</b>
-<b class="fc"><i>85</i>&nbsp;            weaponTypes.addAll(Collections.nCopies(numberOfRequiredPistols, WeaponType.PISTOL));</b>
+<b class="fc"><i>83</i>&nbsp;        if (this.numberOfSergeantsRequired &gt; 0) {</b>
+<b class="fc"><i>84</i>&nbsp;            int numberOfShotguns = this.numberOfSergeantsRequired + (int) Math.floor(this.numberOfSergeantsRequired / 2) - 1;</b>
+<b class="fc"><i>85</i>&nbsp;            weaponTypes.addAll(Collections.nCopies(numberOfShotguns, WeaponType.SHOTGUN));</b>
 <i>86</i>&nbsp;        }
 <b class="fc"><i>87</i>&nbsp;        if (this.numberOfGeneralsRequired &gt; 0) {</b>
 <b class="fc"><i>88</i>&nbsp;            int numberOfRequiredBazookas = this.numberOfGeneralsRequired + (int) Math.floor(this.numberOfGeneralsRequired / 2) - 1;</b>
 <b class="fc"><i>89</i>&nbsp;            weaponTypes.addAll(Collections.nCopies(numberOfRequiredBazookas, WeaponType.BAZOOKA));</b>
 <i>90</i>&nbsp;        }
-<b class="fc"><i>91</i>&nbsp;        if (this.numberOfSergeantsRequired &gt; 0) {</b>
-<b class="fc"><i>92</i>&nbsp;            int numberOfShotguns = this.numberOfSergeantsRequired + (int) Math.floor(this.numberOfSergeantsRequired / 2) - 1;</b>
-<b class="fc"><i>93</i>&nbsp;            weaponTypes.addAll(Collections.nCopies(numberOfShotguns, WeaponType.SHOTGUN));</b>
+<b class="fc"><i>91</i>&nbsp;        if (this.numberOfCorporalsRequired &gt; 0) {</b>
+<b class="fc"><i>92</i>&nbsp;            int numberOfRequiredPistols = this.numberOfCorporalsRequired + (int) Math.floor(this.numberOfCorporalsRequired / 2) - 1;</b>
+<b class="fc"><i>93</i>&nbsp;            weaponTypes.addAll(Collections.nCopies(numberOfRequiredPistols, WeaponType.PISTOL));</b>
 <i>94</i>&nbsp;        }
 <b class="fc"><i>95</i>&nbsp;    }</b>
 <i>96</i>&nbsp;
@@ -190,7 +190,7 @@
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2017-11-17 12:28</div>
+    <div style="float:right;">generated on 2017-11-19 23:58</div>
 </div>
 </body>
 </html>

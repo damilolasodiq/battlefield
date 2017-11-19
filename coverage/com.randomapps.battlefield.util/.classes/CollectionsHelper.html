@@ -74,33 +74,31 @@
 
 <div class="sourceCode"><i>1</i>&nbsp;package com.randomapps.battlefield.util;
 <i>2</i>&nbsp;
-<i>3</i>&nbsp;import com.randomapps.battlefield.barrack.armory.Pistol;
-<i>4</i>&nbsp;
-<i>5</i>&nbsp;import java.util.ArrayList;
-<i>6</i>&nbsp;import java.util.List;
+<i>3</i>&nbsp;import java.util.ArrayList;
+<i>4</i>&nbsp;import java.util.List;
+<i>5</i>&nbsp;
+<b class="nc"><i>6</i>&nbsp;public class CollectionsHelper {</b>
 <i>7</i>&nbsp;
-<b class="nc"><i>8</i>&nbsp;public class CollectionsHelper {</b>
-<i>9</i>&nbsp;
-<i>10</i>&nbsp;    public static &lt;T&gt; List&lt;T&gt; createListWithNewObjects(Class&lt;T&gt; t, int x) {
-<b class="fc"><i>11</i>&nbsp;       List&lt;T&gt; tList = new ArrayList&lt;&gt;();</b>
-<b class="fc"><i>12</i>&nbsp;       for(int i =0; i &lt;x; i++){</b>
-<i>13</i>&nbsp;           try {
-<b class="fc"><i>14</i>&nbsp;               tList.add(t.newInstance());</b>
-<b class="nc"><i>15</i>&nbsp;           } catch (InstantiationException e) {</b>
+<i>8</i>&nbsp;    public static &lt;T&gt; List&lt;T&gt; createListWithNewObjects(Class&lt;T&gt; t, int x) {
+<b class="fc"><i>9</i>&nbsp;       List&lt;T&gt; tList = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>10</i>&nbsp;       for(int i =0; i &lt;x; i++){</b>
+<i>11</i>&nbsp;           try {
+<b class="fc"><i>12</i>&nbsp;               tList.add(t.newInstance());</b>
+<b class="nc"><i>13</i>&nbsp;           } catch (InstantiationException e) {</b>
+<b class="nc"><i>14</i>&nbsp;               e.printStackTrace();</b>
+<b class="nc"><i>15</i>&nbsp;           } catch (IllegalAccessException e) {</b>
 <b class="nc"><i>16</i>&nbsp;               e.printStackTrace();</b>
-<b class="nc"><i>17</i>&nbsp;           } catch (IllegalAccessException e) {</b>
-<b class="nc"><i>18</i>&nbsp;               e.printStackTrace();</b>
-<b class="fc"><i>19</i>&nbsp;           }</b>
-<i>20</i>&nbsp;       }
-<b class="fc"><i>21</i>&nbsp;       return tList;</b>
-<i>22</i>&nbsp;    }
-<i>23</i>&nbsp;}
+<b class="fc"><i>17</i>&nbsp;           }</b>
+<i>18</i>&nbsp;       }
+<b class="fc"><i>19</i>&nbsp;       return tList;</b>
+<i>20</i>&nbsp;    }
+<i>21</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2017-11-17 12:28</div>
+    <div style="float:right;">generated on 2017-11-19 23:58</div>
 </div>
 </body>
 </html>
