@@ -1,4 +1,5 @@
 [![Coverage Status](https://coveralls.io/repos/github/damilolasodiq/battlefield/badge.svg)](https://coveralls.io/github/damilolasodiq/battlefield)
+[![Build Status](https://travis-ci.org/damilolasodiq/battlefield.svg?branch=master)](https://travis-ci.org/damilolasodiq/battlefield)
 
 About the Game
 --------------
