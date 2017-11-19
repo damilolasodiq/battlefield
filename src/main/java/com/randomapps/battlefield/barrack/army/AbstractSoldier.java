@@ -73,7 +73,6 @@ public abstract class AbstractSoldier implements Soldier {
 
     public final boolean isAlive() {
         return this.getHealth() > 0;
-
     }
 
     @Override
