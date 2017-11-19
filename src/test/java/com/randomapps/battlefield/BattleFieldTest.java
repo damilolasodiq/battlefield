@@ -20,17 +20,33 @@ import com.randomapps.battlefield.game.SavedGame;
 import com.randomapps.battlefield.layout.BattleField;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.contrib.java.lang.system.ExpectedSystemExit;
+import org.junit.contrib.java.lang.system.SystemOutRule;
+import org.junit.contrib.java.lang.system.TextFromStandardInputStream;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+
+import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.emptyStandardInputStream;
 
 public class BattleFieldTest {
 
     String player1Name;
     String player2Name;
+
+    @Rule
+    public final TextFromStandardInputStream systemInMock = emptyStandardInputStream();
+
+    @Rule
+    public final ExpectedSystemExit exit = ExpectedSystemExit.none();
+
+    @Rule
+    public final SystemOutRule systemOutRule = new SystemOutRule().enableLog();
+
 
 
     @Before
@@ -306,5 +322,42 @@ public class BattleFieldTest {
         player1.getArsenal().pickWeapon(WeaponType.BAZOOKA);
     }
 
+
+
+    @Test
+    public void shouldStartGameAsConsoleWithTheCPU() throws GameInitializationException, IOException {
+        systemInMock.provideLines("\n", "1", "Sodiq", "0000", "exit");
+        exit.expectSystemExitWithStatus(0);
+        exit.checkAssertionAfterwards(() -> {
+            String[] split = systemOutRule.getLogWithNormalizedLineSeparator().split("\n");
+            Assert.assertEquals(split[split.length - 1], BattleFieldGame.STOP_MESSAGE);
+        });
+        BattleFieldGameLauncher battleFieldGameLauncher = new BattleFieldGameLauncher();
+        battleFieldGameLauncher.main(null);
+    }
+
+    @Test
+    public void shouldStartGameAsConsoleWithTheASecondPlayer() throws GameInitializationException, IOException {
+        systemInMock.provideLines("\n", "2", "P1", "P2", "0000", "exit");
+        exit.expectSystemExitWithStatus(0);
+        exit.checkAssertionAfterwards(() -> {
+            String[] split = systemOutRule.getLogWithNormalizedLineSeparator().split("\n");
+            Assert.assertEquals(split[split.length - 1], BattleFieldGame.STOP_MESSAGE);
+        });
+        BattleFieldGameLauncher battleFieldGameLauncher = new BattleFieldGameLauncher();
+        battleFieldGameLauncher.main(null);
+    }
+
+    @Test
+    public void shouldPauseTheGameFromTheConsole() throws GameInitializationException, IOException {
+        systemInMock.provideLines("\n", "2", "P1", "P2", "0000", "pause");
+        exit.expectSystemExitWithStatus(0);
+        exit.checkAssertionAfterwards(() -> {
+            String[] split = systemOutRule.getLogWithNormalizedLineSeparator().split("\n");
+            Assert.assertEquals(split[split.length - 1], BattleFieldGame.PAUSE_MESSAGE);
+        });
+        BattleFieldGameLauncher battleFieldGameLauncher = new BattleFieldGameLauncher();
+        battleFieldGameLauncher.main(null);
+    }
 
 }

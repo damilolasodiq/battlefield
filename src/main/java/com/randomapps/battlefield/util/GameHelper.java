@@ -12,7 +12,7 @@ public class GameHelper {
 
         StringBuilder result = new StringBuilder("");
 
-        try(InputStream in = GameHelper.class.getClassLoader().getResourceAsStream("readme.txt")){
+        try(InputStream in = GameHelper.class.getClassLoader().getResourceAsStream(fileName)){
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             reader.lines().forEach(line -> result.append(line).append("\n"));
         } catch (IOException e) {

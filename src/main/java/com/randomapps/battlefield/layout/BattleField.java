@@ -181,7 +181,7 @@ public class BattleField implements Serializable {
                             s.assignWeapon(weapon);
                             break;
                         } catch (WeaponNotAssignableException e) {
-                            throw new GameInitializationException(e);
+                            throw new GameInitializationException(e.getMessage());
                         }
                     }
                 }

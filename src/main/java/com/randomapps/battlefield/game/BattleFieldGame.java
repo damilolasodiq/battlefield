@@ -11,6 +11,9 @@ import java.util.Date;
 
 public class BattleFieldGame implements Game<BattleField> {
 
+    public static final String PAUSE_MESSAGE = "Your game has been paused. You would get a prompt to resume next time you play.";
+    public static final String STOP_MESSAGE = "The game has been ended.";
+
     private boolean active;
     private boolean paused;
     private BattleField battleField;
@@ -26,6 +29,7 @@ public class BattleFieldGame implements Game<BattleField> {
     public void stop() throws InvalidGameStateException {
         this.active = false;
         this.battleField.endGame();
+        System.out.println(STOP_MESSAGE);
         System.exit(0);
     }
 
@@ -90,7 +94,7 @@ public class BattleFieldGame implements Game<BattleField> {
                     battleFieldSavedGame.setDescription(String.format("Game play between %s and %s", this.battleField.getCurrentPlayer().getName(), this.battleField.getOpponent().getName()));
                     oos.writeObject(battleFieldSavedGame);
                     this.paused = true;
-                    System.out.println("Your game has been paused. You would get a prompt to resume next time you play.");
+                    System.out.println(PAUSE_MESSAGE);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
