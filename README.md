@@ -41,26 +41,27 @@ How to play
 
 ```java
 
-java -jar Battlefield-1.0-SNAPSHOT.jar BattleFieldGameLauncher
+java -jar target/Battlefield-1.0-SNAPSHOT.jar BattleFieldGameLauncher
 ```        
 
 2) After reading this instructions, you would follow subsequent instructions on the screen to set a game mode (CPU or multi-player)
 3) You will be required to enter a name for your character e.g John, Xavi, Elixir e.t.c
-4) You can type "PAUSE" at any time during a game play to pause the game.
+4) You can type **`PAUSE`** at any time during a game play to pause the game.
 5) The level information, current player name and health status of both players are shown on the top of the screen at everytime
-6) You can type "STAT" at any moment in the game to check your full stat such as number of Soldier killed, number of soldiers injured,
+6) You can type **`STAT`** at any moment in the game to check your full stat such as number of Soldier killed, number of soldiers injured,
 number of points, inventory of your arsenal and so on.
 7) To launch an attack, you need to specify the position of your Soldier to carry out the attack to also a position in the battle area
 of your opponent where the attack your be carried out. For example, you type 0134 to select your Soldier at row 1 col 0 to carry out
 an attack on row 3 col 4 in the opponent's battle area.
 8) For every attack, you can see the effect on the enemies field.
-    'X' means your attack hit a position without a Soldier in which case, you don't get a point but your Soldier weapon loses a bullet.
-    '!' means your attack hit a Soldier on the enemies field and the Soldier died.
-    '-' means a position on the battle field that is yet to be explored.
+    `X` means your attack hit a position without a Soldier in which case, you don't get a point but your Soldier weapon loses a bullet.
+    `!` means your attack hit a Soldier on the enemies field and the Soldier died.
+    `-` means a position on the battle field that is yet to be explored.
 9) Every Soldier type has a range they can shoot for example, a Corporal cannot shoot as far as a Sergeant and a Sergeant cannot shoot as wide as general
 10) If a Soldier tries to shoot to a point on the enemy's area where his cannot reach, his weapon reduces by a round but there's no effect on the enemies field
 and hence, no point awarded.
-11) You can view this instruction anytime during a game play by typing "HELP"
+11) You can view this instruction anytime during a game play by typing **`HELP`**
+12) To End the game, type **`QUIT`** or **`EXIT`** at any time.
 
 
 How points are calculated
