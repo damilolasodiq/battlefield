@@ -165,7 +165,6 @@ public class BattleFieldTest {
 
         Soldier soldier1 = player1.getBattleArea().getBattlePositionsWithActiveSoldiers().stream().filter(s -> s.getSoldier().getType().equals(SoldierType.GENERAL)).findAny().get().getSoldier();
         Soldier soldier2 = player2.getBattleArea().getBattlePositionsWithActiveSoldiers().stream().filter(s -> s.getSoldier().getType().equals(SoldierType.GENERAL)).findAny().get().getSoldier();
-
         Assert.assertEquals(100, soldier2.getArmorVest().get().getHealth());
         battleField.attack(soldier1.getBattleCoordinate()[0][0], soldier1.getBattleCoordinate()[0][1], soldier2.getBattleCoordinate()[0][0], soldier2.getBattleCoordinate()[0][1]);
         Assert.assertTrue(soldier2.getArmorVest().get().getHealth() < 100);
@@ -189,7 +188,7 @@ public class BattleFieldTest {
         SavedGame<BattleField> battleFieldSavedGame = battleFieldGameAfterPause.lastSavedGame();
         Assert.assertNotNull("Could not get the last saved game", battleFieldBeforePause);
         Assert.assertNotNull("The retrieved game is null", battleFieldSavedGame.getGame());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh");
         Assert.assertEquals(dateFormat.format(new Date()), dateFormat.format(battleFieldSavedGame.getDateSaved()));
         Assert.assertEquals("The Points for player 1 must be the same before and after pausing a game", battleFieldBeforePause.getCurrentPlayer().getStat().getPoints(), battleFieldBeforePause.getCurrentPlayer().getStat().getPoints());
         Assert.assertEquals("The Points for player 2 must be the same before and after pausing a game", battleFieldBeforePause.getOpponent().getStat().getPoints(), battleFieldBeforePause.getOpponent().getStat().getPoints());
