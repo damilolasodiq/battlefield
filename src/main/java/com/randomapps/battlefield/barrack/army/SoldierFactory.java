@@ -5,7 +5,10 @@ import com.randomapps.battlefield.exception.UnknownSoldierTypeException;
 
 public class SoldierFactory {
 
-    public static Soldier newInstance(SoldierType type) throws UnknownSoldierTypeException{
+    private SoldierFactory() {
+    }
+
+    public static Soldier newInstance(SoldierType type) {
         if (SoldierType.SERGEANT.equals(type)) {
             return new Sergeant();
         }if (SoldierType.CORPORAL.equals(type)) {

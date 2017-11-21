@@ -1,6 +1,8 @@
 package com.randomapps.battlefield.barrack.armory;
 
-public class ArmorVest {
+import java.io.Serializable;
+
+public class ArmorVest implements Serializable {
 
     private static final int DEFAULT_HEALTH = 100;
     private int health;

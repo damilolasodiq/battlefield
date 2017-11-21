@@ -12,11 +12,19 @@ public class GameHelper {
 
         StringBuilder result = new StringBuilder("");
 
-        try(InputStream in = GameHelper.class.getClassLoader().getResourceAsStream(fileName)){
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        BufferedReader reader = null;
+        try (InputStream in = GameHelper.class.getClassLoader().getResourceAsStream(fileName)) {
+            reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             reader.lines().forEach(line -> result.append(line).append("\n"));
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (reader != null)
+                    reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         return result.toString();
@@ -28,9 +36,7 @@ public class GameHelper {
         if (os.contains("Windows"))
             try {
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (InterruptedException | IOException e) {
                 e.printStackTrace();
             }
         else

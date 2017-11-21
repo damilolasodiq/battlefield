@@ -34,7 +34,7 @@ public class Player implements Serializable{
     public int getHealth() {
         if (soldiers == null)
             return 0;
-        return soldiers.stream().filter(s -> s.isAlive()).mapToInt(soldier -> soldier.getHealth()).sum();
+        return soldiers.stream().filter(Soldier::isAlive).mapToInt(Soldier::getHealth).sum();
     }
 
     public long getNumberOfInjuredSoldiers() {

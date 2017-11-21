@@ -4,6 +4,10 @@ import com.randomapps.battlefield.barrack.WeaponType;
 import com.randomapps.battlefield.exception.WeaponNotAvailableException;
 
 public class WeaponFactory {
+
+    private WeaponFactory() {
+    }
+
     public static Weapon newInstance(WeaponType type) {
         if (WeaponType.PISTOL.equals(type)) {
             return new Pistol();

@@ -21,8 +21,8 @@ public class Level implements Serializable {
 
     private int row;
     private int column;
-    private int level;
-    private int numberOfSoldiersRequired;
+    private int currentLevel;
+
     private int numberOfGeneralsRequired;
     private int numberOfCorporalsRequired;
     private int numberOfSergeantsRequired;
@@ -31,13 +31,13 @@ public class Level implements Serializable {
     private List<Soldier> soldiers;
     private List<WeaponType> weaponTypes;
 
-    public Level(int level) throws GameInitializationException {
-        if (level > MAX_LEVEL || level < 1) {
-            throw new GameInitializationException("Invalid game level selected");
+    public Level(int currentLevel) throws GameInitializationException {
+        if (currentLevel > MAX_LEVEL || currentLevel < 1) {
+            throw new GameInitializationException("Invalid game currentLevel selected");
         }
-        this.level = level;
-        this.row = DEFAULT_ROW_SIZE + level - 1;
-        this.column = DEFAULT_COLUMN_SIZE + level - 1;
+        this.currentLevel = currentLevel;
+        this.row = DEFAULT_ROW_SIZE + currentLevel - 1;
+        this.column = DEFAULT_COLUMN_SIZE + currentLevel - 1;
         this.initSoldiers();
         this.initWeaponTypes();
         this.initHealth();
@@ -57,8 +57,8 @@ public class Level implements Serializable {
     }
 
     private void initSoldiers() {
-        this.numberOfSoldiersRequired = ((row * column) / 2) - level;
-        this.numberOfGeneralsRequired = (level * 2) - 2;
+        int numberOfSoldiersRequired = ((row * column) / 2) - currentLevel;
+        this.numberOfGeneralsRequired = (currentLevel * 2) - 2;
         if (this.numberOfGeneralsRequired < 2) {
             this.numberOfSergeantsRequired = 2;
         } else {
@@ -81,15 +81,15 @@ public class Level implements Serializable {
     private void initWeaponTypes() {
         this.weaponTypes = new ArrayList<>();
         if (this.numberOfSergeantsRequired > 0) {
-            int numberOfShotguns = this.numberOfSergeantsRequired + (int) Math.floor(this.numberOfSergeantsRequired / 2) - 1;
+            int numberOfShotguns = this.numberOfSergeantsRequired + (this.numberOfSergeantsRequired / 2) - 1;
             weaponTypes.addAll(Collections.nCopies(numberOfShotguns, WeaponType.SHOTGUN));
         }
         if (this.numberOfGeneralsRequired > 0) {
-            int numberOfRequiredBazookas = this.numberOfGeneralsRequired + (int) Math.floor(this.numberOfGeneralsRequired / 2) - 1;
+            int numberOfRequiredBazookas = this.numberOfGeneralsRequired + (this.numberOfGeneralsRequired / 2) - 1;
             weaponTypes.addAll(Collections.nCopies(numberOfRequiredBazookas, WeaponType.BAZOOKA));
         }
         if (this.numberOfCorporalsRequired > 0) {
-            int numberOfRequiredPistols = this.numberOfCorporalsRequired + (int) Math.floor(this.numberOfCorporalsRequired / 2) - 1;
+            int numberOfRequiredPistols = this.numberOfCorporalsRequired + (this.numberOfCorporalsRequired / 2) - 1;
             weaponTypes.addAll(Collections.nCopies(numberOfRequiredPistols, WeaponType.PISTOL));
         }
     }
@@ -99,11 +99,11 @@ public class Level implements Serializable {
     }
 
     private void initHealth() {
-        this.maxHealthInLevel = this.getSoldiers().stream().mapToInt(soldier -> soldier.getHealth()).sum();
+        this.maxHealthInLevel = this.getSoldiers().stream().mapToInt(Soldier::getHealth).sum();
     }
 
-    public int getLevel() {
-        return this.level;
+    public int getCurrentLevel() {
+        return this.currentLevel;
     }
 
     public int getMaxHealthInLevel() {

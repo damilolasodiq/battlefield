@@ -22,12 +22,11 @@ import java.util.stream.Collectors;
 
 public class BattleField implements Serializable {
 
-    private final static Character DEAD_SOLDIER_POSITION = '!';
-    private final static Character HIDDEN_POSITION = '-';
-    private final static Character BLASTED_POSITION = 'X';
+    private static final Character DEAD_SOLDIER_POSITION = '!';
+    private static final Character HIDDEN_POSITION = '-';
+    private static final Character BLASTED_POSITION = 'X';
     private Player winner;
-
-    Player[] players = new Player[2]; //number of players possible at a time
+    private Player[] players = new Player[2]; //number of players possible at a time
     private Level level;
     private int currentPlayerIndex = 0;
     private boolean running;
@@ -47,7 +46,7 @@ public class BattleField implements Serializable {
     private int calculatePoints(Soldier shootingSoldier, Soldier shotSoldier, Weapon weapon) {
         int point = weapon.scorePoint();
         if (shootingSoldier.getRank() < shotSoldier.getRank()) {
-            point += 2 * this.level.getLevel();
+            point += 2 * this.level.getCurrentLevel();
         }
         return point;
     }
@@ -166,11 +165,11 @@ public class BattleField implements Serializable {
         List<Soldier> soldiers = new ArrayList<>();
         this.level.getSoldiers().stream().forEach(s -> soldiers.add(SoldierFactory.newInstance(s.getType())));
         List<WeaponType> weapons = new ArrayList<>();
-        this.level.getWeaponTypes().stream().forEach(w -> weapons.add(w));
+        this.level.getWeaponTypes().stream().forEach(weapons::add);
         if (weapons != null) {
             Map<WeaponType, List<WeaponType>> collect = weapons.stream().collect(Collectors.groupingBy(weapon -> weapon));
             for (Soldier s : soldiers) {
-                collect.keySet().stream().sorted(Comparator.comparingInt(c -> c.getGrade()));
+                collect.keySet().stream().sorted(Comparator.comparingInt(WeaponType::getGrade));
                 for (WeaponType weaponType : collect.keySet()) {
                     List<WeaponType> availableWeapons = collect.get(weaponType);
                     if (!s.allowedWeapons().isEmpty() && s.allowedWeapons().contains(weaponType) && !availableWeapons.isEmpty()) {
@@ -220,32 +219,35 @@ public class BattleField implements Serializable {
         Player player = this.getCurrentPlayer();
         List<BattlePosition> battlePositionsWithActiveSoldiers = player.getBattleArea().getBattlePositionsWithActiveSoldiers();
         BattlePosition attackPosition;
-        if (this.level.getLevel() > 1) {
+        if (this.level.getCurrentLevel() > 1) {
             //cpu gets smarter from level 2 by ensuring it uses the best Soldiers first
-            attackPosition = battlePositionsWithActiveSoldiers.stream().max(Comparator.comparingInt(s -> s.getSoldier().getRank())).get();
+            attackPosition = battlePositionsWithActiveSoldiers.stream().max(Comparator.comparingInt(s -> s.getSoldier().getRank())).orElseGet(null);
         } else {
             SecureRandom rnd = new SecureRandom();
             int i = rnd.nextInt(battlePositionsWithActiveSoldiers.size());
             attackPosition = battlePositionsWithActiveSoldiers.get(i);
         }
-
-        Soldier soldier = attackPosition.getSoldier();
-        int x = soldier.getBattleCoordinate()[0][0];
-        int y = soldier.getBattleCoordinate()[0][1];
-        if (!soldier.getCurrentWeapon().isPresent() || soldier.getCurrentWeapon().get().isOutOfArmor()) {
-            try {
-                this.assignWeapon(x, y);
-            } catch (WeaponNotAssignableException | WeaponNotAvailableException e) {
-                if (count < this.level.getLevel() + 2) { //after the x iteration, let the CPU play with whatever player it has selected
-                    simulateCPUPlay(count + 1);
+        if(attackPosition!=null) {
+            Soldier soldier = attackPosition.getSoldier();
+            int x = soldier.getBattleCoordinate()[0][0];
+            int y = soldier.getBattleCoordinate()[0][1];
+            Optional<Weapon> currentWeapon = soldier.getCurrentWeapon();
+            if (!currentWeapon.isPresent() || currentWeapon.get().isOutOfArmor()) {
+                try {
+                    this.assignWeapon(x, y);
+                } catch (WeaponNotAssignableException | WeaponNotAvailableException e) {
+                    if (count < this.level.getCurrentLevel() + 2) { //after the x iteration, let the CPU play with whatever player it has selected
+                        simulateCPUPlay(count + 1);
+                    }
                 }
             }
-        }
-        SecureRandom secureRandomX = new SecureRandom();
-        SecureRandom secureRandomY = new SecureRandom();
-        int row = secureRandomX.nextInt(this.level.getRow());
-        int col = secureRandomY.nextInt(this.level.getColumn());
-        this.attack(x, y, row, col);
+            SecureRandom secureRandomX = new SecureRandom();
+            SecureRandom secureRandomY = new SecureRandom();
+            int row = secureRandomX.nextInt(this.level.getRow());
+            int col = secureRandomY.nextInt(this.level.getColumn());
+            this.attack(x, y, row, col);
+        }else
+            throw new RuntimeException("The CPU could not find an attack position");
     }
 
     private void printNamesInHeaders() {
@@ -260,8 +262,8 @@ public class BattleField implements Serializable {
     }
 
     private void drawBattleHeaders() {
-        System.out.printf(String.format("BattleField Level %d \n", this.level.getLevel()));
-        System.out.printf("%-15s %s \n", "Current Player", this.getCurrentPlayer().getName().toUpperCase());
+        System.out.printf(String.format("BattleField Level %d %n", this.level.getCurrentLevel()));
+        System.out.printf("%-15s %s %n", "Current Player", this.getCurrentPlayer().getName().toUpperCase());
         this.printNamesInHeaders();
 
         int fullHealthBar = (this.level.getColumn() * 4) + 2;
@@ -302,7 +304,7 @@ public class BattleField implements Serializable {
                         Soldier opponentSoldier = opponentBattlePosition.getSoldier();
                         if (opponentSoldier != null) {
                             if (opponentSoldier.isAlive()) {
-                                System.out.printf("%s %s has hit the enemy's %s\n", this.getCurrentPlayer().getName(), soldier.getType().name(), opponentSoldier.getType().name());
+                                System.out.printf("%s %s has hit the enemy's %s%n", this.getCurrentPlayer().getName(), soldier.getType().name(), opponentSoldier.getType().name());
                                 opponentSoldier.takeHit(weaponOptional.get());
                                 if (!opponentSoldier.isAlive()) {
                                     this.getCurrentPlayer().getStat().setNumberOfEnemiesKilled(this.getCurrentPlayer().getStat().getNumberOfEnemiesKilled() + 1);
@@ -313,16 +315,16 @@ public class BattleField implements Serializable {
                                 }
                             }
                         } else {
-                            System.out.printf("%s %s has hit an empty position on the enemy's area.\n", this.getCurrentPlayer().getName(), soldier.getType().name());
+                            System.out.printf("%s %s has hit an empty position on the enemy's area.%n", this.getCurrentPlayer().getName(), soldier.getType().name());
                             opponentBattlePosition.setBlasted(true);
                         }
                         if (this.shouldGameEnd()) {
                             System.out.printf("%s has WON!!\n", this.getCurrentPlayer().getName());
                             this.winner = this.getCurrentPlayer();
-                            if (this.level.getLevel() < Level.MAX_LEVEL) {
-                                System.out.printf("Type \"NEXT LEVEL\" to go to %d \n", this.level.getLevel() + 1);
+                            if (this.level.getCurrentLevel() < Level.MAX_LEVEL) {
+                                System.out.printf("Type \"NEXT LEVEL\" to go to %d %n", this.level.getCurrentLevel() + 1);
                             } else {
-                                System.out.printf("You have reached the end of the game!. The game would now exit :)\n");
+                                System.out.printf("You have reached the end of the game!. The game would now exit :)%n");
                                 this.endGame();
                                 System.exit(0);
                             }
@@ -330,7 +332,7 @@ public class BattleField implements Serializable {
                             return;
                         }
                     } else {
-                        System.out.printf("%s %s shot out of range. What a waste! \n", this.getCurrentPlayer().getName(), soldier.getType().name());
+                        System.out.printf("%s %s shot out of range. What a waste! %n", this.getCurrentPlayer().getName(), soldier.getType().name());
                     }
                     this.nextPlayerTurn();
                 } catch (SoldierOutOfArmorException e) {
@@ -397,7 +399,7 @@ public class BattleField implements Serializable {
         return false;
     }
 
-    public void assignWeapon(int playerRow, int playerCol) throws WeaponNotAssignableException, WeaponNotAvailableException {
+    public void assignWeapon(int playerRow, int playerCol) throws WeaponNotAssignableException {
         BattlePosition battlePosition = this.getCurrentPlayer().getBattleArea().getArea()[playerRow][playerCol];
         Soldier soldier = battlePosition.getSoldier();
         if (soldier != null) {
@@ -432,16 +434,16 @@ public class BattleField implements Serializable {
             return;
         }
         for (Player player : players) {
-            System.out.printf("_________________________________\n");
-            System.out.printf("%-25s %s\n", "Player", player.getName().toUpperCase());
-            System.out.printf("%-25s %d \n", "Enemies Killed", player.getStat().getNumberOfEnemiesKilled());
-            System.out.printf("%-25s %d \n", "Soldiers Killed", player.getNumberOfDeadSoldiers());
-            System.out.printf("%-25s %d \n", "Soldiers Injured", player.getNumberOfInjuredSoldiers());
-            System.out.printf("%-25s %d%%\n", "Health Status", this.calculateHealthInPercentage(player));
-            System.out.printf("%-25s %d \n", "Points", player.getStat().getPoints());
-            System.out.printf("-------Weapons in Arsenal--------\n");
-            player.getArsenal().getInventory().forEach((k, v) -> System.out.printf("%-25s %d \n", k, v));
-            System.out.printf("_________________________________\n");
+            System.out.print("_________________________________%n");
+            System.out.printf("%-25s %s %n", "Player", player.getName().toUpperCase());
+            System.out.printf("%-25s %d %n", "Enemies Killed", player.getStat().getNumberOfEnemiesKilled());
+            System.out.printf("%-25s %d %n", "Soldiers Killed", player.getNumberOfDeadSoldiers());
+            System.out.printf("%-25s %d %n", "Soldiers Injured", player.getNumberOfInjuredSoldiers());
+            System.out.printf("%-25s %d%%%n", "Health Status", this.calculateHealthInPercentage(player));
+            System.out.printf("%-25s %d %n", "Points", player.getStat().getPoints());
+            System.out.printf("-------Weapons in Arsenal--------%n");
+            player.getArsenal().getInventory().forEach((k, v) -> System.out.printf("%-25s %d %n", k, v));
+            System.out.print("_________________________________\n");
         }
     }
 
@@ -462,7 +464,7 @@ public class BattleField implements Serializable {
 
     public BattleField goToNextLevel() throws GameInitializationException {
         if (!this.running) {
-            return new BattleField(this.getFirstPlayer(), this.getSecondPlayer(), new Level(this.level.getLevel() + 1));
+            return new BattleField(this.getFirstPlayer(), this.getSecondPlayer(), new Level(this.level.getCurrentLevel() + 1));
         } else {
             throw new GameInitializationException("You cannot switch game level while another game is going on");
         }
@@ -474,6 +476,6 @@ public class BattleField implements Serializable {
     }
 
     public int getLevel() {
-        return this.level.getLevel();
+        return this.level.getCurrentLevel();
     }
 }

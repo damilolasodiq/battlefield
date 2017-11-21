@@ -3,7 +3,7 @@ About the Game
 The Battlefield game is an interesting console game designed to emulate 2 nations at war.
 As a player, you have can choose between a multi-player mode or a CPU simulated mode (single player).
 
-When the game starts, each player is given a battle area (N x M matrix) with a representation of Soldiers. There are 3 type of Soldier and the number and type of Soldiers a Player get is based on the current game level
+When the game starts, each player is given a battle area (N x M matrix) with a representation of Soldiers. There are 3 type of Soldier and the number and type of Soldiers a Player get is based on the current game currentLevel
 
     C - Corporal
     S - Sergeant
@@ -13,14 +13,14 @@ There are 3 categories of weapons in the game, a Pistol, a Shotgun and a Bazooka
 For example, a Corporal can only use a Pistol, a Sergent can use a Pistol and a Shotgun while a General can use any of the 3 weapons.
 
 For a CPU simulated mode, the computer randomly selects a name from some list of TRANSFORMER names.
-For every level, each player is assigned the same number of soldiers, weapons and arsenal.
+For every currentLevel, each player is assigned the same number of soldiers, weapons and arsenal.
 
 How to play
 -----------
     1) After reading this instructions, you would follow subsequent instructions on the screen to set a game mode (CPU or multi-player)
     2) You will be required to enter a name for your character e.g John, Xavi, Elixir e.t.c
     3) You can type "PAUSE" at any time during a game play to pause the game.
-    4) The level information, current player name and health status of both players are shown on the top of the screen at everytime
+    4) The currentLevel information, current player name and health status of both players are shown on the top of the screen at everytime
     5) You can type "STAT" at any moment in the game to check your full stat such as number of Soldier killed, number of soldiers injured,
     number of points, inventory of your arsenal and so on.
     6) To launch an attack, you need to specify the position of your Soldier to carry out the attack to also a position in the battle area

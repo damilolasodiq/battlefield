@@ -83,7 +83,9 @@ public class BattleFieldGame implements Game<BattleField> {
             try {
                 File dir = getGameSaveFolder();
                 if (!dir.exists()) {
-                    dir.mkdirs();
+                    boolean mkdirs = dir.mkdirs();
+                    if (!mkdirs)
+                        throw new RuntimeException("Unable to save game because the game save directory could not be created");
                 }
                 File tempFile = File.createTempFile(GAME_SAVE_PREFIX, ".ser", dir);
                 fout = new FileOutputStream(tempFile);
@@ -115,37 +117,31 @@ public class BattleFieldGame implements Game<BattleField> {
     public SavedGame<BattleField> lastSavedGame() {
         try {
             File file = getGameSaveFolder();
-            if (file != null) {
-                File[] files = file.listFiles();
-                if (files == null || files.length < 1) {
-                    return null;
-                } else {
-                    File gameFile = files[0];
-                    FileInputStream fileInputStream = new FileInputStream(gameFile);
-                    try (ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
-                        SavedGame savedGame = (SavedGame) objectInputStream.readObject();
-                        this.paused = true;
-                        return savedGame;
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        return null;
-                    } finally {
-                        try {
-                            if (fileInputStream != null) {
-                                fileInputStream.close();
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        Files.delete(gameFile.toPath());
-                    }
-                }
-            } else {
+            File[] files = file.listFiles();
+            if (files == null || files.length < 1) {
                 return null;
+            } else {
+                File gameFile = files[0];
+                FileInputStream fileInputStream = new FileInputStream(gameFile);
+                try (ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
+                    SavedGame savedGame = (SavedGame) objectInputStream.readObject();
+                    this.paused = true;
+                    return savedGame;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                } finally {
+                    try {
+                        fileInputStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Files.delete(gameFile.toPath());
+                }
             }
-
         } catch (IOException e) {
-            return null;
+            e.printStackTrace();
         }
+        return null;
     }
 }

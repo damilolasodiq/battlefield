@@ -40,7 +40,7 @@ public class BattleFieldGameLauncher {
         if (battleFieldSavedGame != null) {
             String prompt = "Type \"1\" to resume or \"2\" to start a new game";
             String date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(battleFieldSavedGame.getDateSaved());
-            resumeGame = getInputAsString(String.format("You have a game saved at LEVEL %d on %s.\n%s.\n%s", battleFieldSavedGame.getGame().getLevel(), date, battleFieldSavedGame.getDescription(), prompt), true, s -> {
+            resumeGame = getInputAsString(String.format("You have a game saved at LEVEL %d on %s.%n%s.%n%s", battleFieldSavedGame.getGame().getLevel(), date, battleFieldSavedGame.getDescription(), prompt), true, s -> {
                 if (s == null || s.length() == 0 || (!s.equals("1") && !s.equals("2"))) {
                     System.out.println(prompt);
                     return false;
@@ -75,7 +75,7 @@ public class BattleFieldGameLauncher {
         try {
             battleFieldGame.setBattleField(battleField);
             battleFieldGame.start();
-            Scanner scanner = new Scanner(System.in);
+            Scanner scanner = new Scanner(System.in, "UTF-8");
             while (battleFieldGame.isActive()) {
                 String next = scanner.nextLine();
                 switch (next.toLowerCase()) {
@@ -119,9 +119,7 @@ public class BattleFieldGameLauncher {
                         break;
                 }
             }
-        } catch (GameInitializationException e) {
-            System.err.println(e.getMessage());
-        } catch (InvalidGameStateException e) {
+        } catch (GameInitializationException | InvalidGameStateException e) {
             System.err.println(e.getMessage());
         }
     }
@@ -131,7 +129,7 @@ public class BattleFieldGameLauncher {
         boolean b = false;
         String output = null;
         while (!b) {
-            Scanner s = new Scanner(System.in);
+            Scanner s = new Scanner(System.in, "UTF-8");
             output = s.nextLine();
             b = stringPredicate.test(output);
         }

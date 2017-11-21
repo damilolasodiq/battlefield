@@ -140,8 +140,8 @@
 <i>66</i>&nbsp;            } else {
 <b class="nc"><i>67</i>&nbsp;                throw new GameInitializationException(&quot;Could not determine game mode&quot;);</b>
 <i>68</i>&nbsp;            }
-<b class="fc"><i>69</i>&nbsp;            Level level = new Level(1);</b>
-<b class="fc"><i>70</i>&nbsp;            battleField = new BattleField(player1, player2, level);</b>
+<b class="fc"><i>69</i>&nbsp;            Level currentLevel = new Level(1);</b>
+<b class="fc"><i>70</i>&nbsp;            battleField = new BattleField(player1, player2, currentLevel);</b>
 <b class="fc"><i>71</i>&nbsp;        } else {</b>
 <b class="nc"><i>72</i>&nbsp;            battleField = battleFieldSavedGame.getGame();</b>
 <i>73</i>&nbsp;        }
@@ -167,7 +167,7 @@
 <b class="fc"><i>93</i>&nbsp;                        battleFieldGame.pause();</b>
 <b class="fc"><i>94</i>&nbsp;                        System.exit(0);</b>
 <b class="nc"><i>95</i>&nbsp;                        break;</b>
-<i>96</i>&nbsp;                    case &quot;next level&quot;:
+<i>96</i>&nbsp;                    case &quot;next currentLevel&quot;:
 <b class="nc"><i>97</i>&nbsp;                        battleField = battleField.goToNextLevel();</b>
 <b class="nc"><i>98</i>&nbsp;                        if (!battleField.isRunning()) {</b>
 <b class="nc"><i>99</i>&nbsp;                            battleField.startGame();</b>

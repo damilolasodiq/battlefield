@@ -1,6 +1,5 @@
 package com.randomapps.battlefield.barrack.armory;
 
-import com.randomapps.battlefield.barrack.WeaponType;
 import com.randomapps.battlefield.exception.SoldierOutOfArmorException;
 
 
@@ -17,11 +16,6 @@ public abstract class AbstractWeapon implements Weapon {
         return this.availableRounds <= 0;
     }
 
-    @Override
-    public abstract WeaponType getWeaponType();
-
-    @Override
-    public abstract int scorePoint();
 
     @Override
     public final String name() {

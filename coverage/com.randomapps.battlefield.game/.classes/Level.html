@@ -95,7 +95,7 @@
 <i>21</i>&nbsp;
 <i>22</i>&nbsp;    private int row;
 <i>23</i>&nbsp;    private int column;
-<i>24</i>&nbsp;    private int level;
+<i>24</i>&nbsp;    private int currentLevel;
 <i>25</i>&nbsp;    private int numberOfSoldiersRequired;
 <i>26</i>&nbsp;    private int numberOfGeneralsRequired;
 <i>27</i>&nbsp;    private int numberOfCorporalsRequired;
@@ -105,13 +105,13 @@
 <i>31</i>&nbsp;    private List&lt;Soldier&gt; soldiers;
 <i>32</i>&nbsp;    private List&lt;WeaponType&gt; weaponTypes;
 <i>33</i>&nbsp;
-<b class="fc"><i>34</i>&nbsp;    public Level(int level) throws GameInitializationException {</b>
-<b class="fc"><i>35</i>&nbsp;        if (level &gt; MAX_LEVEL || level &lt; 1) {</b>
-<b class="fc"><i>36</i>&nbsp;            throw new GameInitializationException(&quot;Invalid game level selected&quot;);</b>
+<b class="fc"><i>34</i>&nbsp;    public Level(int currentLevel) throws GameInitializationException {</b>
+<b class="fc"><i>35</i>&nbsp;        if (currentLevel &gt; MAX_LEVEL || currentLevel &lt; 1) {</b>
+<b class="fc"><i>36</i>&nbsp;            throw new GameInitializationException(&quot;Invalid game currentLevel selected&quot;);</b>
 <i>37</i>&nbsp;        }
-<b class="fc"><i>38</i>&nbsp;        this.level = level;</b>
-<b class="fc"><i>39</i>&nbsp;        this.row = DEFAULT_ROW_SIZE + level - 1;</b>
-<b class="fc"><i>40</i>&nbsp;        this.column = DEFAULT_COLUMN_SIZE + level - 1;</b>
+<b class="fc"><i>38</i>&nbsp;        this.currentLevel = currentLevel;</b>
+<b class="fc"><i>39</i>&nbsp;        this.row = DEFAULT_ROW_SIZE + currentLevel - 1;</b>
+<b class="fc"><i>40</i>&nbsp;        this.column = DEFAULT_COLUMN_SIZE + currentLevel - 1;</b>
 <b class="fc"><i>41</i>&nbsp;        this.initSoldiers();</b>
 <b class="fc"><i>42</i>&nbsp;        this.initWeaponTypes();</b>
 <b class="fc"><i>43</i>&nbsp;        this.initHealth();</b>
@@ -131,8 +131,8 @@
 <i>57</i>&nbsp;    }
 <i>58</i>&nbsp;
 <i>59</i>&nbsp;    private void initSoldiers() {
-<b class="fc"><i>60</i>&nbsp;        this.numberOfSoldiersRequired = ((row * column) / 2) - level;</b>
-<b class="fc"><i>61</i>&nbsp;        this.numberOfGeneralsRequired = (level * 2) - 2;</b>
+<b class="fc"><i>60</i>&nbsp;        this.numberOfSoldiersRequired = ((row * column) / 2) - currentLevel;</b>
+<b class="fc"><i>61</i>&nbsp;        this.numberOfGeneralsRequired = (currentLevel * 2) - 2;</b>
 <b class="fc"><i>62</i>&nbsp;        if (this.numberOfGeneralsRequired &lt; 2) {</b>
 <b class="fc"><i>63</i>&nbsp;            this.numberOfSergeantsRequired = 2;</b>
 <i>64</i>&nbsp;        } else {
@@ -177,7 +177,7 @@
 <b class="fc"><i>103</i>&nbsp;    }</b>
 <i>104</i>&nbsp;
 <i>105</i>&nbsp;    public int getLevel() {
-<b class="fc"><i>106</i>&nbsp;        return this.level;</b>
+<b class="fc"><i>106</i>&nbsp;        return this.currentLevel;</b>
 <i>107</i>&nbsp;    }
 <i>108</i>&nbsp;
 <i>109</i>&nbsp;    public int getMaxHealthInLevel() {

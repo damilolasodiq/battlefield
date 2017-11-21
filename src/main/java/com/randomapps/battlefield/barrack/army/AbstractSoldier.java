@@ -1,12 +1,10 @@
 package com.randomapps.battlefield.barrack.army;
 
-import com.randomapps.battlefield.barrack.SoldierType;
 import com.randomapps.battlefield.barrack.WeaponType;
 import com.randomapps.battlefield.barrack.armory.ArmorVest;
 import com.randomapps.battlefield.barrack.armory.Weapon;
 import com.randomapps.battlefield.exception.WeaponNotAssignableException;
 
-import java.util.List;
 import java.util.Optional;
 
 public abstract class AbstractSoldier implements Soldier {
@@ -20,7 +18,6 @@ public abstract class AbstractSoldier implements Soldier {
         this.health = DEFAULT_HEALTH;
     }
 
-    public abstract List<WeaponType> allowedWeapons();
 
     @Override
     public Optional<Weapon> getCurrentWeapon() {
@@ -68,9 +65,6 @@ public abstract class AbstractSoldier implements Soldier {
         }
     }
 
-    @Override
-    public abstract Optional<ArmorVest> getArmorVest();
-
     public final boolean isAlive() {
         return this.getHealth() > 0;
     }
@@ -85,8 +79,6 @@ public abstract class AbstractSoldier implements Soldier {
         return this.battleCoordinate;
     }
 
-    @Override
-    public abstract SoldierType getType();
 
     @Override
     public void setBattleCoordinate(int[][] battleCoordinate) {

@@ -5,12 +5,12 @@ import com.randomapps.battlefield.barrack.armory.WeaponFactory;
 import com.randomapps.battlefield.exception.WeaponNotAvailableException;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class Arsenal implements Serializable {
 
-    private Map<WeaponType, Integer> inventory = new HashMap();
+    private Map<WeaponType, Integer> inventory = new EnumMap<>(WeaponType.class);
 
     public void addWeapon(WeaponType weaponType) {
         this.addWeapon(weaponType, 1);
@@ -27,7 +27,7 @@ public class Arsenal implements Serializable {
         }
     }
 
-    public final Weapon pickWeapon(WeaponType weaponType) throws WeaponNotAvailableException {
+    public final Weapon pickWeapon(WeaponType weaponType) {
         if (this.hasWeapon(weaponType)) {
             int weaponCount = this.inventory.get(weaponType);
             if (weaponCount <= 1) {
@@ -47,11 +47,9 @@ public class Arsenal implements Serializable {
     }
 
     public Map<WeaponType, Integer> getInventory() {
-        Map<WeaponType, Integer> inventory = new HashMap<>();
-        this.inventory.forEach((k, v) -> {
-            inventory.put(k, v);
-        });
-        return inventory;
+        Map<WeaponType, Integer> currentInventory = new EnumMap<>(WeaponType.class);
+        this.inventory.forEach(currentInventory::put);
+        return currentInventory;
     }
 
     public boolean isEmpty() {
