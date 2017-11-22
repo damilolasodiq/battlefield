@@ -143,12 +143,17 @@ public class BattleFieldTest {
         Level level = new Level(2);
         BattleField battleField = new BattleField(player1, player2, level);
 
-        Soldier soldier1 = player1.getBattleArea().getBattlePositionsWithActiveSoldiers().stream().filter(s -> s.getSoldier().getType().equals(SoldierType.GENERAL)).findFirst().get().getSoldier();
-        Soldier soldier2 = player2.getBattleArea().getBattlePositionsWithActiveSoldiers().stream().filter(s -> s.getSoldier().getType().equals(SoldierType.CORPORAL)).findFirst().get().getSoldier();
+        Soldier soldier1 = player1.getSoldiers().stream().filter(s -> s.getType().equals(SoldierType.GENERAL)).findAny().get();
+        Soldier soldier2 = player2.getSoldiers().stream().filter(s -> s.getType().equals(SoldierType.CORPORAL)).findAny().get();
 
         int points = player1.getStat().getPoints();
         battleField.attack(soldier1.getBattleCoordinate()[0][0], soldier1.getBattleCoordinate()[0][1], soldier2.getBattleCoordinate()[0][0], soldier2.getBattleCoordinate()[0][1]);
-
+        System.out.println(soldier1.getCurrentWeapon());
+        System.out.println(soldier1.getBattleCoordinate());
+        player1.getSoldiers().stream().forEach(s->{
+            System.out.println("soldier "+s.getType()+" weapon+"+s.getCurrentWeapon());
+        });
+        battleField.printStat(player1);
         Assert.assertEquals(1, player1.getStat().getNumberOfEnemiesKilled());
         Assert.assertEquals(1, player2.getStat().getNumberOfSoldiersKilled());
         Assert.assertTrue(points < player1.getStat().getPoints());
@@ -163,8 +168,8 @@ public class BattleFieldTest {
         BattleField battleField = new BattleField(player1, player2, level);
 
 
-        Soldier soldier1 = player1.getBattleArea().getBattlePositionsWithActiveSoldiers().stream().filter(s -> s.getSoldier().getType().equals(SoldierType.GENERAL)).findAny().get().getSoldier();
-        Soldier soldier2 = player2.getBattleArea().getBattlePositionsWithActiveSoldiers().stream().filter(s -> s.getSoldier().getType().equals(SoldierType.GENERAL)).findAny().get().getSoldier();
+        Soldier soldier1 = player1.getSoldiers().stream().filter(s -> s.getType().equals(SoldierType.GENERAL)).findAny().get();
+        Soldier soldier2 = player2.getSoldiers().stream().filter(s -> s.getType().equals(SoldierType.GENERAL)).findAny().get();
         Assert.assertEquals(100, soldier2.getArmorVest().get().getHealth());
         battleField.attack(soldier1.getBattleCoordinate()[0][0], soldier1.getBattleCoordinate()[0][1], soldier2.getBattleCoordinate()[0][0], soldier2.getBattleCoordinate()[0][1]);
         Assert.assertTrue(soldier2.getArmorVest().get().getHealth() < 100);
@@ -329,6 +334,7 @@ public class BattleFieldTest {
         exit.expectSystemExitWithStatus(0);
         exit.checkAssertionAfterwards(() -> {
             String[] split = systemOutRule.getLogWithNormalizedLineSeparator().split("\n");
+            Assert.assertEquals(split[split.length - 1], BattleFieldGame.STOP_MESSAGE);
             Assert.assertEquals(split[split.length - 1], BattleFieldGame.STOP_MESSAGE);
         });
         BattleFieldGameLauncher battleFieldGameLauncher = new BattleFieldGameLauncher();

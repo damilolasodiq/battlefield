@@ -169,17 +169,19 @@ public class BattleField implements Serializable {
         if (weapons != null) {
             Map<WeaponType, List<WeaponType>> collect = weapons.stream().collect(Collectors.groupingBy(weapon -> weapon));
             for (Soldier s : soldiers) {
-                collect.keySet().stream().sorted(Comparator.comparingInt(WeaponType::getGrade));
                 for (WeaponType weaponType : collect.keySet()) {
-                    List<WeaponType> availableWeapons = collect.get(weaponType);
-                    if (!s.allowedWeapons().isEmpty() && s.allowedWeapons().contains(weaponType) && !availableWeapons.isEmpty()) {
-                        try {
-                            Weapon weapon = WeaponFactory.newInstance(availableWeapons.remove(0));
-                            s.assignWeapon(weapon);
-                            break;
-                        } catch (WeaponNotAssignableException e) {
-                            throw new GameInitializationException(e.getMessage());
+                    for (WeaponType type : s.allowedWeapons()) {
+                        if (weaponType.equals(type)) {
+                            List<WeaponType> availableWeapons = collect.get(weaponType);
+                            try {
+                                Weapon weapon = WeaponFactory.newInstance(availableWeapons.remove(0));
+                                s.assignWeapon(weapon);
+                                break;
+                            } catch (WeaponNotAssignableException e) {
+                                throw new GameInitializationException(e.getMessage());
+                            }
                         }
+
                     }
                 }
                 if (!s.getCurrentWeapon().isPresent()) {
