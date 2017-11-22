@@ -3,4 +3,4 @@ jdk:
   - oraclejdk8
 
 after_success:
-  - coveralls
+  - "clean test jacoco:report coveralls:report"
